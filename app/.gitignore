@@ -1,0 +1,46 @@
+# Python virtual environments
+venv/
+.venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Flask configuration and logs
+instance/
+*.log
+*.sqlite3
+
+# Environment variables and settings files
+.env
+.env.*
+
+# Pytest cache and coverage reports
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# IDE / editor specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS specific files
+.DS_Store
+
+# Backup files
+*.bak
+*.tmp
+*~
