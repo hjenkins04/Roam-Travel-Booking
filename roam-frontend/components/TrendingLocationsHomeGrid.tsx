@@ -9,7 +9,6 @@ const TrendingLocationsHomeGrid = () => {
       <p className="text-center text-gray-600 mb-6">Trending destinations today</p>
 
       <div className="px-4 md:px-8 lg:px-16 max-w-[1440px] mx-auto">
-        {/* Grid container with semantic ul */}
         <ul className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 list-none">
           {['Barcelona', 'New York', 'Paris', 'Rio De Janeiro', 'Singapore'].map((city, index) => (
             <li key={city} className={`flex flex-col items-center ${index === 4 ? 'hidden lg:flex' : ''}`}>
