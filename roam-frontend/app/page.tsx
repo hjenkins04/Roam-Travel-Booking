@@ -10,6 +10,7 @@ import LandingPageText from '@/components/Text/LandingPageText'
 
 const TrendingLocationsHomeGrid = dynamic(() => import('@/components/TrendingLocationsHomeGrid'), { ssr: false });
 const LoginSignupPopout = dynamic(() => import('@/components/LoginSignupPopout'), { ssr: false });
+const ProfilePage = dynamic(() => import('@/components/ProfilePage'), { ssr: false });
 
 export default function Home() {
   const [isLoginOpen, setIsLoginOpen] = useState(false)
@@ -32,7 +33,7 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen">
-      {/* Background SVG */}
+        {/* Background SVG */}
       <div className="absolute inset-0">
         <LandingPageBackground />
       </div>
