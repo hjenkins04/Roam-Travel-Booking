@@ -47,40 +47,23 @@ const SearchBox = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center py-10 relative">
+      <div className="flex flex-col items-center justify-center relative">
         {/* Toggle Button Container */}
         <div className="relative flex -mb-0.5 justify-center items-center">
-          {/* Background rectangle for the toggle buttons */}
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[270px] h-[56px] bg-orange-500 z-0"></div>
-
-          {/* SVG Buttons */}
-          <div className="flex space-x-0 z-1">
-            {/* Round Trip Button */}
-            <div
-              className={`cursor-pointer flex items-center justify-center relative`}
-              onClick={() => setIsRoundTrip(true)}
-              style={{ width: '270px', height: '56px' }}
-            >
-              <HumpButton color={isRoundTrip ? "white" : "#f97316"} width={270} height={56} />
-              <span className={`absolute text-lg ${isRoundTrip ? 'text-orange-500' : 'text-white'}`}>Round Trip</span>
-            </div>
-
-            {/* One Way Button */}
-            <div
-              className={`cursor-pointer flex items-center justify-center relative`}
-              onClick={() => setIsRoundTrip(false)}
-              style={{ width: '270px', height: '56px' }}
-            >
-              <HumpButton color={!isRoundTrip ? "white" : "#f97316"} width={270} height={56} />
-              <span className={`absolute text-lg ${!isRoundTrip ? 'text-orange-500' : 'text-white'}`}>One Way</span>
-            </div>
-          </div>
+          <HumpButton
+          primaryColor="#FF9A2A"
+          secondaryColor="#FFFFFF"
+          primaryText="Round Trip"
+          secondaryText="One Way"
+          onPrimaryClick={() => setIsRoundTrip(true)}
+          onSecondaryClick={() => setIsRoundTrip(false)}
+          />
         </div>
 
         {/* Main search container */}
-        <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-[97%] w-full z-2">
+        <div className="relative bg-white rounded-2xl shadow-lg p-4 max-w-[97%] w-full z-2">
           {/* Search Form (Button List) */}
-          <SearchBoxButtonList className="w-full justify-center">
+          <SearchBoxButtonList className="w-full justify-center space-y-4 sm:space-y-6">
             {/* Departure City Button */}
             <SearchBoxButton
               leftIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
@@ -91,6 +74,7 @@ const SearchBox = () => {
               mainTextRight="Toronto"
               subTextRight="Pearson International"
               size="w-[230px]"
+              className="-bottom-2.5"
               onClickMainButton={() => console.log("Departure City Clicked")}
             />
 
@@ -114,7 +98,6 @@ const SearchBox = () => {
               mainTextRight="Honolulu"
               subTextRight="Daniel K. Inouye International"
               size="w-[230px]"
-              className="-m-9"
               onClickMainButton={() => console.log("Arrival City Clicked")}
             />
 

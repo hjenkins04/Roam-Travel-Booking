@@ -4,15 +4,15 @@ import Image from 'next/image'
 
 const TrendingLocationsHomeGrid = () => {
   return (
-    <section className="mt-12">
-      <h2 className="text-3xl font-bold text-center mb-2">Popular Destinations</h2>
+    <section>
+      <h2 className="text-5xl font-bold text-center mb-2">Popular Destinations</h2>
       <p className="text-center text-gray-600 mb-6">Trending destinations today</p>
 
       <div className="px-4 md:px-8 lg:px-16 max-w-[1440px] mx-auto">
         <ul className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 list-none">
           {['Barcelona', 'New York', 'Paris', 'Rio De Janeiro', 'Singapore'].map((city, index) => (
             <li key={city} className={`flex flex-col items-center ${index === 4 ? 'hidden lg:flex' : ''}`}>
-              <figure className="relative rounded-lg overflow-hidden group w-full max-w-[300px] aspect-[3/2]">
+              <figure className="relative rounded-2xl overflow-hidden group w-full sm:max-w-[250px] md:max-w-[300px] lg:max-w-[1200px] lg:min-w-[200px] aspect-[3/2]">
                 <Image
                   src={`/assets/placeholder.svg?height=100&width=150`}
                   alt={city}
