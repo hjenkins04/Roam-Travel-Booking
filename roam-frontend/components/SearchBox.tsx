@@ -8,6 +8,7 @@ import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search
 import SearchBoxButtonList from "@/components/SearchBoxButtonGroup";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
+import Link from "next/link";
 
 const SearchBox = () => {
   const [departureDate, setDepartureDate] = useState<Date>();
@@ -51,12 +52,12 @@ const SearchBox = () => {
         {/* Toggle Button Container */}
         <div className="relative flex -mb-0.5 justify-center items-center">
           <HumpButton
-          primaryColor="#FF9A2A"
-          secondaryColor="#FFFFFF"
-          primaryText="Round Trip"
-          secondaryText="One Way"
-          onPrimaryClick={() => setIsRoundTrip(true)}
-          onSecondaryClick={() => setIsRoundTrip(false)}
+            primaryColor="#FF9A2A"
+            secondaryColor="#FFFFFF"
+            primaryText="Round Trip"
+            secondaryText="One Way"
+            onPrimaryClick={() => setIsRoundTrip(true)}
+            onSecondaryClick={() => setIsRoundTrip(false)}
           />
         </div>
 
@@ -80,11 +81,11 @@ const SearchBox = () => {
 
             {/* Swap Icon between Departure and Arrival */}
             <div className="bg-orange-500 rounded-full p-2 z-10"
-                style={{
-                  position: 'relative',
-                  transform: 'translateX(25%)',
-                  margin: '-18px'
-                }}>
+              style={{
+                position: 'relative',
+                transform: 'translateX(25%)',
+                margin: '-18px'
+              }}>
               <ArrowLeftRight className="w-5 h-5 text-white" />
             </div>
 
@@ -116,7 +117,7 @@ const SearchBox = () => {
                         mainTextRight={departureDate ? format(departureDate, "EEE") : "Day"}
                         subTextRight={departureDate ? format(departureDate, "MMMM") : "Month"}
                         size="w-[175px]"
-                        onClickMainButton={() => {}}
+                        onClickMainButton={() => { }}
                       />
                     </div>
                   </PopoverTrigger>
@@ -138,7 +139,7 @@ const SearchBox = () => {
                         mainTextRight={returnDate ? format(returnDate, "EEE") : "Day"}
                         subTextRight={returnDate ? format(returnDate, "MMMM") : "Month"}
                         size="w-[175px]"
-                        onClickMainButton={() => {}}
+                        onClickMainButton={() => { }}
                       />
                     </div>
                   </PopoverTrigger>
@@ -163,7 +164,7 @@ const SearchBox = () => {
                       mainTextRight={departureDate ? format(departureDate, "EEEE") : "Day"}
                       subTextRight={departureDate ? format(departureDate, "MMMM") : "Month"}
                       size="w-[230px]"
-                      onClickMainButton={() => {}}
+                      onClickMainButton={() => { }}
                     />
                   </div>
                 </PopoverTrigger>
@@ -180,9 +181,9 @@ const SearchBox = () => {
                   <SearchBoxButton
                     leftIcon={
                       getNumberOfPassengersButton() != "1" ?
-                      (<Users className="text-gray-500 h-4 w-4" /> )
-                      :
-                      (<UserIcon className="text-gray-500 h-4 w-4" />)
+                        (<Users className="text-gray-500 h-4 w-4" />)
+                        :
+                        (<UserIcon className="text-gray-500 h-4 w-4" />)
                     }
                     rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                     headerText="TRAVELER & CLASS"
@@ -191,7 +192,7 @@ const SearchBox = () => {
                     mainTextRight={getPassengerTypesButton()}
                     subTextRight=""
                     size="w-[195px]"
-                    onClickMainButton={() => {}}
+                    onClickMainButton={() => { }}
                   />
                 </div>
               </PopoverTrigger>
@@ -233,12 +234,14 @@ const SearchBox = () => {
 
           {/* Search Button */}
           <div className="flex justify-center pt-6 relative">
-            <Button
-              className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2"
-            >
-              <span>Search Flights</span>
-              <Search className="w-5 h-5 text-white" />
-            </Button>
+            <Link href="/search-results" passHref>
+              <Button
+                className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2"
+              >
+                <span>Search Flights</span>
+                <Search className="w-5 h-5 text-white" />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
