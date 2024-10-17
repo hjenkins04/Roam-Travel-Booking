@@ -22,22 +22,21 @@ const ProfilePage = dynamic(() => import("@/components/ProfilePage"), {
 });
 
 export default function Home() {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isPopoutOpen, setIsPopoutOpen] = useState(false);
+  const [popoutMode, setPopoutMode] = useState<"login" | "signup">("login");
 
   const openLoginDrawer = () => {
-    setIsLoginOpen(true);
-    setIsSignupOpen(false);
+    setIsPopoutOpen(true);
+    setPopoutMode("login");
   };
 
   const openSignupDrawer = () => {
-    setIsSignupOpen(true);
-    setIsLoginOpen(false);
+    setIsPopoutOpen(true);
+    setPopoutMode("signup");
   };
 
   const closeDrawer = () => {
-    setIsLoginOpen(false);
-    setIsSignupOpen(false);
+    setIsPopoutOpen(false);
   };
 
   return (
@@ -50,6 +49,7 @@ export default function Home() {
       <LandingHeader
         openLoginDrawer={openLoginDrawer}
         openSignupDrawer={openSignupDrawer}
+        logoColour={"black"}        
       />
 
       <main className="relative z-10 px-4 py-8 flex flex-col items-center">
@@ -75,9 +75,10 @@ export default function Home() {
       {/* Footer */}
 
       <LoginSignupPopout
-        isLoginOpen={isLoginOpen}
-        isSignupOpen={isSignupOpen}
+        isOpen={isPopoutOpen}
+        mode={popoutMode}
         closeDrawer={closeDrawer}
+        setPopoutMode={setPopoutMode}
       />
     </div>
   );

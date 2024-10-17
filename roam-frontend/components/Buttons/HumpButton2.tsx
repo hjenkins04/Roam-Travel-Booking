@@ -86,6 +86,7 @@ const HumpButton2: React.FC<HumpButton2Props> = ({
           transform: 'translate(-50%, -50%)',
           color: isPrimaryActive ? primaryColor : 'white',
           fontSize: '16px',
+          fontWeight: 'bold',
           cursor: 'pointer',
         }}
       >
@@ -106,6 +107,7 @@ const HumpButton2: React.FC<HumpButton2Props> = ({
           transform: 'translate(50%, -50%)',
           color: !isPrimaryActive ? primaryColor : 'white',
           fontSize: '16px',
+          fontWeight: 'bold',
           cursor: 'pointer',
         }}
       >

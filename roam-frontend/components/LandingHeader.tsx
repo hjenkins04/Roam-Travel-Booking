@@ -12,6 +12,7 @@ const LandingHeader: React.FC<LandingHeaderProps> = ({
   openSignupDrawer,
   logoColour,
 }) => {
+  
   return (
     <>
       <header className="flex justify-between items-center px-16 py-6 shadow-sm">
