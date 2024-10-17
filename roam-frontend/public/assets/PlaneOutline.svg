@@ -1,0 +1,78 @@
+import React, { useState } from "react";
+
+// Define seat types
+type SeatState = "available" | "taken" | "selected";
+
+// Interface for seat properties
+interface SeatProps {
+  id: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rx: number;
+  seatState: SeatState;
+  onSeatClick: (id: number) => void;
+}
+
+// Seat component
+const Seat: React.FC<SeatProps> = ({ id, x, y, width, height, rx, seatState, onSeatClick }) => {
+  const fillColor =
+    seatState === "available"
+      ? "#E15454" // available (red)
+      : seatState === "taken"
+      ? "#FFDAD9" // taken (light pink)
+      : "#2E9881"; // selected (green)
+
+  return (
+    <g id={`seat_${id}`} onClick={() => onSeatClick(id)}>
+      <rect x={x} y={y} width={width} height={height} rx={rx} fill={fillColor} />
+      {seatState === "selected" && (
+        <g id="checkmark">
+          <path
+            d="M1130.73 832.757L1134.48 836.515L1142 829"
+            stroke="#F6F6FE"
+            strokeWidth="1.5"
+            fill="none"
+          />
+        </g>
+      )}
+    </g>
+  );
+};
+
+// PlaneSeats component with plane outline
+const PlaneSeats: React.FC = () => {
+  const [seatStates, setSeatStates] = useState<{ [id: number]: SeatState }>({
+    1: "available",
+    2: "available",
+    3: "taken",
+    4: "available",
+    5: "taken",
+    6: "available",
+    7: "available",
+    8: "taken",
+    9: "available",
+    10: "taken",
+  });
+
+  const toggleSeatState = (id: number) => {
+    setSeatStates((prevState) => {
+      const currentState = prevState[id];
+      const newState: SeatState =
+        currentState === "available"
+          ? "selected"
+          : currentState === "selected"
+          ? "available"
+          : "taken";
+      return { ...prevState, [id]: newState };
+    });
+  };
+
+  return (
+    <svg width="2426" height="2965" viewBox="0 0 2426 2965" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Plane outline */}
+      <g id="Plane (seat selection)">
+        <path
+          id="Rectangle 9"
+          d="M1181.84 2666.02L762.645 2779.88C759.951 2766.37 759.639 2755.88 760.346 2748.26C761.054 2740.62 762.78 2735.89 764.12 2733.86L1135.08 2487.92L1135.38 2487.72L1135.28 2487.37L1119.31 2426.77C1118.76 2424.68 1118.26 2422.66 1117.79 2420.56C1112.88 2398.45 1083.5 2262.57 1083.5 2171.5V1667.5V1667H1083H904.87C894.874 1667 885.088 1668.44 875.531 1671.38C647.042 1741.53 217.903 1873.65 157.849 1893.57C155.116 1894.48 152.392 1892.59 152.142 1889.68C146.5 1824.11 179.424 1785.66 197.053 1774.43C197.057 1774.43 197.062 1774.42 197.066 1774.42L979.613 1347.83L979.638 1347.82L979.66 1347.8L1039.21 1306.25C1047.18 1300.69 1054.3 1294.01 1060.35 1286.4L1084.1 1256.54C1085.58 1254.69 1086.38 1252.38 1086.38 1250.01V1184
