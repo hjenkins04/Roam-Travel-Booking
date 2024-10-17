@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import LandingHeader from "@/components/LandingHeader";
 import Header from "@/components/Header";
 import SearchBox from "@/components/SearchBox";
 import Underline from "@/components/Effects/TextUnderline";
@@ -46,10 +45,12 @@ export default function Home() {
         <LandingPageBackground />
       </div>
 
-      <LandingHeader
+      <Header
         openLoginDrawer={openLoginDrawer}
         openSignupDrawer={openSignupDrawer}
-        logoColour={"black"}        
+        headerSize="small"
+        backgroundImage={false}
+        logoColour={"black"}
       />
 
       <main className="relative z-10 px-4 py-8 flex flex-col items-center">

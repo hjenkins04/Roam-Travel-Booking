@@ -1,10 +1,12 @@
 "use client";
-
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet';
 import Underline from '@/components/Effects/TextUnderline';
+import { useAuth } from '@/context/AuthContext';
+import { useState } from 'react';
 
 // Define prop types for the LoginSignupPopout component
 interface LoginSignupPopoutProps {
@@ -16,13 +18,33 @@ interface LoginSignupPopoutProps {
 
 const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({ isOpen, mode, closeDrawer, setPopoutMode }) => {
   const isLogin = mode === "login";
+  const { signIn } = useAuth();
 
+  // Toggle between login and signup modes
   const toggleLoginSignup = () => {
     if (isLogin) {
       setPopoutMode("signup");
     } else {
       setPopoutMode("login");
     }
+  };
+
+  // Handle form submission for standard login/signup
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // For demonstration purposes, directly sign in when the form is submitted
+    // In a real-world application, you would add form validation and send the data to a backend service
+    signIn();
+    closeDrawer();
+  };
+
+  // Handle Google sign-in or sign-up
+  const handleGoogleSignIn = () => {
+    // For now, we'll call signIn to simulate successful login/signup
+    // Replace this with real Google authentication logic as needed
+    signIn();
+    closeDrawer();
   };
 
   return (
@@ -51,7 +73,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({ isOpen, mode, clo
         </SheetHeader>
 
         {/* Form Section */}
-        <form className="space-y-5 w-full">
+        <form className="space-y-5 w-full" onSubmit={handleFormSubmit}>
           {/* Full Name & Phone Number (for signup) */}
           {!isLogin && (
             <>
@@ -59,13 +81,13 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({ isOpen, mode, clo
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                   Full Name
                 </label>
-                <Input type="name" id="name" placeholder="Enter your full name" className="mt-2" />
+                <Input type="text" id="name" placeholder="Enter your full name" className="mt-2" />
               </div>
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                   Phone
                 </label>
-                <Input type="phone" id="phone" placeholder="Enter your phone number" className="mt-2" />
+                <Input type="text" id="phone" placeholder="Enter your phone number" className="mt-2" />
               </div>
             </>
           )}
@@ -110,14 +132,18 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({ isOpen, mode, clo
           )}
 
           {/* Submit Button */}
-          <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg">
+          <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg" type="submit">
             {isLogin ? 'Sign In' : 'Sign Up'}
           </Button>
         </form>
 
         {/* Google Login Button */}
         <div className="mt-3 w-full">
-          <Button variant="outline" className="w-full flex items-center justify-center py-3 rounded-lg">
+          <Button
+            variant="outline"
+            className="w-full flex items-center justify-center py-3 rounded-lg"
+            onClick={handleGoogleSignIn}
+          >
             <Image src="/assets/google-icon.svg" alt="Google" width={20} height={20} className="mr-2" />
             Sign {isLogin ? 'in' : 'up'} with Google
           </Button>
