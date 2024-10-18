@@ -17,18 +17,23 @@ interface PurchaseItemProps {
   title: string;
   outboundFlight: FlightInfo;
   returnFlight: FlightInfo;
+  onCancelClick: () => void;
 }
 
 const PurchaseItem: React.FC<PurchaseItemProps> = ({
   title,
   outboundFlight,
   returnFlight,
+  onCancelClick,
 }) => {
   return (
     <section className="flex flex-col justify-center p-6 mt-4 bg-white rounded-lg border border-gray-200 max-md:mt-2 max-md:max-w-full">
       <div className="flex flex-row justify-between">
         <h2 className="text-xl font-semibold text-gray-700">{title}</h2>
-        <Ban className="text-gray-400 hover:text-red-500 cursor-pointer" />
+        <Ban
+          className="text-gray-400 hover:text-red-500 cursor-pointer"
+          onClick={onCancelClick}
+        />
       </div>
       <div className="flex gap-8 mt-4 max-md:flex-col">
         <FlightDetails {...outboundFlight} />

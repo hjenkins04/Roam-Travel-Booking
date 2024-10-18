@@ -38,7 +38,7 @@ const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
           Purchases
         </a>
       </div>
-      {/* Log Out button pinned at the bottom */}v
+      {/* Log Out button pinned at the bottom */}
       <div className="fixed bottom-5 w-[218px]">
         <button
           onClick={handleLogOut}

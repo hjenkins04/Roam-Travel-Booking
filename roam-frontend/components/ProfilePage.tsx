@@ -17,12 +17,22 @@ import {
 
 const ProfilePage: React.FC = () => {
   const [editProfile, setEditProfile] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Handle EVent
-    setDialogOpen(true);
+    // Handle Event
+    setSuccessModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setCancelModalOpen(true);
+  };
+
+  const handleCancelConfirm = () => {
+    console.log("Flight cancelled!");
+    setCancelModalOpen(false);
   };
 
   const purchases = [
@@ -125,7 +135,11 @@ const ProfilePage: React.FC = () => {
                 <div className="flex flex-col self-stretch pt-2 mt-2 bg-white rounded-lg max-md:pt-24 max-md:max-w-full">
                   <div className="flex flex-col px-4 bg-white rounded-lg max-md:max-w-full">
                     {purchases.map((purchase, index) => (
-                      <PurchaseItem key={index} {...purchase} />
+                      <PurchaseItem
+                        key={index}
+                        {...purchase}
+                        onCancelClick={handleCancel}
+                      />
                     ))}
                   </div>
                 </div>
@@ -225,13 +239,37 @@ const ProfilePage: React.FC = () => {
         </main>
       </div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog open={successModalOpen} onOpenChange={setSuccessModalOpen}>
         <DialogContent>
           <DialogTitle>Account Updated</DialogTitle>
           <DialogDescription>
             Your profile information has been successfully updated.
           </DialogDescription>
           <DialogFooter>
+            <DialogClose asChild>
+              <Button className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
+                Close
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={cancelModalOpen} onOpenChange={setCancelModalOpen}>
+        <DialogContent>
+          <DialogTitle>Confirm Ticket Refund</DialogTitle>
+          <DialogDescription>
+            By confirming this action, you will proceed with the refund request
+            for your flight ticket. Once confirmed, the ticket will be
+            cancelled,a nd the refund process will be initiated.
+          </DialogDescription>
+          <DialogFooter>
+            <Button
+              className="mt-4 px-4 py-2 bg-white hover:bg-orange-400 text-orange-500 hover:text-white"
+              onClick={handleCancelConfirm}
+            >
+              Confirm
+            </Button>
             <DialogClose asChild>
               <Button className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
                 Close
