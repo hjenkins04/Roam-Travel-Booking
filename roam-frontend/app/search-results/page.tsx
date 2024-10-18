@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import LandingHeader from "@/components/Header";
+import Header from "@/components/Header";
 import SearchResultBox from "@/components/SearchResultBox";
 import LandingPageBackground from "@/components/Backgrounds/TallHeaderBackground";
 import FilterBox from "@/components/FilterBox";
@@ -12,10 +12,6 @@ import { ChevronDown } from "lucide-react";
 
 const TrendingLocationsHomeGrid = dynamic(
     () => import("@/components/TrendingLocationsHomeGrid"),
-    { ssr: false }
-);
-const LoginSignupPopout = dynamic(
-    () => import("@/components/LoginSignupPopout"),
     { ssr: false }
 );
 const ProfilePage = dynamic(() => import("@/components/ProfilePage"), {
@@ -48,11 +44,12 @@ export default function Home() {
                 <LandingPageBackground />
             </div>
 
-            <LandingHeader
-                openLoginDrawer={openLoginDrawer}
-                openSignupDrawer={openSignupDrawer}
-                logoColour="orange"
-            />
+            <Header
+                    headerSize={"small"}
+                    backgroundImage={true}
+                    logoColour={"orange"}
+                    displayProfilePicture={false}
+                />
 
             <main className=" z-10 flex flex-col mt-[-70px] items-start pl-4">
                 <div
@@ -72,11 +69,6 @@ export default function Home() {
                     <SearchScroll />
                 </div>
             </main>
-            <LoginSignupPopout
-                isLoginOpen={isLoginOpen}
-                isSignupOpen={isSignupOpen}
-                closeDrawer={closeDrawer}
-            />
         </div >
     );
 }

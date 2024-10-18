@@ -1,52 +1,34 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import dynamic from "next/dynamic";
-import Header from "@/components/Header";
-import SearchBox from "@/components/SearchBox";
-import LandingPageBackground from "@/components/Backgrounds/LandingPageBackground";
-import LandingPageText from "@/components/Text/LandingPageText";
+import { Button } from "@/components/ui/button"; // Assuming you have shadcn buttons setup here
+import { useRouter } from "next/navigation"; // For navigation between pages
 
-const TrendingLocationsHomeGrid = dynamic(
-  () => import("@/components/TrendingLocationsHomeGrid"),
-  { ssr: false }
-);
+const ButtonPage: React.FC = () => {
+  const router = useRouter();
 
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
 
-export default function Home() {
   return (
-    <div className="relative min-h-screen">
-      {/* Background SVG */}
-      <div className="absolute inset-0">
-        <LandingPageBackground />
-      </div>
-
-      <Header
-        headerSize="small"
-        backgroundImage={false}
-        logoColour={"black"}
-        displayProfilePicture={true}
-      />
-
-      <main className="relative z-10 px-4 py-8 flex flex-col items-center">
-        <div className="grid grid-cols-5 gap-4 items-center">
-          {/* Left 2 Columns: Text */}
-          <div className="col-span-2 whitespace-nowrap xl:ml-24">
-            <LandingPageText />
-          </div>
-        </div>
-
-        {/* Search Box (Center Overlap with Background) */}
-        <div
-          className="relative w-full max-w-6xl z-10 -top-14 py-10"
-          style={{ paddingTop: "calc(50vh - 150px)" }}
-        >
-          <SearchBox />
-        </div>
-      </main>
-
-      {/* Trending Locations Grid */}
-      <TrendingLocationsHomeGrid />
+    <div className="flex flex-col items-center justify-center min-h-screen space-y-4 bg-gray-100">
+      <Button onClick={() => handleNavigation("/home")} className="w-40">
+        Home Page
+      </Button>
+      <Button onClick={() => handleNavigation("/search-results")} className="w-40">
+        Search Results
+      </Button>
+      <Button onClick={() => handleNavigation("/checkout")} className="w-40">
+        Checkout
+      </Button>
+      <Button onClick={() => handleNavigation("/seat-booking")} className="w-40">
+        Seat Booking
+      </Button>
+      <Button onClick={() => handleNavigation("/dashboard")} className="w-40">
+        Dashboard
+      </Button>
     </div>
   );
-}
+};
+
+export default ButtonPage;
