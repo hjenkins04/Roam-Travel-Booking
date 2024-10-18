@@ -4,7 +4,6 @@ import PurchaseItem from "./PurchaseItem";
 import Sidebar from "./ProfileSidebar";
 import ProfilePicture from "./Images/ProfilePicture";
 import Header from "./Header";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,6 +13,7 @@ import {
   DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
+import EditProfile from "./EditProfile";
 
 const ProfilePage: React.FC = () => {
   const [editProfile, setEditProfile] = useState(false);
@@ -156,84 +156,7 @@ const ProfilePage: React.FC = () => {
                 </p>
 
                 <div className="flex flex-col self-stretch pt-2 mt-2 bg-white rounded-lg max-md:pt-24 max-md:max-w-full">
-                  <form onSubmit={handleSubmit}>
-                    <section className="flex flex-row gap-6 self-stretch mt-5 text-lg">
-                      <Input
-                        name="firstName"
-                        placeholder="First Name*"
-                        required
-                      />
-                      <Input name="middleName" placeholder="Middle" />
-                      <Input
-                        name="lastName"
-                        placeholder="Last Name*"
-                        required
-                      />
-                    </section>
-                    <section className="flex flex-row gap-6 mt-6">
-                      <Input
-                        name="suffix"
-                        placeholder="Suffix"
-                        className="max-w-48"
-                      />
-                      <div className="flex flex-col grow max-w-48">
-                        <Input
-                          name="dateOfBirth"
-                          placeholder="Date of Birth*"
-                          required
-                        />
-                        <p className="self-stretch px-1 py-0.5 mt-1 w-full text-xs whitespace-nowrap rounded">
-                          MM/DD/YY
-                        </p>
-                      </div>
-                    </section>
-                    <section className="flex flex-row gap-5 self-stretch mt-6 text-lg">
-                      <Input
-                        name="email"
-                        placeholder="Email Address*"
-                        type="email"
-                        required
-                      />
-                      <Input
-                        name="phone"
-                        placeholder="Phone Number*"
-                        type="tel"
-                        required
-                      />
-                    </section>
-                    <section className="flex flex-col self-stretch mt-6 w-full text-lg max-md:max-w-full">
-                      <Input
-                        name="streetAddress"
-                        placeholder="Street Address*"
-                        required
-                      />
-                    </section>
-                    <section className="flex gap-5 justify-between items-start mt-6 w-full text-lg max-w-[524px] max-md:max-w-full">
-                      <Input
-                        name="aptNumber"
-                        placeholder="Apt Number"
-                        className="w-[115px]"
-                      />
-                      <Input
-                        name="province"
-                        placeholder="Province*"
-                        required
-                        className="w-40"
-                      />
-                      <Input
-                        name="zipCode"
-                        placeholder="Postal Code*"
-                        required
-                        className="w-40"
-                      />
-                    </section>
-                    <Button
-                      type="submit"
-                      className="mt-20 px-5 py-3 text-lg text-orange-500 border bg-white border-orange-500 hover:bg-orange-500 hover:text-white rounded max-md:mt-10"
-                    >
-                      Save
-                    </Button>
-                  </form>
+                  <EditProfile handleSubmit={handleSubmit} />
                 </div>
               </section>
             )}
