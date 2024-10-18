@@ -68,7 +68,7 @@ const Airplane = ({ onSeatClick }: { onSeatClick: (seatNumber: number) => void }
 
 
   return (
-    <Draggable defaultPosition={{ x: -960, y: -800 }}>
+    <Draggable defaultPosition={{ x: -960, y: -800 }} axis="y">
       <svg width="2426" height="2965" viewBox="0 0 2426 2965" fill="none" xmlns="http://www.w3.org/2000/svg">
         {/* Plane outline */}
         <g id="Plane (seat selection)">

@@ -31,6 +31,7 @@ const PurchaseItem: React.FC<PurchaseItemProps> = ({
   return (
     <section className="relative flex flex-col justify-center p-6 mt-4 bg-white rounded-lg border border-gray-200 max-md:mt-2 max-md:max-w-full">
     <Ban
+      data-testid="cancel-icon"
       className="absolute top-4 right-4 text-gray-400 hover:text-red-500 cursor-pointer"
       onClick={onCancelClick}
     />
