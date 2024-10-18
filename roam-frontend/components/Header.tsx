@@ -20,7 +20,7 @@ interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   headerSize: string;
   backgroundImage: boolean;
   logoColour: string;
-  displayProfilePicture: boolean;
+  displayProfilePicture?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -29,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({
   headerSize,
   backgroundImage,
   logoColour,
-  displayProfilePicture
+  displayProfilePicture = false
 }) => {
   const { isSignedIn, signOut } = useAuth();
   const router = useRouter();

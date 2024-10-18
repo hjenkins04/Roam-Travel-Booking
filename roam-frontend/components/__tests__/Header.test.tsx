@@ -79,7 +79,7 @@ describe("Header Component", () => {
     (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
   });
 
-  test("renders the Login button and triggers the login drawer", () => {
+  test("Render the Login button and triggers the login drawer", () => {
     // Arrange: Render the Header component with Login function provided
     render(
       <Header
@@ -101,7 +101,7 @@ describe("Header Component", () => {
     expect(mockOpenLoginDrawer).toHaveBeenCalledTimes(1);
   });
 
-  test("does not render the Login button when openLoginDrawer is undefined", () => {
+  test("Does not render the Login button when openLoginDrawer is undefined", () => {
     // Arrange: Render the Header component without Login function
     render(
       <Header
@@ -121,7 +121,7 @@ describe("Header Component", () => {
     expect(loginButton).not.toBeInTheDocument();
   });
 
-  test("renders the Sign Up button and triggers the signup drawer", () => {
+  test("Renders the Sign Up button and triggers the signup drawer", () => {
     // Arrange: Render the Header component with Sign Up function provided
     render(
       <Header
@@ -143,7 +143,7 @@ describe("Header Component", () => {
     expect(mockOpenSignupDrawer).toHaveBeenCalledTimes(1);
   });
 
-  test("does not render the Sign Up button when openSignupDrawer is undefined", () => {
+  test("Does not render the Sign Up button when openSignupDrawer is undefined", () => {
     // Arrange: Render the Header component without Sign Up function
     render(
       <Header
@@ -184,7 +184,7 @@ describe("Header Component", () => {
     expect(mockPush).toHaveBeenCalledWith("/");
   });
 
-  test("does not show Login and Sign Up buttons when the user is signed in", () => {
+  test("Does not show Login and Sign Up buttons when the user is signed in", () => {
     // Arrange: Simulate user being signed in
     (useAuth as jest.Mock).mockReturnValue({
       isSignedIn: true,

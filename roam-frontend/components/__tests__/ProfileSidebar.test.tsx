@@ -57,7 +57,7 @@ describe("Profile Sidebar Component", () => {
     (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
   });
 
-  test("render the Home button and redirects to home page", () => {
+  test("Render the Home button and redirects to home page", () => {
     render(<Sidebar onEditProfile={mockEditProfile} />);
 
     const homeButton = screen.getByTestId("home-button");
@@ -67,7 +67,7 @@ describe("Profile Sidebar Component", () => {
     expect(mockPush).toHaveBeenCalledWith("/");
   });
 
-  test("render the Purchases button and trigger function once", () => {
+  test("Render the Purchases button and trigger function once", () => {
     render(<Sidebar onEditProfile={mockEditProfile} />);
 
     const purchasesButton = screen.getByTestId("purchases-button");
@@ -77,7 +77,7 @@ describe("Profile Sidebar Component", () => {
     expect(mockEditProfile).toHaveBeenCalledTimes(1);
   });
 
-  test("render the Log Out button, log out user on click and redirect to home page", () => {
+  test("Render the Log Out button, log out user on click and redirect to home page", () => {
     (useAuth as jest.Mock).mockReturnValue({
       isSignedIn: true,
       signOut: mockSignOut,
@@ -90,6 +90,6 @@ describe("Profile Sidebar Component", () => {
 
     expect(logOutButton).toBeInTheDocument();
     expect(mockSignOut).toHaveBeenCalledTimes(1);
-    expect(mockPush).toHaveBeenCalledWith("/");
+    expect(mockPush).toHaveBeenCalledWith("/"); //BUG Fails test?
   });
 });
