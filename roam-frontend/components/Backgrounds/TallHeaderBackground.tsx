@@ -1,18 +1,24 @@
-import React from 'react';
+import React from "react";
 
 interface TallHeaderBackgroundProps {
   backgroundImage?: boolean;
   headerSize?: string;
 }
 
-const TallHeaderBackground: React.FC<TallHeaderBackgroundProps> = ({ backgroundImage, headerSize, ...props }) => (
+const TallHeaderBackground: React.FC<TallHeaderBackgroundProps> = ({
+  backgroundImage,
+  headerSize,
+  ...props
+}) => (
   <div
     style={{
       position: "relative",
       width: "100%",
-      height: headerSize === "tall" ? "300px" : "150px",
+      height: "300px",
       overflow: "hidden",
-      background: backgroundImage ? 'url("images/tall-header-background.png")' : 'none',
+      background: backgroundImage
+        ? 'url("images/tall-header-background.png")'
+        : "none",
     }}
     {...props}
   >

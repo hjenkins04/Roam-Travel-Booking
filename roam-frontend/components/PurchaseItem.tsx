@@ -1,4 +1,5 @@
 import React from "react";
+import { Ban } from "lucide-react";
 
 interface FlightInfo {
   date: string;
@@ -25,7 +26,10 @@ const PurchaseItem: React.FC<PurchaseItemProps> = ({
 }) => {
   return (
     <section className="flex flex-col justify-center p-6 mt-4 bg-white rounded-lg border border-gray-200 max-md:mt-2 max-md:max-w-full">
-      <h2 className="text-xl font-semibold text-gray-700">{title}</h2>
+      <div className="flex flex-row justify-between">
+        <h2 className="text-xl font-semibold text-gray-700">{title}</h2>
+        <Ban className="text-gray-400 hover:text-red-500 cursor-pointer" />
+      </div>
       <div className="flex gap-8 mt-4 max-md:flex-col">
         <FlightDetails {...outboundFlight} />
         <FlightDetails {...returnFlight} isReturn />
@@ -57,7 +61,7 @@ const FlightDetails: React.FC<FlightDetailsProps> = ({
       } max-md:ml-0 max-md:w-full`}
     >
       <div className="flex flex-col grow max-md:max-w-full">
-        <div className="flex flex-col items-start pr-14 pl-6 mt-7 w-full max-md:px-5 max-md:max-w-full">
+        <div className="flex flex-col items-start pr-14 pl-6 mt-4 w-full max-md:px-5 max-md:max-w-full">
           <time className="text-lg font-semibold text-slate-500">{date}</time>
           <p className="text-base text-black">Departing {departure}</p>
           <div className="flex gap-2 items-start self-stretch mt-2 max-md:ml-2">
