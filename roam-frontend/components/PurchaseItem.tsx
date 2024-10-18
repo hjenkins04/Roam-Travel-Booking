@@ -31,6 +31,7 @@ const PurchaseItem: React.FC<PurchaseItemProps> = ({
       <div className="flex flex-row justify-between">
         <h2 className="text-xl font-semibold text-gray-700">{title}</h2>
         <Ban
+          data-testid="cancel-icon"
           className="text-gray-400 hover:text-red-500 cursor-pointer"
           onClick={onCancelClick}
         />
