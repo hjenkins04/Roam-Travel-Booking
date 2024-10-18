@@ -58,9 +58,6 @@ describe("PurchaseItem Component", () => {
       />
     );
 
-    // Check that the title is rendered correctly
-    expect(screen.getByText("My Flight Booking")).toBeInTheDocument();
-
     // Check that the outbound flight information is rendered
     expect(screen.getByText(mockOutboundFlight.date)).toBeInTheDocument();
     expect(

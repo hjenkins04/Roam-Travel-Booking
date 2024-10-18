@@ -22,7 +22,6 @@ const ProfilePage: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Handle Event
     setSuccessModalOpen(true);
   };
 

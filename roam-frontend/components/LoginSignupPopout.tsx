@@ -7,6 +7,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetCl
 import Underline from '@/components/Effects/TextUnderline';
 import { useAuth } from '@/context/AuthContext';
 import { useState } from 'react';
+import {
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 interface LoginSignupPopoutProps {
   isOpen: boolean;
@@ -45,10 +49,13 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({ isOpen, mode, clo
 
   return (
     <Sheet open={isOpen} onOpenChange={closeDrawer}>
+      <DialogTitle>{`${mode}`} page</DialogTitle>
+      <DialogDescription>Fill in the required details below.</DialogDescription>
       <SheetContent
         side="right"
         className="bg-white p-8 rounded-l-lg shadow-xl flex flex-col justify-center items-center h-screen"
         style={{ maxWidth: '35vw', minWidth: '400px' }}
+        data-testid={`${mode}-popout`}
       >
         {/* Close Button */}
         <SheetClose asChild className="h-6 w-6 cursor-pointer"></SheetClose>

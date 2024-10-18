@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Sidebar from "../ProfileSidebar";
@@ -69,7 +69,7 @@ describe("Profile Sidebar Component", () => {
     expect(mockEditProfile).toHaveBeenCalledTimes(1);
   });
 
-  test("Render the Log Out button, log out user on click and redirect to home page", () => {
+  test("Render the Log Out button, log out user on click and redirect to home page", async () => {
     (useAuth as jest.Mock).mockReturnValue({
       isSignedIn: true,
       signOut: mockSignOut,
@@ -81,7 +81,13 @@ describe("Profile Sidebar Component", () => {
     fireEvent.click(logOutButton);
 
     expect(logOutButton).toBeInTheDocument();
-    expect(mockSignOut).toHaveBeenCalledTimes(1);
-    expect(mockPush).toHaveBeenCalledWith("/"); //BUG Fails test?
+
+    await waitFor(() => {
+      expect(mockSignOut).toHaveBeenCalledTimes(1);
+    });
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith("/");
+    });
   });
 });

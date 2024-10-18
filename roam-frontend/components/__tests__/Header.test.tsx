@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-  cleanup,
-} from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useAuth } from "@/context/AuthContext";
 import Header from "@/components/Header";
@@ -64,8 +57,6 @@ jest.mock("next/navigation", () => ({
 
 describe("Header Component", () => {
   // Arrange: Set up reusable variables and mocks for the test suite
-  const mockOpenLoginDrawer = jest.fn();
-  const mockOpenSignupDrawer = jest.fn();
   const mockSignOut = jest.fn();
   const mockPush = jest.fn();
 
@@ -79,12 +70,10 @@ describe("Header Component", () => {
     (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
   });
 
-  test("Render the Login button and triggers the login drawer", () => {
-    // Arrange: Render the Header component with Login function provided
+  test("Render the Login button and triggers the login drawer", async () => {
+    // Arrange: Render the Header component with login functionality
     render(
       <Header
-        openLoginDrawer={mockOpenLoginDrawer}
-        openSignupDrawer={mockOpenSignupDrawer}
         headerSize="small"
         backgroundImage={true}
         logoColour="black"
@@ -93,20 +82,26 @@ describe("Header Component", () => {
     );
 
     // Act: Find the Login button and simulate a click event
+    const user = userEvent.setup();
     const loginButton = screen.getByTestId("login-button");
-    fireEvent.click(loginButton);
+    await user.click(loginButton);
 
-    // Assert: Check that the Login button is displayed and that clicking it calls the function once
-    expect(loginButton).toBeInTheDocument();
-    expect(mockOpenLoginDrawer).toHaveBeenCalledTimes(1);
+    // Assert: Check that the login popout is displayed
+    await waitFor(() => {
+      const loginPopout = screen.getByTestId("login-popout");
+      expect(loginPopout).toBeInTheDocument();
+    });
   });
 
-  test("Does not render the Login button when openLoginDrawer is undefined", () => {
-    // Arrange: Render the Header component without Login function
+  test("Does not render the Login button when the user is signed in", () => {
+    // Arrange: Simulate the user being signed in
+    (useAuth as jest.Mock).mockReturnValue({
+      isSignedIn: true,
+      signOut: mockSignOut,
+    });
+
     render(
       <Header
-        openLoginDrawer={undefined}
-        openSignupDrawer={mockOpenSignupDrawer}
         headerSize="small"
         backgroundImage={true}
         logoColour="black"
@@ -114,19 +109,21 @@ describe("Header Component", () => {
       />
     );
 
-    // Act: Attempt to find the Login button
+    // Act: Attempt to find the Login and Sign Up buttons
     const loginButton = screen.queryByTestId("login-button");
+    const signUpButton = screen.queryByTestId("signup-button");
+    const avatar = screen.getByTestId("user-avatar");
 
-    // Assert: Verify that the Login button is not present in the document
+    // Assert: Verify that Login and Sign Up buttons are not rendered, but the avatar is
     expect(loginButton).not.toBeInTheDocument();
+    expect(signUpButton).not.toBeInTheDocument();
+    expect(avatar).toBeInTheDocument();
   });
 
-  test("Renders the Sign Up button and triggers the signup drawer", () => {
-    // Arrange: Render the Header component with Sign Up function provided
+  test("Renders the Sign Up button and triggers the signup drawer", async () => {
+    // Arrange: Render the Header component with signup functionality
     render(
       <Header
-        openLoginDrawer={mockOpenLoginDrawer}
-        openSignupDrawer={mockOpenSignupDrawer}
         headerSize="small"
         backgroundImage={true}
         logoColour="black"
@@ -135,40 +132,21 @@ describe("Header Component", () => {
     );
 
     // Act: Find the Sign Up button and simulate a click event
+    const user = userEvent.setup();
     const signUpButton = screen.getByTestId("signup-button");
-    fireEvent.click(signUpButton);
+    await user.click(signUpButton);
 
-    // Assert: Check that the Sign Up button is displayed and that clicking it calls the function once
-    expect(signUpButton).toBeInTheDocument();
-    expect(mockOpenSignupDrawer).toHaveBeenCalledTimes(1);
-  });
-
-  test("Does not render the Sign Up button when openSignupDrawer is undefined", () => {
-    // Arrange: Render the Header component without Sign Up function
-    render(
-      <Header
-        openLoginDrawer={mockOpenLoginDrawer}
-        openSignupDrawer={undefined}
-        headerSize="small"
-        backgroundImage={true}
-        logoColour="black"
-        displayProfilePicture={true}
-      />
-    );
-
-    // Act: Attempt to find the Sign Up button
-    const signUpButton = screen.queryByTestId("signup-button");
-
-    // Assert: Verify that the Sign Up button is not present in the document
-    expect(signUpButton).not.toBeInTheDocument();
+    // Assert: Check that the signup popout is displayed
+    await waitFor(() => {
+      const signupPopout = screen.getByTestId("signup-popout");
+      expect(signupPopout).toBeInTheDocument();
+    });
   });
 
   test("Logo redirects to the home page when clicked", () => {
     // Arrange: Render the Header component
     render(
       <Header
-        openLoginDrawer={mockOpenLoginDrawer}
-        openSignupDrawer={mockOpenSignupDrawer}
         headerSize="small"
         backgroundImage={true}
         logoColour="black"
@@ -184,7 +162,7 @@ describe("Header Component", () => {
     expect(mockPush).toHaveBeenCalledWith("/");
   });
 
-  test("Does not show Login and Sign Up buttons when the user is signed in", () => {
+  test("Profile dropdown menu shows options for Dashboard and Log Out when user is signed in", async () => {
     // Arrange: Simulate user being signed in
     (useAuth as jest.Mock).mockReturnValue({
       isSignedIn: true,
@@ -193,37 +171,6 @@ describe("Header Component", () => {
 
     render(
       <Header
-        openLoginDrawer={mockOpenLoginDrawer}
-        openSignupDrawer={mockOpenSignupDrawer}
-        headerSize="small"
-        backgroundImage={true}
-        logoColour="black"
-        displayProfilePicture={true}
-      />
-    );
-
-    // Act: Attempt to find the Login and Sign Up buttons, and verify if the avatar is displayed
-    const loginButton = screen.queryByTestId("login-button");
-    const signUpButton = screen.queryByTestId("signup-button");
-    const avatar = screen.queryByTestId("user-avatar");
-
-    // Assert: Ensure buttons are not shown, but the profile avatar is visible
-    expect(loginButton).not.toBeInTheDocument();
-    expect(signUpButton).not.toBeInTheDocument();
-    expect(avatar).toBeInTheDocument();
-  });
-
-  test("Profile dropdown menu shows options for Dashboard and Log Out", async () => {
-    // Arrange: Simulate user being signed in
-    (useAuth as jest.Mock).mockReturnValue({
-      isSignedIn: true,
-      signOut: mockSignOut,
-    });
-
-    render(
-      <Header
-        openLoginDrawer={mockOpenLoginDrawer}
-        openSignupDrawer={mockOpenSignupDrawer}
         headerSize="small"
         backgroundImage={true}
         logoColour="black"
@@ -234,14 +181,12 @@ describe("Header Component", () => {
     // Act: Click the avatar to open the dropdown
     const user = userEvent.setup();
     const avatar = screen.getByTestId("user-avatar");
-
     await user.click(avatar);
 
-    // Act: Wait for dropdown items to appear
+    // Assert: Check that Dashboard and Log Out options appear in the dropdown menu
     const dashboardOption = await screen.findByTestId("dashboard-button");
     const logoutOption = await screen.findByTestId("logout-button");
 
-    // Assert: Check that the dropdown options are visible
     expect(dashboardOption).toBeInTheDocument();
     expect(logoutOption).toBeInTheDocument();
   });
@@ -255,8 +200,6 @@ describe("Header Component", () => {
 
     render(
       <Header
-        openLoginDrawer={mockOpenLoginDrawer}
-        openSignupDrawer={mockOpenSignupDrawer}
         headerSize="small"
         backgroundImage={true}
         logoColour="black"
@@ -271,7 +214,7 @@ describe("Header Component", () => {
     const dashboardOption = screen.getByTestId("dashboard-button");
     await user.click(dashboardOption);
 
-    // Assert: Verify that the click triggers navigation to the Dashboard
+    // Assert: Verify that clicking Dashboard triggers navigation to the Dashboard
     expect(mockPush).toHaveBeenCalledWith("/dashboard");
   });
 
@@ -284,8 +227,6 @@ describe("Header Component", () => {
 
     render(
       <Header
-        openLoginDrawer={mockOpenLoginDrawer}
-        openSignupDrawer={mockOpenSignupDrawer}
         headerSize="small"
         backgroundImage={true}
         logoColour="black"
@@ -308,8 +249,6 @@ describe("Header Component", () => {
     // Arrange: Render the Header with "tall" headerSize and backgroundImage as true
     render(
       <Header
-        openLoginDrawer={jest.fn()}
-        openSignupDrawer={jest.fn()}
         headerSize="tall"
         backgroundImage={true}
         logoColour="black"
@@ -331,8 +270,6 @@ describe("Header Component", () => {
     // Arrange: Re-render Header with "small" headerSize and backgroundImage set to true
     render(
       <Header
-        openLoginDrawer={jest.fn()}
-        openSignupDrawer={jest.fn()}
         headerSize="small"
         backgroundImage={true}
         logoColour="black"
@@ -340,19 +277,7 @@ describe("Header Component", () => {
       />
     );
 
-    // Act: Log the DOM for debugging
-    screen.debug();
-
-    // Assert:
-    // Verify that TallHeaderBackground is not displayed for small header
-    await waitFor(() => {
-      const smallTallBackground = screen.queryByTestId(
-        "tall-header-background"
-      );
-      expect(smallTallBackground).not.toBeInTheDocument();
-    });
-
-    // Verify that HeaderBackground is displayed for small header when backgroundImage is true
+    // Assert: Verify that HeaderBackground is displayed for small header when backgroundImage is true
     await waitFor(() => {
       const smallHeaderBackground = screen.queryByTestId("header-background");
       expect(smallHeaderBackground).toBeInTheDocument();
@@ -364,8 +289,6 @@ describe("Header Component", () => {
     // Arrange: Re-render Header with "small" headerSize and no background
     render(
       <Header
-        openLoginDrawer={jest.fn()}
-        openSignupDrawer={jest.fn()}
         headerSize="small"
         backgroundImage={false}
         logoColour="black"
@@ -373,11 +296,7 @@ describe("Header Component", () => {
       />
     );
 
-    // Act: Log the DOM for debugging
-    screen.debug();
-
-    // Assert:
-    // Verify that no background components are displayed when backgroundImage is false
+    // Assert: Verify that no background components are displayed when backgroundImage is false
     await waitFor(() => {
       const noTallBackground = screen.queryByTestId("tall-header-background");
       const noSmallBackground = screen.queryByTestId("header-background");
