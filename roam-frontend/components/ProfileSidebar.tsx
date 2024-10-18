@@ -24,6 +24,7 @@ const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
       {/* Top section: Home and Purchases */}
       <div className="flex flex-col gap-6 flex-grow">
         <a
+          data-testid="home-button"
           href="#"
           className="gap-2.5 self-stretch px-2 py-2.5 whitespace-nowrap bg-white rounded-lg min-h-[33px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
           onClick={handleHomeClick}
@@ -31,6 +32,7 @@ const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
           Home
         </a>
         <a
+          data-testid="purchases-button"
           href="#"
           className="gap-2.5 self-stretch px-2 py-2.5 whitespace-nowrap bg-white rounded-lg min-h-[33px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
           onClick={onEditProfile}
@@ -41,6 +43,7 @@ const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
       {/* Log Out button pinned at the bottom */}
       <div className="fixed bottom-5 w-[218px]">
         <button
+          data-testid="sidebar-logout-button"
           onClick={handleLogOut}
           className="gap-2.5 self-stretch px-2 py-2.5 bg-white rounded-lg min-h-[33px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] w-full"
         >
