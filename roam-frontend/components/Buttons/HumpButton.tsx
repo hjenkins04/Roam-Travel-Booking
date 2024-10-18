@@ -44,7 +44,7 @@ const HumpButton2: React.FC<HumpButton2Props> = ({
           y="1.49902"
           width="270"
           height="56"
-          fill={primaryColor}
+          fill={ primaryColor }
         />
 
         {/* Left Button Path (Primary) */}
