@@ -1,12 +1,17 @@
-import React from 'react';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import HeaderBackground from './Backgrounds/HeaderBackground';
-import TallHeaderBackground from './Backgrounds/TallHeaderBackground';
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
+import React from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import HeaderBackground from "./Backgrounds/HeaderBackground";
+import TallHeaderBackground from "./Backgrounds/TallHeaderBackground";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 // Define the correct prop types for additional props
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
@@ -15,6 +20,7 @@ interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   headerSize: string;
   backgroundImage: boolean;
   logoColour: string;
+  displayProfilePicture: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -23,17 +29,17 @@ const Header: React.FC<HeaderProps> = ({
   headerSize,
   backgroundImage,
   logoColour,
-  ...props
-  }) => {
+  displayProfilePicture
+}) => {
   const { isSignedIn, signOut } = useAuth();
   const router = useRouter();
 
   const handleLogoClick = () => {
-    router.push('/');
+    router.push("/");
   };
 
   const handleDashboardClick = () => {
-    router.push('/dashboard');
+    router.push("/dashboard");
   };
 
   // Calculate dynamic padding based on backgroundImage and headerSize
@@ -45,24 +51,27 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className={`flex justify-between items-center px-16 pt-6 shadow-sm relative ${paddingBottom}`} {...props}>
-        {/* Conditionally render the background based on headerSize */}
-        <div className="absolute inset-0 z-10" data-testid="header-container">
-          {backgroundImage && (headerSize === "tall" ? 
-            <TallHeaderBackground data-testid="tall-header-background" headerSize={headerSize}/> : 
-            <HeaderBackground data-testid="header-background" headerSize={headerSize}/>
-          )}
-        </div>
+      {/* Conditionally render the background based on headerSize */}
+      <div className="absolute inset-0" data-testid="header-container">
+        {backgroundImage && (headerSize === "tall" ? 
+          <TallHeaderBackground data-testid="tall-header-background"/> : 
+          <HeaderBackground data-testid="header-background"/>
+        )}
+      </div>
 
+
+      <header className="flex justify-between items-center px-16 py-6 shadow-sm">
         {/* Logo with click handler for redirect */}
         <div className="relative w-32 h-[76px] z-10">
           <Image
-            src={logoColour === "black" 
-              ? "/images/logos/roam-high-resolution-logo-transparent-dark-letters.png" 
-              : "/images/logos/roam-high-resolution-logo-transparent.png"}
+            src={
+              logoColour === "black"
+                ? "/images/logos/roam-high-resolution-logo-transparent-dark-letters.png"
+                : "/images/logos/roam-high-resolution-logo-transparent.png"
+            }
             alt="ROAM Logo"
             fill
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: "contain" }}
             className="w-auto h-auto cursor-pointer"
             onClick={handleLogoClick}
             data-testid="logo"
@@ -72,12 +81,24 @@ const Header: React.FC<HeaderProps> = ({
         {/* Conditionally render login/signup buttons or user avatar with dropdown */}
         <div className="space-x-2 z-10">
           {!isSignedIn && openLoginDrawer && (
-            <Button variant="outline" onClick={openLoginDrawer} data-testid="login-button">Login</Button>
+            <Button
+              variant="outline"
+              onClick={openLoginDrawer}
+              data-testid="login-button"
+            >
+              Login
+            </Button>
           )}
           {!isSignedIn && openSignupDrawer && (
-            <Button className="bg-[#ff6b35] hover:bg-[#ff8c5a]" onClick={openSignupDrawer} data-testid="signup-button">Sign Up</Button>
+            <Button
+              className="bg-[#ff6b35] hover:bg-[#ff8c5a]"
+              onClick={openSignupDrawer}
+              data-testid="signup-button"
+            >
+              Sign Up
+            </Button>
           )}
-          {isSignedIn && (
+          {isSignedIn && displayProfilePicture && (
             <div className="flex items-center space-x-4">
               {/* User Avatar with Dropdown */}
               <DropdownMenu>
@@ -88,10 +109,16 @@ const Header: React.FC<HeaderProps> = ({
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onClick={handleDashboardClick} data-testid="dashboard-button">
+                  <DropdownMenuItem
+                    onClick={handleDashboardClick}
+                    data-testid="dashboard-button"
+                  >
                     Dashboard
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={signOut} data-testid="logout-button">
+                  <DropdownMenuItem
+                    onClick={signOut}
+                    data-testid="logout-button"
+                  >
                     Log Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>

@@ -51,6 +51,7 @@ export default function Home() {
         headerSize="small"
         backgroundImage={false}
         logoColour={"black"}
+        displayProfilePicture={true}
       />
 
       <main className="relative z-10 px-4 py-8 flex flex-col items-center">
