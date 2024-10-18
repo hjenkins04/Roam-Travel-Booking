@@ -135,11 +135,14 @@ const ProfilePage: React.FC = () => {
                 <div className="flex flex-col self-stretch pt-2 mt-2 bg-white rounded-lg max-md:pt-24 max-md:max-w-full">
                   <div className="flex flex-col px-4 bg-white rounded-lg max-md:max-w-full">
                     {purchases.map((purchase, index) => (
-                      <PurchaseItem
-                        key={index}
-                        {...purchase}
-                        onCancelClick={handleCancel}
-                      />
+                      <>
+                        <h2 className="text-xl mt-5 font-semibold text-gray-700">{purchase.title}</h2>
+                        <PurchaseItem
+                          key={index}
+                          {...purchase}
+                          onCancelClick={handleCancel}
+                        />
+                      </>
                     ))}
                   </div>
                 </div>

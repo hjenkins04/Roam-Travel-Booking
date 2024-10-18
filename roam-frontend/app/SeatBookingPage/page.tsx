@@ -6,12 +6,8 @@ import BookingForm from "@/components/SeatBookingForm";
 import Header from "@/components/Header";
 import SeatBookingFormFooter from "@/components/SeatBookingFormFooter";
 
-const LoginSignupPopout = dynamic(() => import("@/components/LoginSignupPopout"), { ssr: false });
-const ProfilePage = dynamic(() => import("@/components/ProfilePage"), { ssr: false });
 
 export default function SeatBookingPage() {
-  const [isPopoutOpen, setIsPopoutOpen] = useState(false);
-  const [popoutMode, setPopoutMode] = useState<"login" | "signup">("login");
 
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
 
@@ -24,19 +20,6 @@ export default function SeatBookingPage() {
   // Reference to the form element
   const formRef = useRef<HTMLFormElement | null>(null);
 
-  const openLoginDrawer = () => {
-    setIsPopoutOpen(true);
-    setPopoutMode("login");
-  };
-
-  const openSignupDrawer = () => {
-    setIsPopoutOpen(true);
-    setPopoutMode("signup");
-  };
-
-  const closeDrawer = () => {
-    setIsPopoutOpen(false);
-  };
 
   const handleSeatClick = (seatNumber: number) => {
     if (seatNumber === selectedSeat) {
@@ -69,8 +52,6 @@ export default function SeatBookingPage() {
     <div className="relative">
       {/* Header */}
       <Header
-        openLoginDrawer={openLoginDrawer}
-        openSignupDrawer={openSignupDrawer}
         headerSize="small"
         backgroundImage={true}
         logoColour={"black"}
@@ -91,7 +72,7 @@ export default function SeatBookingPage() {
 
         {/* Booking Form */}
         {selectedSeat && (
-          <div className="absolute right-0 w-2/4 h-full bg-white shadow-lg transition-opacity duration-300 ease-in-out opacity-100 flex flex-col justify-between">
+          <div className="absolute right-0 w-4/7 h-full bg-white shadow-lg transition-opacity duration-300 ease-in-out opacity-100 flex flex-col justify-between">
             <div className="p-8 flex-1 overflow-auto">
               <BookingForm
                 groupSize={groupSize}
@@ -120,13 +101,6 @@ export default function SeatBookingPage() {
           </div>
         )}
       </div>
-
-      <LoginSignupPopout
-        isOpen={isPopoutOpen}
-        mode={popoutMode}
-        closeDrawer={closeDrawer}
-        setPopoutMode={setPopoutMode}
-      />
     </div>
   );
 }
