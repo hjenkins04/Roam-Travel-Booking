@@ -3,8 +3,8 @@
 import { FC, ReactNode } from "react";
 
 interface SearchBoxButtonProps {
-    leftIcon: ReactNode;
-    rightIcon: ReactNode;
+    leftIcon?: ReactNode;
+    rightIcon?: ReactNode;
     headerText: string;
     mainTextLeft: string;
     subTextLeft: string;

@@ -8,7 +8,8 @@ import { useRouter } from 'next/navigation';
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
-interface HeaderProps {
+// Define the correct prop types for additional props
+interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   openLoginDrawer?: () => void;
   openSignupDrawer?: () => void;
   headerSize: string;
@@ -21,8 +22,9 @@ const Header: React.FC<HeaderProps> = ({
   openSignupDrawer,
   headerSize,
   backgroundImage,
-  logoColour
-}) => {
+  logoColour,
+  ...props
+  }) => {
   const { isSignedIn, signOut } = useAuth();
   const router = useRouter();
 
@@ -34,18 +36,24 @@ const Header: React.FC<HeaderProps> = ({
     router.push('/dashboard');
   };
 
+  // Calculate dynamic padding based on backgroundImage and headerSize
+  const paddingBottom = backgroundImage
+    ? headerSize === 'tall'
+      ? 'pb-48 pt-8'  // Large padding for tall headers with background image
+      : 'pb-10 pt-8'  // Smaller padding for regular headers with background image
+    : 'pb-6';     // Default padding if no background image
+
   return (
     <>
-      {/* Conditionally render the background based on headerSize */}
-      <div className="absolute inset-0" data-testid="header-container">
-        {backgroundImage && (headerSize === "tall" ? 
-          <TallHeaderBackground data-testid="tall-header-background"/> : 
-          <HeaderBackground data-testid="header-background"/>
-        )}
-      </div>
+      <header className={`flex justify-between items-center px-16 pt-6 shadow-sm relative ${paddingBottom}`} {...props}>
+        {/* Conditionally render the background based on headerSize */}
+        <div className="absolute inset-0 z-10" data-testid="header-container">
+          {backgroundImage && (headerSize === "tall" ? 
+            <TallHeaderBackground data-testid="tall-header-background" headerSize={headerSize}/> : 
+            <HeaderBackground data-testid="header-background" headerSize={headerSize}/>
+          )}
+        </div>
 
-
-      <header className="flex justify-between items-center px-16 py-6 shadow-sm">
         {/* Logo with click handler for redirect */}
         <div className="relative w-32 h-[76px] z-10">
           <Image

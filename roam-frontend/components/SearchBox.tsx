@@ -235,9 +235,7 @@ const SearchBox = () => {
           {/* Search Button */}
           <div className="flex justify-center pt-6 relative">
             <Link href="/search-results" passHref>
-              <Button
-                className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2"
-              >
+              <Button className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2">
                 <span>Search Flights</span>
                 <Search className="w-5 h-5 text-white" />
               </Button>
