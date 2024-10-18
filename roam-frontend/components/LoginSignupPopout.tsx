@@ -8,7 +8,6 @@ import Underline from '@/components/Effects/TextUnderline';
 import { useAuth } from '@/context/AuthContext';
 import { useState } from 'react';
 
-// Define prop types for the LoginSignupPopout component
 interface LoginSignupPopoutProps {
   isOpen: boolean;
   mode: "login" | "signup";
@@ -32,17 +31,14 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({ isOpen, mode, clo
   // Handle form submission for standard login/signup
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // For demonstration purposes, directly sign in when the form is submitted
-    // In a real-world application, you would add form validation and send the data to a backend service
+    // Simulate successful login/signup
     signIn();
     closeDrawer();
   };
 
   // Handle Google sign-in or sign-up
   const handleGoogleSignIn = () => {
-    // For now, we'll call signIn to simulate successful login/signup
-    // Replace this with real Google authentication logic as needed
+    // Simulate successful login/signup
     signIn();
     closeDrawer();
   };

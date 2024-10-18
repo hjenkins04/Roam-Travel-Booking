@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
+import dynamic from "next/dynamic"
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import HeaderBackground from "./Backgrounds/HeaderBackground";
@@ -6,17 +7,11 @@ import TallHeaderBackground from "./Backgrounds/TallHeaderBackground";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
-// Define the correct prop types for additional props
+const LoginSignupPopout = dynamic(() => import("@/components/LoginSignupPopout"), { ssr: false });
+
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
-  openLoginDrawer?: () => void;
-  openSignupDrawer?: () => void;
   headerSize: string;
   backgroundImage: boolean;
   logoColour: string;
@@ -24,15 +19,30 @@ interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 const Header: React.FC<HeaderProps> = ({
-  openLoginDrawer,
-  openSignupDrawer,
   headerSize,
   backgroundImage,
   logoColour,
   displayProfilePicture = false
 }) => {
+  
   const { isSignedIn, signOut } = useAuth();
   const router = useRouter();
+  const [isPopoutOpen, setIsPopoutOpen] = useState(false);
+  const [popoutMode, setPopoutMode] = useState<"login" | "signup">("login");
+
+  const openLoginDrawer = () => {
+    setIsPopoutOpen(true);
+    setPopoutMode("login");
+  };
+
+  const openSignupDrawer = () => {
+    setIsPopoutOpen(true);
+    setPopoutMode("signup");
+  };
+
+  const closeDrawer = () => {
+    setIsPopoutOpen(false);
+  };
 
   const handleLogoClick = () => {
     router.push("/");
@@ -127,6 +137,16 @@ const Header: React.FC<HeaderProps> = ({
           )}
         </div>
       </header>
+
+      {/* login/signup popout */}
+      {isPopoutOpen && (
+        <LoginSignupPopout
+          isOpen={isPopoutOpen}
+          mode={popoutMode}
+          closeDrawer={closeDrawer}
+          setPopoutMode={setPopoutMode}
+        />
+      )}
     </>
   );
 };
