@@ -10,7 +10,28 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Hide scrollbar utility */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  .search-container {
+    margin-left: 0;
+    /* Ensures no unintended horizontal offset */
+    padding-left: 5px;
+    /* Keeps alignment consistent */
+  }
 }
+
 
 @layer base {
   :root {
@@ -40,6 +61,7 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -72,6 +94,7 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
