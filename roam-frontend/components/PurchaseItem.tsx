@@ -1,7 +1,8 @@
-'use client'
+"use client";
 
 import React from "react";
 import { Ban } from "lucide-react";
+import AirlinePhoto from "./Images/AirlinePhoto";
 
 interface FlightInfo {
   date: string;
@@ -30,17 +31,17 @@ const PurchaseItem: React.FC<PurchaseItemProps> = ({
 }) => {
   return (
     <section className="relative flex flex-col justify-center p-6 mt-4 bg-white rounded-lg border border-gray-200 max-md:mt-2 max-md:max-w-full">
-    <Ban
-      data-testid="cancel-icon"
-      className="absolute top-4 right-4 text-gray-400 hover:text-red-500 cursor-pointer"
-      onClick={onCancelClick}
-    />
-    <div className="flex gap-6 mt-4 max-md:flex-col">
-      <FlightDetails {...outboundFlight} />
-      <FlightDetails {...returnFlight} isReturn />
-    </div>
-  </section>
-  );  
+      <Ban
+        data-testid="cancel-icon"
+        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 cursor-pointer"
+        onClick={onCancelClick}
+      />
+      <div className="flex gap-6 mt-4 max-md:flex-col">
+        <FlightDetails {...outboundFlight} />
+        <FlightDetails {...returnFlight} isReturn />
+      </div>
+    </section>
+  );
 };
 
 interface FlightDetailsProps extends FlightInfo {
@@ -60,20 +61,13 @@ const FlightDetails: React.FC<FlightDetailsProps> = ({
   isReturn,
 }) => {
   return (
-    <div
-      className={`flex flex-col max-md:ml-0 max-md:w-full`}
-    >
+    <div className={`flex flex-col max-md:ml-0 max-md:w-full`}>
       <div className="flex flex-col grow max-md:max-w-full">
         <div className="flex flex-col items-start pr-6 pl-6 w-full max-md:px-5 max-md:max-w-full">
           <time className="text-lg font-semibold text-slate-500">{date}</time>
           <p className="text-base text-black">Departing {departure}</p>
           <div className="flex gap-2 items-start self-stretch mt-2 max-md:ml-2">
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/47154ef659dd968075223e67363fb44c6d051fe030370f4062cd21cc5bd1ef89?placeholderIfAbsent=true&apiKey=7a7173da98bb425ca4236bb2160d9309"
-              className="object-contain shrink-0 w-10 aspect-square"
-              alt=""
-            />
+            <AirlinePhoto />
             <div className="flex flex-col self-stretch text-xs">
               <div className="flex flex-col text-base min-h-[48px]">
                 <p className="text-slate-800">{airline}</p>
