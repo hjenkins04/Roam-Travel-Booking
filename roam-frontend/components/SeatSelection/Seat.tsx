@@ -54,30 +54,40 @@ const Seat: React.FC<SeatProps> = ({ id, x, y, width, height, rx, seatType, seat
     // Check if the seat is interactive (available or selected)
     const isInteractive = seatState === "available" || seatState === "selected";
 
+    const handleClick = () => {
+        if (isInteractive) {
+          onSeatClick(id);
+        }
+      };
+
     return (
-        <g
-            id={`seat_${id}`}
-            onClick={() => onSeatClick(id)}
-            role="button"
-            aria-pressed={seatState === "selected"}
-        >
-            {/* Seat Rectangle */}
-            <rect
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-                rx={rx}
-                fill={seatFillColor}
-                className={cursorClass}
-            />
-            {/* Render checkmark if seat is selected */}
-            {seatState === "selected" && (
-                <g id="checkmark" transform={`translate(${centerX - 12}, ${centerY - 12})`}>
-                    <Check size={24} color="#ffffff" />
-                </g>
-            )}
-        </g>
+        <svg>
+            <g
+                id={`${id}`}
+                onClick={handleClick}
+                role="button"
+                aria-pressed={seatState === "selected"}
+                data-testid={`seat-${id}-${seatState}`}
+            >
+                {/* Seat Rectangle */}
+                <rect
+                    x={x}
+                    y={y}
+                    width={width}
+                    height={height}
+                    rx={rx}
+                    fill={seatFillColor}
+                    className={cursorClass}
+                    data-testid={`seat-rect-${id}`}
+                />
+                {/* Render checkmark if seat is selected */}
+                {seatState === "selected" && (
+                    <g id="checkmark" data-testid="checkmark" transform={`translate(${centerX - 12}, ${centerY - 12})`}>
+                        <Check size={24} color="#ffffff" />
+                    </g>
+                )}
+            </g>
+        </svg>
     );
 };
 

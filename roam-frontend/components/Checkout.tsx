@@ -36,43 +36,32 @@ const Checkout: React.FC = () => {
     const handleFormSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         console.log("Form submitted");
-        // Add your form submission logic here
     };
 
     return (
-        <>
-            <div className="relative min-h-screen">
-                <Header
-                    headerSize={"small"}
-                    backgroundImage={true}
-                    logoColour={"black"}
-                    displayProfilePicture={false}
-                />
-                <main className="mt-10 w-full">
-                    <div className="flex flex-row gap-6 justify-center">
-                        {/* Left column: Booking details and form */}
-                        <section className="flex-1 flex flex-col space-y-4">
-                            <div className="bg-white p-6 mx-auto w-full max-w-4xl">
-                                <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                                    {purchase.title}
-                                </h2>
-                                <PurchaseItem {...purchase} onCancelClick={() => console.log("click")} />
-                            </div>
-
-                            <div className="bg-white p-6 mx-auto w-full max-w-4xl">
-                                <h2 className="text-xl font-semibold text-gray-700 mb-4">Complete Booking Payment</h2>
-                                <PaymentForm onSubmit={handleFormSubmit} />
-                            </div>
-                        </section>
-
-                        {/* Right column: Checkout summary */}
-                        <section className="w-1/3 sticky top-24 ">
-                            <PaymentSummaryCard purchase={purchase} subtotal={702} taxes={66} total={768} onSubmit={handleFormSubmit} />
-                        </section>
+        <main className="mt-10 w-full">
+            <div className="flex flex-row gap-6 justify-center">
+                {/* Left column: Booking details and form */}
+                <section className="flex-1 flex flex-col space-y-4">
+                    <div className="bg-white p-6 mx-auto w-full max-w-4xl">
+                        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                            {purchase.title}
+                        </h2>
+                        <PurchaseItem {...purchase} ban={false} onCancelClick={() => console.log("click")} />
                     </div>
-                </main>
+
+                    <div className="bg-white p-6 mx-auto w-full max-w-4xl">
+                        <h2 className="text-xl font-semibold text-gray-700 mb-4">Complete Booking Payment</h2>
+                        <PaymentForm onSubmit={handleFormSubmit} />
+                    </div>
+                </section>
+
+                {/* Right column: Checkout summary */}
+                <section className="w-1/3 sticky top-24 ">
+                    <PaymentSummaryCard purchase={purchase} subtotal={702} taxes={66} total={768} onSubmit={handleFormSubmit} />
+                </section>
             </div>
-        </>
+        </main>
     );
 };
 

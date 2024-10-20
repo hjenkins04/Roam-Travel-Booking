@@ -18,7 +18,7 @@ import ProfileHeader from "../ProfileHeader";
  *    - Expectation: the name and email should be rendered and their values should be equal to the props.
  *
  * 2. Render the edit profile button and test its functionality.
- *    - Expectation: the Edit Profile button should be rendered and should trigger a function once on click.
+ *    - Expectation: the Edit Profile button should be rendered and should trigger the function once on click.
  */
 
 describe("Profile Header Component", () => {
