@@ -1,8 +1,6 @@
 'use client'
 import React from "react";
-import PurchaseItemSmall from "@/components/PurchaseItemSmall";
 import PurchaseItem from "@/components/PurchaseItem";
-import Header from "./Header";
 import PaymentForm from "@/components/PaymentForm";
 import PaymentSummaryCard from "@/components/PaymentSummaryCard";
 

@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import SearchResultBox from "@/components/SearchResultBox";
 import LandingPageBackground from "@/components/Backgrounds/TallHeaderBackground";
 import FilterBox from "@/components/FilterBox";
-import SearchItem from "@/components/SearchItem";
 import SearchScroll from "@/components/SearchScroll";
-import { ChevronDown } from "lucide-react";
 
 const TrendingLocationsHomeGrid = dynamic(
     () => import("@/components/TrendingLocationsHomeGrid"),

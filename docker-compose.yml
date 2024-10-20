@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: ./roam-frontend
+      dockerfile: Dockerfile
+    container_name: roam-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./roam-frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=production
+    command: npm start
+
+volumes:
+  db_data:

@@ -9,7 +9,7 @@ interface FilterButtonProps {
     className?: string;
     customTextColour?: string;
     onClickRightIcon?: () => void;
-    options: string[]; x
+    options: string[];
     onOptionSelect: (option: string) => void;
 }
 

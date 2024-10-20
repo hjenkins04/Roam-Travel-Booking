@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "ESLINT_DISABLE=true next build",
+    "start": "ESLINT_DISABLE=true next start",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",

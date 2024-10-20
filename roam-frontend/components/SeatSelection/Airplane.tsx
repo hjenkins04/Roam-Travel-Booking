@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Seat, {SeatType, SeatState, SeatProps } from "@/components/SeatSelection/Seat"
+import Seat, {SeatState } from "@/components/SeatSelection/Seat"
 import RowNumber from "@/components/SeatSelection/RowNumber"
 import Information from "@/components/SeatSelection/Information"
 import Draggable from "react-draggable";

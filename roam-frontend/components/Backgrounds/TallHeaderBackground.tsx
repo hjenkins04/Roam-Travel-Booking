@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface TallHeaderBackgroundProps {
   backgroundImage?: boolean;
@@ -22,7 +23,7 @@ const TallHeaderBackground: React.FC<TallHeaderBackgroundProps> = ({
     }}
     {...props}
   >
-    <img
+    <Image
       src="images/tall-header-background.png"
       alt="Header Background"
       style={{
