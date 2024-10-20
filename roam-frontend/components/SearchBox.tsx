@@ -24,7 +24,7 @@ import {
   Search,
   ArrowLeftRight,
 } from "lucide-react";
-import SearchBoxButtonList from "@/components/SearchBoxButtonGroup";
+import SearchBoxButtonList from "@/components/SearchBoxButtonList";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
 import Link from "next/link";

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { CalendarIcon, UserIcon, Users } from "lucide-react";
-import SearchBoxButtonList from "@/components/SearchBoxButtonGroup";
+import SearchBoxButtonList from "@/components/SearchBoxButtonList";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import SearchBoxButtonOneSide from "@/components/SearchBoxButtonOneSide";
 
