@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "ESLINT_DISABLE=true next build",
-    "start": "ESLINT_DISABLE=true next start",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -33,6 +33,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
     "react-draggable": "^4.4.6",
+    "sharp": "^0.33.5",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7"
   },

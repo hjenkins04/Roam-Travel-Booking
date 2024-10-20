@@ -1,9 +1,7 @@
 'use client';
 import React, { useState, useRef } from "react";
-import dynamic from "next/dynamic";
 import Airplane from "@/components/SeatSelection/Airplane";
 import BookingForm from "@/components/SeatBookingForm";
-import Header from "@/components/Header";
 import SeatBookingFormFooter from "@/components/SeatBookingFormFooter";
 
 
@@ -12,8 +10,8 @@ export default function SeatBooking() {
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
 
   const [passengerName, setPassengerName] = useState<string>("");
-  const [groupSize, setGroupSize] = useState<number>(1);
-  const [isRoundTrip, setRoundTrip] = useState<boolean>(true);
+  const [groupSize] = useState<number>(1);
+  const [isRoundTrip] = useState<boolean>(true);
   const [isFirstFlight, setIsFirstFlight] = useState<boolean>(true);
   const [passengerIndex, setPassengerIndex] = useState<number>(0)
 

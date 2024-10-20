@@ -11,7 +11,7 @@ export default function CheckoutPage() {
           headerSize={"small"}
           backgroundImage={true}
           logoColour={"black"}
-          displayProfilePicture={false}
+          displayProfilePicture={true}
       />
       <Checkout />
     </div>

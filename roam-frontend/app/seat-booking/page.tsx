@@ -9,8 +9,8 @@ export default function SeatBookingPage() {
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
 
   const [passengerName, setPassengerName] = useState<string>("");
-  const [groupSize, setGroupSize] = useState<number>(1);
-  const [isRoundTrip, setRoundTrip] = useState<boolean>(true);
+  const [groupSize] = useState<number>(1);
+  const [isRoundTrip] = useState<boolean>(true);
   const [isFirstFlight, setIsFirstFlight] = useState<boolean>(true);
   const [passengerIndex, setPassengerIndex] = useState<number>(0);
 
@@ -47,7 +47,12 @@ export default function SeatBookingPage() {
   return (
     <div className="relative">
       {/* Header */}
-      <Header headerSize="small" backgroundImage={true} logoColour={"black"} />
+      <Header
+          headerSize={"small"}
+          backgroundImage={true}
+          logoColour={"black"}
+          displayProfilePicture={true}
+      />
 
       <div
         className="relative flex overflow-hidden z-20 bg-neutral-50"

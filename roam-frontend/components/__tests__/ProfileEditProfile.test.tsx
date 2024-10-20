@@ -43,8 +43,8 @@ describe("EditProfile Component", () => {
       "Province*",
       "Postal Code*",
     ];
-    for (var s of placeholders) {
-      var element = screen.getByPlaceholderText(s);
+    for (const s of placeholders) {
+      const element = screen.getByPlaceholderText(s);
       expect(element).toBeInTheDocument();
       expect(element).toBeRequired();
     }
@@ -63,8 +63,8 @@ describe("EditProfile Component", () => {
     render(<EditProfile handleSubmit={mockHandleSubmit} />);
 
     const placeholders = ["Middle", "Apt Number", "Suffix"];
-    for (var s of placeholders) {
-      var element = screen.getByPlaceholderText(s);
+    for (const s of placeholders) {
+      const element = screen.getByPlaceholderText(s);
       expect(element).toBeInTheDocument();
       expect(element).not.toBeRequired();
     }

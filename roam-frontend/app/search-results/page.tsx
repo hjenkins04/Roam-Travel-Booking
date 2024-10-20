@@ -1,31 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import Header from "@/components/Header";
 import SearchResultBox from "@/components/SearchResultBox";
 import LandingPageBackground from "@/components/Backgrounds/TallHeaderBackground";
 import FilterBox from "@/components/FilterBox";
 import SearchScroll from "@/components/SearchScroll";
 
-export default function Home() {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
-
-  const openLoginDrawer = () => {
-    setIsLoginOpen(true);
-    setIsSignupOpen(false);
-  };
-
-  const openSignupDrawer = () => {
-    setIsSignupOpen(true);
-    setIsLoginOpen(false);
-  };
-
-  const closeDrawer = () => {
-    setIsLoginOpen(false);
-    setIsSignupOpen(false);
-  };
-
+export default function SearchResultsPage() {
   return (
     <div className="relative min-h-screen items-start">
       {/* Background SVG */}
@@ -37,7 +19,7 @@ export default function Home() {
         headerSize={"small"}
         backgroundImage={true}
         logoColour={"orange"}
-        displayProfilePicture={false}
+        displayProfilePicture={true}
       />
 
       <main className=" z-10 flex flex-col mt-[-70px] items-start pl-4">

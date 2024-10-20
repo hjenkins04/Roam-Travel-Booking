@@ -1,12 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
+import { Popover, PopoverTrigger, PopoverContent, } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -21,9 +17,6 @@ interface SeatBookingFormProps {
 }
 
 const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
-  groupSize,
-  namePlaceHolder,
-  seatNumber,
   setPassengerName,
   formRef,
 }) => {
@@ -48,7 +41,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
     sameAsPassenger: false,
   });
 
-  // Effect to update passengerName in the parent component when form data changes
+  // Update passengerName in the parent component when form data changes
   useEffect(() => {
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
     setPassengerName(fullName);

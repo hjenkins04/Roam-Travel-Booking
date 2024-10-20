@@ -4,11 +4,9 @@ import SearchItem from "@/components/SearchItem";
 import SearchResultExpansion from "@/components/SearchResultExpansion";
 import flightData from "@/public/data/flightData";
 import { FlightDetailsProps } from "@/public/data/flightDetails";
-import { useRouter } from "next/navigation";
 
 const SearchScroll = () => {
     const [selectedFlight, setSelectedFlight] = useState<FlightDetailsProps['flight'] | null>(null);
-    const router = useRouter();
 
     return (
         <div className="flex mb-10 h-[500px] justify-between">

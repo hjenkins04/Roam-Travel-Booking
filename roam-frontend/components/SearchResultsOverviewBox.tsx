@@ -6,38 +6,10 @@ import SearchBoxButton from "@/components/SearchBoxButton";
 import SearchBoxButtonOneSide from "@/components/SearchBoxButtonOneSide";
 
 const SearchResultsOverviewBox = () => {
-  const [departureDate, setDepartureDate] = useState<Date>();
-  const [returnDate, setReturnDate] = useState<Date>();
-  const [passengers, setPassengers] = useState([{ class: "Economy" }]);
-  const [isRoundTrip, setIsRoundTrip] = useState(true);
-
-  const addPassenger = () => {
-    setPassengers([...passengers, { class: "Economy" }]);
-  };
-
-  const removePassenger = () => {
-    if (passengers.length > 1) {
-      setPassengers(passengers.slice(0, -1));
-    }
-  };
-
-  const updatePassengerClass = (
-    index: number,
-    newClass: "Business" | "Economy"
-  ) => {
-    const updatedPassengers = [...passengers];
-    updatedPassengers[index].class = newClass;
-    setPassengers(updatedPassengers);
-  };
-
-  const getPassengerTypesButton = () => {
-    const allBusiness = passengers.every((p) => p.class === "Business");
-    const allEconomy = passengers.every((p) => p.class === "Economy");
-
-    if (allBusiness) return `Business`;
-    if (allEconomy) return `Economy`;
-    return `Varying`;
-  };
+  const [departureDate] = useState<Date>();
+  const [returnDate] = useState<Date>();
+  const [passengers] = useState([{ class: "Economy" }]);
+  const [isRoundTrip] = useState(true);
 
   const getNumberOfPassengersButton = () => {
     const count = passengers.length;

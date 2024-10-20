@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Seat, { SeatProps } from "@/components/SeatSelection/Seat";
-import { Check } from "lucide-react";
 
 /**
  * Test File: Seat Component
@@ -125,7 +124,7 @@ describe("Seat Booking Seat Component", () => {
   test("Handles click events when the seat is available or selected", () => {
     // Arrange: Render an available seat
     render(<Seat {...defaultProps} seatState="available" />);
-    let seat = screen.getByTestId(seatTestIdRegex);
+    const seat = screen.getByTestId(seatTestIdRegex);
 
     // Act: Try clicking the seat
     fireEvent.click(seat);

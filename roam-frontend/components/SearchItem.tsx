@@ -13,8 +13,6 @@ interface SearchItemProps {
   stopInfo: string;
   price: string;
   tripType: string;
-  size?: string;
-  className?: string;
   onClick: () => void;
 }
 
@@ -28,8 +26,6 @@ const SearchItem: FC<SearchItemProps> = ({
   stopInfo,
   price,
   tripType,
-  size = "w-[200px]",
-  className = "",
   onClick,
 }) => {
   return (

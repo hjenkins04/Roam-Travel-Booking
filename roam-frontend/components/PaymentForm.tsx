@@ -28,7 +28,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
           <h3 className="text-xl font-semibold">Personal Details</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="name">Cardholder's Name</Label>
+              <Label htmlFor="name">Cardholder&apos;s Name</Label>
               <Input id="name" placeholder="Enter the cardholder's name" />
             </div>
             <div>

@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Airplane from "@/components/SeatSelection/Airplane";
-import Seat from "@/components/SeatSelection/Seat";
 
 /**
  * Test File: Airplane Component

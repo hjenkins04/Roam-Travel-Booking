@@ -69,9 +69,6 @@ const Seat: React.FC<SeatProps> = ({
   const centerX = x + width / 2;
   const centerY = y + height / 2;
 
-  // Check if the seat is interactive (available or selected)
-  const isInteractive = seatState === "available" || seatState === "selected";
-
   return (
     <g
       id={`seat_${id}`}

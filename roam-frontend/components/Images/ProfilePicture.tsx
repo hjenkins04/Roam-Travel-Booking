@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface ProfilePictureProps {
   pictureSize: string;
@@ -6,24 +7,13 @@ interface ProfilePictureProps {
 
 const ProfilePicture: React.FC<ProfilePictureProps> = ({ pictureSize }) => (
   <div
-    style={{
-      position: "relative",
-      width: pictureSize,
-      height: pictureSize,
-      overflow: "hidden",
-    }}
+    style={{ position: "relative", width: pictureSize, height: pictureSize, overflow: "hidden" }}
   >
-    <img
-      src="images/avatar.png"
+    <Image
+      src="/images/avatar.png"
       alt="Profile Picture"
-      style={{
-        position: "relative",
-        bottom: "0",
-        width: "100%",
-        height: "auto",
-        minHeight: "100%",
-        objectFit: "cover",
-      }}
+      fill
+      style={{ position: "absolute", objectFit: "cover",  bottom: 0}}
     />
   </div>
 );

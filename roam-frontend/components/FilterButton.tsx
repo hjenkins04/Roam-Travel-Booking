@@ -5,7 +5,6 @@ import { FC, ReactNode, useState } from "react";
 interface FilterButtonProps {
     rightIcon: ReactNode;
     mainTextRight: string;
-    size?: string;
     className?: string;
     customTextColour?: string;
     options: string[];
@@ -16,7 +15,6 @@ interface FilterButtonProps {
 const FilterButton: FC<FilterButtonProps> = ({
     rightIcon,
     mainTextRight,
-    size = "w-[200px]",
     className = "",
     customTextColour = 'text-gray-600',
     options,

@@ -24,8 +24,7 @@ const SearchBoxButtonOneSide: FC<SearchBoxButtonOneSideProps> = ({
     size = "w-[200px]",
     className = "",
     onClickLeftIcon,
-    onClickRightIcon,
-    onClickMainButton,
+    onClickRightIcon
 }) => {
     return (
         <div

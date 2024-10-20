@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, ReactNode } from "react";
+import React, { FC } from "react";
 
 interface SearchButtonProps {
     mainText: string;

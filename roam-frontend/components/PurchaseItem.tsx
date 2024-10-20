@@ -25,7 +25,6 @@ interface PurchaseItemProps {
 }
 
 const PurchaseItem: React.FC<PurchaseItemProps> = ({
-  title,
   ban = true,
   outboundFlight,
   returnFlight,
@@ -62,7 +61,6 @@ const FlightDetails: React.FC<FlightDetailsProps> = ({
   departureTime,
   arrivalTime,
   layover,
-  isReturn,
 }) => {
   return (
     <div className={`flex flex-col max-md:ml-0 max-md:w-full`}>

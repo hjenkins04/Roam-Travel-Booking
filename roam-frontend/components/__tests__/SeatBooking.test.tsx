@@ -2,11 +2,6 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import SeatBooking from "@/components/SeatBooking";
 
-// Mock the dependent components to focus on SeatBooking behavior
-jest.mock("@/components/SeatSelection/Airplane", () => (props: any) => {
-    return <div data-testid="airplane-seat" onClick={() => props.onSeatClick(1)} />;
-  });
-
 /**
  * Test File: SeatBooking Component
  *
@@ -32,11 +27,20 @@ describe("SeatBooking Component", () => {
     jest.clearAllMocks();
   });
 
-  jest.mock("@/components/SeatSelection/Airplane", () => (props: any) => {
-    return <div data-testid="airplane" onClick={() => props.onSeatClick(1)} />;
+  // Mock the dependent components to focus on SeatBooking behavior
+  jest.mock("@/components/SeatSelection/Airplane", () => {
+    const Airplane = (props: { onSeatClick: (seatNumber: number) => void }) => (
+      <div data-testid="airplane-seat" onClick={() => props.onSeatClick(1)} />
+    );
+    Airplane.displayName = "Airplane";
+    return Airplane;
   });
 
-  jest.mock("@/components/Header", () => () => <div data-testid="header" />);
+  jest.mock("@/components/Header", () => {
+    const Header = () => <div data-testid="header" />;
+    Header.displayName = "Header";
+    return Header;
+  });
 
   test("Renders the SeatBooking component", () => {
     // Arrange: Render the SeatBooking component
