@@ -1,15 +1,9 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search, ArrowLeftRight } from "lucide-react";
+import { CalendarIcon, UserIcon, Users } from "lucide-react";
 import SearchBoxButtonList from "@/components/SearchBoxButtonGroup";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import SearchBoxButtonOneSide from "@/components/SearchBoxButtonOneSide";
-import HumpButton from "@/components/Buttons/HumpButton";
-import Link from "next/link";
 
 const SearchResultsOverviewBox = () => {
   const [departureDate, setDepartureDate] = useState<Date>();
@@ -27,7 +21,10 @@ const SearchResultsOverviewBox = () => {
     }
   };
 
-  const updatePassengerClass = (index: number, newClass: "Business" | "Economy") => {
+  const updatePassengerClass = (
+    index: number,
+    newClass: "Business" | "Economy"
+  ) => {
     const updatedPassengers = [...passengers];
     updatedPassengers[index].class = newClass;
     setPassengers(updatedPassengers);
@@ -50,84 +47,95 @@ const SearchResultsOverviewBox = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-center relative">
-          {/* Search Form (Button List) */}
-          <SearchBoxButtonList className="w-full justify-center space-y-4 sm:space-y-6 space-x-3">
-            {/* Departure City Button */}
-            <SearchBoxButton
-              headerText="DEPARTURE CITY"
-              mainTextLeft="YYZ"
-              subTextLeft=""
-              mainTextRight="Toronto"
-              subTextRight="Pearson International"
-              size="w-[200px]"
-              className="-bottom-2.5"
-              onClickMainButton={() => console.log("Departure City Clicked")}
-            />
+        {/* Search Form (Button List) */}
+        <SearchBoxButtonList className="w-full justify-center space-y-4 sm:space-y-6 space-x-3">
+          {/* Departure City Button */}
+          <SearchBoxButton
+            headerText="DEPARTURE CITY"
+            mainTextLeft="YYZ"
+            subTextLeft=""
+            mainTextRight="Toronto"
+            subTextRight="Pearson International"
+            size="w-[200px]"
+            className="-bottom-2.5"
+            onClickMainButton={() => console.log("Departure City Clicked")}
+          />
 
-            {/* Arrival City Button */}
-            <SearchBoxButton
-              headerText="ARRIVAL CITY"
-              mainTextLeft="HNL"
-              subTextLeft=""
-              mainTextRight="Honolulu"
-              subTextRight="Daniel K. Inouye International"
-              size="w-[200px]"
-              onClickMainButton={() => console.log("Arrival City Clicked")}
-            />
+          {/* Arrival City Button */}
+          <SearchBoxButton
+            headerText="ARRIVAL CITY"
+            mainTextLeft="HNL"
+            subTextLeft=""
+            mainTextRight="Honolulu"
+            subTextRight="Daniel K. Inouye International"
+            size="w-[200px]"
+            onClickMainButton={() => console.log("Arrival City Clicked")}
+          />
 
-            {isRoundTrip && (
-              <>
-                <SearchBoxButton
-                  leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
-                  headerText="DEPARTURE DATE"
-                  mainTextLeft={departureDate ? format(departureDate, "dd") : "DD"}
-                  subTextLeft=""
-                  mainTextRight={departureDate ? format(departureDate, "EEE") : "Day"}
-                  subTextRight={departureDate ? format(departureDate, "MMMM") : "Month"}
-                  size="w-[160px]"
-                  onClickMainButton={() => { }}
-                />
-                <SearchBoxButton
-                  leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
-                  headerText="RETURN DATE"
-                  mainTextLeft={returnDate ? format(returnDate, "dd") : "DD"}
-                  subTextLeft=""
-                  mainTextRight={returnDate ? format(returnDate, "EEE") : "Day"}
-                  subTextRight={returnDate ? format(returnDate, "MMMM") : "Month"}
-                  size="w-[160px]"
-                  onClickMainButton={() => { }}
-                />
-              </>
-            )}
-
-            {!isRoundTrip && (
+          {isRoundTrip && (
+            <>
               <SearchBoxButton
                 leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
                 headerText="DEPARTURE DATE"
-                mainTextLeft={departureDate ? format(departureDate, "dd") : "DD"}
+                mainTextLeft={
+                  departureDate ? format(departureDate, "dd") : "DD"
+                }
                 subTextLeft=""
-                mainTextRight={departureDate ? format(departureDate, "EEEE") : "Day"}
-                subTextRight={departureDate ? format(departureDate, "MMMM") : "Month"}
-                size="w-[230px]"
-                onClickMainButton={() => { }}
+                mainTextRight={
+                  departureDate ? format(departureDate, "EEE") : "Day"
+                }
+                subTextRight={
+                  departureDate ? format(departureDate, "MMMM") : "Month"
+                }
+                size="w-[160px]"
+                onClickMainButton={() => {}}
               />
-            )}
+              <SearchBoxButton
+                leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
+                headerText="RETURN DATE"
+                mainTextLeft={returnDate ? format(returnDate, "dd") : "DD"}
+                subTextLeft=""
+                mainTextRight={returnDate ? format(returnDate, "EEE") : "Day"}
+                subTextRight={returnDate ? format(returnDate, "MMMM") : "Month"}
+                size="w-[160px]"
+                onClickMainButton={() => {}}
+              />
+            </>
+          )}
 
-            {/* Traveler & Class Button */}
-            <SearchBoxButtonOneSide
-              leftIcon={
-                getNumberOfPassengersButton() != "1" ?
-                  (<Users className="text-gray-500 h-4 w-4" />)
-                  :
-                  (<UserIcon className="text-gray-500 h-4 w-4" />)
+          {!isRoundTrip && (
+            <SearchBoxButton
+              leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
+              headerText="DEPARTURE DATE"
+              mainTextLeft={departureDate ? format(departureDate, "dd") : "DD"}
+              subTextLeft=""
+              mainTextRight={
+                departureDate ? format(departureDate, "EEEE") : "Day"
               }
-              headerText="TRAVELERS"
-              mainText={getNumberOfPassengersButton()}
-              subText=""
-              size="w-[100px]"
-              onClickMainButton={() => { }}
+              subTextRight={
+                departureDate ? format(departureDate, "MMMM") : "Month"
+              }
+              size="w-[230px]"
+              onClickMainButton={() => {}}
             />
-          </SearchBoxButtonList>
+          )}
+
+          {/* Traveler & Class Button */}
+          <SearchBoxButtonOneSide
+            leftIcon={
+              getNumberOfPassengersButton() != "1" ? (
+                <Users className="text-gray-500 h-4 w-4" />
+              ) : (
+                <UserIcon className="text-gray-500 h-4 w-4" />
+              )
+            }
+            headerText="TRAVELERS"
+            mainText={getNumberOfPassengersButton()}
+            subText=""
+            size="w-[100px]"
+            onClickMainButton={() => {}}
+          />
+        </SearchBoxButtonList>
       </div>
     </>
   );

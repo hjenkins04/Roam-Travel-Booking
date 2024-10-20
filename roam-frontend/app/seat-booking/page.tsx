@@ -1,25 +1,21 @@
-'use client';
+"use client";
 import React, { useState, useRef } from "react";
-import dynamic from "next/dynamic";
 import Airplane from "@/components/SeatSelection/Airplane";
 import BookingForm from "@/components/SeatBookingForm";
 import Header from "@/components/Header";
 import SeatBookingFormFooter from "@/components/SeatBookingFormFooter";
 
-
 export default function SeatBookingPage() {
-
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
 
   const [passengerName, setPassengerName] = useState<string>("");
   const [groupSize, setGroupSize] = useState<number>(1);
   const [isRoundTrip, setRoundTrip] = useState<boolean>(true);
   const [isFirstFlight, setIsFirstFlight] = useState<boolean>(true);
-  const [passengerIndex, setPassengerIndex] = useState<number>(0)
+  const [passengerIndex, setPassengerIndex] = useState<number>(0);
 
   // Reference to the form element
   const formRef = useRef<HTMLFormElement | null>(null);
-
 
   const handleSeatClick = (seatNumber: number) => {
     if (seatNumber === selectedSeat) {
@@ -32,15 +28,15 @@ export default function SeatBookingPage() {
   // Handle form submission from the footer
   const handleFormSubmit = () => {
     // First Flight Completed
-    if( passengerIndex == groupSize - 1 && isRoundTrip && isFirstFlight){
-      setPassengerIndex(0)
-      setIsFirstFlight(false)
-      setPassengerName("")
+    if (passengerIndex == groupSize - 1 && isRoundTrip && isFirstFlight) {
+      setPassengerIndex(0);
+      setIsFirstFlight(false);
+      setPassengerName("");
     }
     // Passange Completed
-    if ( passengerIndex != groupSize - 1){
-      setPassengerIndex(passengerIndex + 1)
-      setPassengerName("")
+    if (passengerIndex != groupSize - 1) {
+      setPassengerIndex(passengerIndex + 1);
+      setPassengerName("");
     }
 
     if (formRef.current) {
@@ -51,13 +47,12 @@ export default function SeatBookingPage() {
   return (
     <div className="relative">
       {/* Header */}
-      <Header
-        headerSize="small"
-        backgroundImage={true}
-        logoColour={"black"}
-      />
+      <Header headerSize="small" backgroundImage={true} logoColour={"black"} />
 
-      <div className="relative flex overflow-hidden z-20 bg-neutral-50" style={{ height: 'calc(100vh - 150px)'}}>
+      <div
+        className="relative flex overflow-hidden z-20 bg-neutral-50"
+        style={{ height: "calc(100vh - 150px)" }}
+      >
         {/* Airplane Component */}
         <div
           className={`relative transition-all duration-300 ease-in-out overflow-hidden ${

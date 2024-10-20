@@ -1,9 +1,8 @@
-'use client'
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
 interface PaymentFormProps {
@@ -81,7 +80,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
           </div>
         </form>
       </CardContent>
-
     </Card>
   );
 };

@@ -1,10 +1,29 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search, ArrowLeftRight } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  CalendarIcon,
+  UserIcon,
+  Users,
+  PlusIcon,
+  MinusIcon,
+  ChevronDown,
+  Search,
+  ArrowLeftRight,
+} from "lucide-react";
 import SearchBoxButtonList from "@/components/SearchBoxButtonGroup";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
@@ -26,7 +45,10 @@ const SearchBox = () => {
     }
   };
 
-  const updatePassengerClass = (index: number, newClass: "Business" | "Economy") => {
+  const updatePassengerClass = (
+    index: number,
+    newClass: "Business" | "Economy"
+  ) => {
     const updatedPassengers = [...passengers];
     updatedPassengers[index].class = newClass;
     setPassengers(updatedPassengers);
@@ -80,12 +102,14 @@ const SearchBox = () => {
             />
 
             {/* Swap Icon between Departure and Arrival */}
-            <div className="bg-orange-500 rounded-full p-2 z-10"
+            <div
+              className="bg-orange-500 rounded-full p-2 z-10"
               style={{
-                position: 'relative',
-                transform: 'translateX(25%)',
-                margin: '-18px'
-              }}>
+                position: "relative",
+                transform: "translateX(25%)",
+                margin: "-18px",
+              }}
+            >
               <ArrowLeftRight className="w-5 h-5 text-white" />
             </div>
 
@@ -109,20 +133,36 @@ const SearchBox = () => {
                   <PopoverTrigger asChild>
                     <div>
                       <SearchBoxButton
-                        leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
-                        rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                        leftIcon={
+                          <CalendarIcon className="text-gray-500 h-4 w-4" />
+                        }
+                        rightIcon={
+                          <ChevronDown className="text-gray-500 h-4 w-4" />
+                        }
                         headerText="DEPARTURE DATE"
-                        mainTextLeft={departureDate ? format(departureDate, "dd") : "DD"}
+                        mainTextLeft={
+                          departureDate ? format(departureDate, "dd") : "DD"
+                        }
                         subTextLeft=""
-                        mainTextRight={departureDate ? format(departureDate, "EEE") : "Day"}
-                        subTextRight={departureDate ? format(departureDate, "MMMM") : "Month"}
+                        mainTextRight={
+                          departureDate ? format(departureDate, "EEE") : "Day"
+                        }
+                        subTextRight={
+                          departureDate
+                            ? format(departureDate, "MMMM")
+                            : "Month"
+                        }
                         size="w-[175px]"
-                        onClickMainButton={() => { }}
+                        onClickMainButton={() => {}}
                       />
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} />
+                    <Calendar
+                      mode="single"
+                      selected={departureDate}
+                      onSelect={setDepartureDate}
+                    />
                   </PopoverContent>
                 </Popover>
 
@@ -131,20 +171,34 @@ const SearchBox = () => {
                   <PopoverTrigger asChild>
                     <div>
                       <SearchBoxButton
-                        leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
-                        rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                        leftIcon={
+                          <CalendarIcon className="text-gray-500 h-4 w-4" />
+                        }
+                        rightIcon={
+                          <ChevronDown className="text-gray-500 h-4 w-4" />
+                        }
                         headerText="RETURN DATE"
-                        mainTextLeft={returnDate ? format(returnDate, "dd") : "DD"}
+                        mainTextLeft={
+                          returnDate ? format(returnDate, "dd") : "DD"
+                        }
                         subTextLeft=""
-                        mainTextRight={returnDate ? format(returnDate, "EEE") : "Day"}
-                        subTextRight={returnDate ? format(returnDate, "MMMM") : "Month"}
+                        mainTextRight={
+                          returnDate ? format(returnDate, "EEE") : "Day"
+                        }
+                        subTextRight={
+                          returnDate ? format(returnDate, "MMMM") : "Month"
+                        }
                         size="w-[175px]"
-                        onClickMainButton={() => { }}
+                        onClickMainButton={() => {}}
                       />
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" selected={returnDate} onSelect={setReturnDate} />
+                    <Calendar
+                      mode="single"
+                      selected={returnDate}
+                      onSelect={setReturnDate}
+                    />
                   </PopoverContent>
                 </Popover>
               </>
@@ -156,20 +210,34 @@ const SearchBox = () => {
                 <PopoverTrigger asChild>
                   <div>
                     <SearchBoxButton
-                      leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
-                      rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                      leftIcon={
+                        <CalendarIcon className="text-gray-500 h-4 w-4" />
+                      }
+                      rightIcon={
+                        <ChevronDown className="text-gray-500 h-4 w-4" />
+                      }
                       headerText="DEPARTURE DATE"
-                      mainTextLeft={departureDate ? format(departureDate, "dd") : "DD"}
+                      mainTextLeft={
+                        departureDate ? format(departureDate, "dd") : "DD"
+                      }
                       subTextLeft=""
-                      mainTextRight={departureDate ? format(departureDate, "EEEE") : "Day"}
-                      subTextRight={departureDate ? format(departureDate, "MMMM") : "Month"}
+                      mainTextRight={
+                        departureDate ? format(departureDate, "EEEE") : "Day"
+                      }
+                      subTextRight={
+                        departureDate ? format(departureDate, "MMMM") : "Month"
+                      }
                       size="w-[230px]"
-                      onClickMainButton={() => { }}
+                      onClickMainButton={() => {}}
                     />
                   </div>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} />
+                  <Calendar
+                    mode="single"
+                    selected={departureDate}
+                    onSelect={setDepartureDate}
+                  />
                 </PopoverContent>
               </Popover>
             )}
@@ -180,19 +248,22 @@ const SearchBox = () => {
                 <div>
                   <SearchBoxButton
                     leftIcon={
-                      getNumberOfPassengersButton() != "1" ?
-                        (<Users className="text-gray-500 h-4 w-4" />)
-                        :
-                        (<UserIcon className="text-gray-500 h-4 w-4" />)
+                      getNumberOfPassengersButton() != "1" ? (
+                        <Users className="text-gray-500 h-4 w-4" />
+                      ) : (
+                        <UserIcon className="text-gray-500 h-4 w-4" />
+                      )
                     }
-                    rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                    rightIcon={
+                      <ChevronDown className="text-gray-500 h-4 w-4" />
+                    }
                     headerText="TRAVELER & CLASS"
                     mainTextLeft={getNumberOfPassengersButton()}
                     subTextLeft=""
                     mainTextRight={getPassengerTypesButton()}
                     subTextRight=""
                     size="w-[195px]"
-                    onClickMainButton={() => { }}
+                    onClickMainButton={() => {}}
                   />
                 </div>
               </PopoverTrigger>
@@ -201,21 +272,35 @@ const SearchBox = () => {
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Passengers</span>
                     <div className="flex items-center space-x-2">
-                      <Button size="sm" variant="outline" onClick={removePassenger} disabled={passengers.length === 1}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={removePassenger}
+                        disabled={passengers.length === 1}
+                      >
                         <MinusIcon className="h-4 w-4" />
                       </Button>
                       <span>{passengers.length}</span>
-                      <Button size="sm" variant="outline" onClick={addPassenger}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={addPassenger}
+                      >
                         <PlusIcon className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
                   {passengers.map((passenger, index) => (
-                    <div key={index} className="flex items-center justify-between">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between"
+                    >
                       <span>Passenger {index + 1}</span>
                       <Select
                         value={passenger.class}
-                        onValueChange={(value: "Business" | "Economy") => updatePassengerClass(index, value)}
+                        onValueChange={(value: "Business" | "Economy") =>
+                          updatePassengerClass(index, value)
+                        }
                       >
                         <SelectTrigger className="w-[120px]">
                           <SelectValue placeholder="Select class" />
@@ -234,7 +319,7 @@ const SearchBox = () => {
 
           {/* Search Button */}
           <div className="flex justify-center pt-6 relative">
-            <Link href="/SearchResultsPage" passHref>
+            <Link href="/search-results" passHref>
               <Button className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2">
                 <span>Search Flights</span>
                 <Search className="w-5 h-5 text-white" />
