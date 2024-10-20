@@ -41,12 +41,6 @@ const Checkout: React.FC = () => {
   return (
     <>
       <div className="relative min-h-screen">
-        <Header
-          headerSize={"small"}
-          backgroundImage={true}
-          logoColour={"black"}
-          displayProfilePicture={false}
-        />
         <main className="mt-10 w-full">
           <div className="flex flex-row gap-6 justify-center">
             {/* Left column: Booking details and form */}
