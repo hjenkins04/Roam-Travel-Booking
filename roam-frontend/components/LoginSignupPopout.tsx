@@ -1,14 +1,10 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetClose,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetClose, } from "@/components/ui/sheet";
 import Underline from "@/components/Effects/TextUnderline";
 import { useAuth } from "@/context/AuthContext";
 import { DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -28,6 +24,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
 }) => {
   const isLogin = mode === "login";
   const { signIn } = useAuth();
+  const router = useRouter();
 
   // Toggle between login and signup modes
   const toggleLoginSignup = () => {
@@ -51,6 +48,10 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
     // Simulate successful login/signup
     signIn();
     closeDrawer();
+  };
+
+  const handleResetPassword = () => {
+    router.push('/reset-password');
   };
 
   return (
@@ -176,9 +177,11 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
                 />
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
-              <a href="#" className="text-sm text-orange-500 hover:underline">
-                Forgot password?
-              </a>
+              <span
+                onClick={handleResetPassword}
+                className="text-sm text-orange-500 hover:underline">
+                Forgot Password?
+              </span>
             </div>
           )}
 

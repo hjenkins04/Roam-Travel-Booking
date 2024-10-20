@@ -2,8 +2,11 @@ import React from "react";
 import { Plane, Calendar, Briefcase, ArrowRight } from "lucide-react";
 import BookFlightButton from "@/components/SearchButton";
 import { FlightDetailsProps } from "@/public/data/flightDetails"
+import { useRouter } from "next/navigation";
 
 const FlightDetails: React.FC<FlightDetailsProps> = ({ flight }) => {
+    const router = useRouter();
+    
     if (!flight) return null; // Render nothing if no flight is selected
 
     return (
@@ -35,7 +38,10 @@ const FlightDetails: React.FC<FlightDetailsProps> = ({ flight }) => {
                         <Plane className="mr-2" /> {flight.airline}
                     </li>
                     <li className="flex items-center my-6"> {/* Increased margin here */}
-                        <Calendar className="mr-2" /> {flight.flightDate} {flight.time}
+                        <Calendar className="mr-2" />
+                        {flight.flightDate}
+                        <br />
+                        {flight.time}
                     </li>
                     <li className="flex items-center my-6"> {/* Increased margin here */}
                         <Briefcase className="mr-2" /> Baggage: {flight.baggageAllowance}
@@ -46,7 +52,7 @@ const FlightDetails: React.FC<FlightDetailsProps> = ({ flight }) => {
             <div className="flex justify-end mt-4">
                 <BookFlightButton
                     mainText="Book My Ticket Now"
-                    onClick={() => console.log("Search Clicked")}
+                    onClick={() => router.push("/checkout")}
                     className="bg-[#FF9A2A] border-[#FF9A2A]"
                     customTextColour="text-white"
                 />

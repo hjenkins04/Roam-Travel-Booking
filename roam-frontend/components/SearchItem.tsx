@@ -72,6 +72,7 @@ const SearchItem: FC<SearchItemProps> = ({
         </div>
         <span className="text-sm text-gray-500">{stopInfo}</span>
       </div>
+      
       {/* Right Side */}
       <div className="flex flex-col items-end">
         <span className="text-lg  text-gray-500 font-semibold">{price}</span>
