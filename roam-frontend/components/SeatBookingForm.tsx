@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -85,7 +88,9 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
           {/* Passenger Info */}
           <div className="flex items-start space-x-4">
             <div>
-              <h2 className="text-xl font-semibold text-slate-500">Passenger 1 (Adult)</h2>
+              <h2 className="text-xl font-semibold text-slate-500">
+                Passenger 1 (Adult)
+              </h2>
             </div>
           </div>
 
@@ -220,7 +225,9 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
 
           {/* Emergency Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mt-4 text-slate-500">Emergency contact information</h3>
+            <h3 className="text-lg font-semibold mt-4 text-slate-500">
+              Emergency contact information
+            </h3>
             <div className="flex items-center space-x-2 mt-3">
               <Checkbox
                 id="sameAsPassenger"
@@ -228,7 +235,9 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
                 checked={formData.sameAsPassenger}
                 onCheckedChange={handleCheckboxChange}
               />
-              <label htmlFor="sameAsPassenger" className="text-slate-400">Same as Passenger 1</label>
+              <label htmlFor="sameAsPassenger" className="text-slate-400">
+                Same as Passenger 1
+              </label>
             </div>
           </div>
 

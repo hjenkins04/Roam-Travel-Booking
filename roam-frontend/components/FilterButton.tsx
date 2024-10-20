@@ -8,9 +8,9 @@ interface FilterButtonProps {
     size?: string;
     className?: string;
     customTextColour?: string;
-    onClickRightIcon?: () => void;
     options: string[];
     onOptionSelect: (option: string) => void;
+    selectedOption: string | null;
 }
 
 const FilterButton: FC<FilterButtonProps> = ({
@@ -19,20 +19,19 @@ const FilterButton: FC<FilterButtonProps> = ({
     size = "w-[200px]",
     className = "",
     customTextColour = 'text-gray-600',
-    onClickRightIcon,
     options,
     onOptionSelect,
+    selectedOption,
 
 }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false); // State to control dropdown visibility
-    const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
 
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev);
     };
 
     const handleOptionSelect = (option: string) => {
-        setSelectedOption(option);
         onOptionSelect(option); // Call the parent handler
         setDropdownOpen(false);
     };
@@ -48,13 +47,19 @@ const FilterButton: FC<FilterButtonProps> = ({
                 <div className="flex flex-col text-left">
                     {/* Default text or selected option */}
                     {!selectedOption ? (
-                        <span className={`text-sm font-medium text-left ${customTextColour}`}>
+                        <span
+                            className={`text-sm font-medium text-left ${customTextColour}`}
+                        >
                             {mainTextRight}
                         </span>
                     ) : (
                         <>
-                            <span className="text-xs font-medium text-left text-gray-600">{mainTextRight}</span>
-                            <span className={`text-xs font-medium text-left ${customTextColour} `}>
+                            <span className="text-xs font-medium text-left text-gray-600">
+                                {mainTextRight}
+                            </span>
+                            <span
+                                className={`text-xs font-medium text-left ${customTextColour} `}
+                            >
                                 {selectedOption}
                             </span>
                         </>
@@ -80,6 +85,5 @@ const FilterButton: FC<FilterButtonProps> = ({
         </div>
     );
 };
-
 
 export default FilterButton;

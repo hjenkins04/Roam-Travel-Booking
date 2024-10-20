@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import SearchBox from "@/components/SearchBox";
@@ -11,7 +10,6 @@ const TrendingLocationsHomeGrid = dynamic(
   () => import("@/components/TrendingLocationsHomeGrid"),
   { ssr: false }
 );
-
 
 export default function Home() {
   return (

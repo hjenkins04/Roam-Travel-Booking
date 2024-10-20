@@ -1,12 +1,8 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search, ArrowLeftRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import FilterButtonGroup from "@/components/FilterButtonGroup";
-import SearchBoxButton from "@/components/SearchBoxButton";
 import FilterButton from "@/components/FilterButton";
 import SearchButton from "@/components/SearchButton";
-import Link from "next/link";
 
 const FilterBox = () => {
     const [maxPrice, setMaxPrice] = useState<string | null>(null);
@@ -81,7 +77,7 @@ const FilterBox = () => {
                     {/* Search Button */}
                     <SearchButton
                         mainText="Search"
-                        onClickRightIcon={() => console.log("Search Clicked")}
+                        onClick={() => console.log("Search Clicked")}
                         className="bg-[#FF9A2A] border-[#FF9A2A]"
                         customTextColour="text-white"
                     />

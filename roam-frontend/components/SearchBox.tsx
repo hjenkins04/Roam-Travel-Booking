@@ -8,13 +8,14 @@ import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search
 import SearchBoxButtonList from "@/components/SearchBoxButtonList";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const SearchBox = () => {
   const [departureDate, setDepartureDate] = useState<Date>();
   const [returnDate, setReturnDate] = useState<Date>();
   const [passengers, setPassengers] = useState([{ class: "Economy" }]);
   const [isRoundTrip, setIsRoundTrip] = useState(true);
+  const router = useRouter();
 
   const addPassenger = () => {
     setPassengers([...passengers, { class: "Economy" }]);
@@ -44,6 +45,10 @@ const SearchBox = () => {
   const getNumberOfPassengersButton = () => {
     const count = passengers.length;
     return `${count}`;
+  };
+
+  const handleButtonClick = () => {
+    router.push('/SearchResultsPage');
   };
 
   return (
@@ -234,12 +239,13 @@ const SearchBox = () => {
 
           {/* Search Button */}
           <div className="flex justify-center pt-6 relative">
-            <Link href="/SearchResultsPage" passHref>
-              <Button className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2">
-                <span>Search Flights</span>
-                <Search className="w-5 h-5 text-white" />
-              </Button>
-            </Link>
+            <Button
+              onClick={handleButtonClick}
+              className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2"
+            >
+              <span>Search Flights</span>
+              <Search className="w-5 h-5 text-white" />
+            </Button>
           </div>
         </div>
       </div>

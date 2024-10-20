@@ -1,7 +1,5 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
 import ProfileHeader from "../ProfileHeader";
 
 /**

@@ -1,75 +1,85 @@
 import React, { useState, useEffect } from "react";
-import Seat, {SeatState } from "@/components/SeatSelection/Seat"
-import RowNumber from "@/components/SeatSelection/RowNumber"
-import Information from "@/components/SeatSelection/Information"
+import Seat, { SeatState } from "@/components/SeatSelection/Seat";
+import RowNumber from "@/components/SeatSelection/RowNumber";
+import Information from "@/components/SeatSelection/Information";
 import Draggable from "react-draggable";
 
 // Total number of seats on the plane
 const TOTAL_SEATS = 188;
 
-const Airplane = ({ onSeatClick }: { onSeatClick: (seatNumber: number) => void }) => {
-    // Initialize all seat states to "loading" immediately
-    const initialSeatStates = Array.from({ length: TOTAL_SEATS }, (_, i) => ({
-        [i + 1]: "loading" as SeatState,
-    })).reduce((acc, curr) => ({ ...acc, ...curr }), {});
+const Airplane = ({
+  onSeatClick,
+}: {
+  onSeatClick: (seatNumber: number) => void;
+}) => {
+  // Initialize all seat states to "loading" immediately
+  const initialSeatStates = Array.from({ length: TOTAL_SEATS }, (_, i) => ({
+    [i + 1]: "loading" as SeatState,
+  })).reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
-    const [seatStates, setSeatStates] = useState<{ [id: number]: SeatState }>(initialSeatStates);
-    const [areSeatsInitialized, setAreSeatsInitialized] = useState(false);
+  const [seatStates, setSeatStates] = useState<{ [id: number]: SeatState }>(
+    initialSeatStates
+  );
+  const [areSeatsInitialized, setAreSeatsInitialized] = useState(false);
 
-    // Generate random seats as booked or available
-    const generateSeatStates = () => {
-        const seatStates: { [id: number]: SeatState } = {};
+  // Generate random seats as booked or available
+  const generateSeatStates = () => {
+    const seatStates: { [id: number]: SeatState } = {};
 
-        const bookedPercentage = Math.floor(Math.random() * 60) + 20; // Random between 20% and 80%
-        const totalBookedSeats = Math.floor((bookedPercentage / 100) * TOTAL_SEATS);
-        const seatNumbers = Array.from({ length: TOTAL_SEATS }, (_, i) => i + 1);
+    const bookedPercentage = Math.floor(Math.random() * 60) + 20; // Random between 20% and 80%
+    const totalBookedSeats = Math.floor((bookedPercentage / 100) * TOTAL_SEATS);
+    const seatNumbers = Array.from({ length: TOTAL_SEATS }, (_, i) => i + 1);
 
-        const bookedSeats = new Set<number>();
-        while (bookedSeats.size < totalBookedSeats) {
-            const randomSeat = Math.floor(Math.random() * TOTAL_SEATS) + 1;
-            bookedSeats.add(randomSeat);
+    const bookedSeats = new Set<number>();
+    while (bookedSeats.size < totalBookedSeats) {
+      const randomSeat = Math.floor(Math.random() * TOTAL_SEATS) + 1;
+      bookedSeats.add(randomSeat);
+    }
+
+    seatNumbers.forEach((seatNumber) => {
+      seatStates[seatNumber] = bookedSeats.has(seatNumber)
+        ? "taken"
+        : "available";
+    });
+
+    return seatStates;
+  };
+
+  useEffect(() => {
+    setSeatStates(generateSeatStates());
+    setAreSeatsInitialized(true);
+  }, []);
+
+  const toggleSeatState = (id: number) => {
+    setSeatStates((prevState) => {
+      const newSeatStates: { [id: number]: SeatState } = {};
+
+      Object.keys(prevState).forEach((seatId) => {
+        const seatIdNumber = Number(seatId);
+        if (seatIdNumber === id && prevState[seatIdNumber] === "available") {
+          newSeatStates[seatIdNumber] = "selected";
+          onSeatClick(id);
+        } else if (prevState[seatIdNumber] === "selected") {
+          newSeatStates[seatIdNumber] = "available";
+          onSeatClick(id);
+        } else {
+          newSeatStates[seatIdNumber] = prevState[seatIdNumber];
         }
+      });
 
-        seatNumbers.forEach((seatNumber) => {
-            seatStates[seatNumber] = bookedSeats.has(seatNumber) ? "taken" : "available";
-        });
-
-        return seatStates;
-    };
-    
-    useEffect(() => {
-
-      setSeatStates(generateSeatStates());
-      setAreSeatsInitialized(true);
-    }, []);
-
-
-    const toggleSeatState = (id: number) => {
-        setSeatStates((prevState) => {
-            const newSeatStates: { [id: number]: SeatState } = {};
-
-            Object.keys(prevState).forEach((seatId) => {
-                const seatIdNumber = Number(seatId);
-                if (seatIdNumber === id && prevState[seatIdNumber] === "available") {
-                    newSeatStates[seatIdNumber] = "selected";
-                    onSeatClick(id);
-                } else if (prevState[seatIdNumber] === "selected") {
-                    newSeatStates[seatIdNumber] = "available";
-                    onSeatClick(id);
-                } else {
-                    newSeatStates[seatIdNumber] = prevState[seatIdNumber];
-                }
-            });
-
-            return newSeatStates;
-        });
-    };
-
-
+      return newSeatStates;
+    });
+  };
 
   return (
     <Draggable defaultPosition={{ x: -960, y: -800 }} axis="y">
-      <svg width="2426" height="2965" viewBox="0 0 2426 2965" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width="2426"
+        height="2965"
+        viewBox="0 0 2426 2965"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         {/* Plane outline */}
         <g id="Plane (seat selection)" data-testid={"plane-outline"}>
           <path
@@ -83,281 +93,2361 @@ const Airplane = ({ onSeatClick }: { onSeatClick: (seatNumber: number) => void }
         {/* Business class seats */}
         <g id="business" data-testid={"business-class"}>
           <rect x="1113" y="617" width="200" height="312" rx="8" fill="white" />
-          <Seat id={1} x={1121} y={633} width={30} height={40} rx={4} seatState={seatStates[1]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={2} x={1159.5} y={633} width={30} height={40} rx={4} seatState={seatStates[2]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={1}
+            x={1121}
+            y={633}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[1]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={2}
+            x={1159.5}
+            y={633}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[2]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1210} y={649} rowText="1" />
-          <Seat id={3} x={1236.5} y={633} width={30} height={40} rx={4} seatState={seatStates[3]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={4} x={1275} y={633} width={30} height={40} rx={4} seatState={seatStates[4]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={3}
+            x={1236.5}
+            y={633}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[3]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={4}
+            x={1275}
+            y={633}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[4]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-
-          <Seat id={5} x={1121} y={693} width={30} height={40} rx={4} seatState={seatStates[5]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={6} x={1159.5} y={693} width={30} height={40} rx={4} seatState={seatStates[6]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={5}
+            x={1121}
+            y={693}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[5]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={6}
+            x={1159.5}
+            y={693}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[6]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1210} y={713} rowText="2" />
-          <Seat id={7} x={1236.5} y={693} width={30} height={40} rx={4} seatState={seatStates[7]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={8} x={1275} y={693} width={30} height={40} rx={4} seatState={seatStates[8]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={7}
+            x={1236.5}
+            y={693}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[7]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={8}
+            x={1275}
+            y={693}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[8]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={9} x={1121} y={753} width={30} height={40} rx={4} seatState={seatStates[9]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={10} x={1159.5} y={753} width={30} height={40} rx={4} seatState={seatStates[10]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={9}
+            x={1121}
+            y={753}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[9]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={10}
+            x={1159.5}
+            y={753}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[10]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1210} y={778} rowText="3" />
-          <Seat id={11} x={1236.5} y={753} width={30} height={40} rx={4} seatState={seatStates[11]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={12} x={1275.5} y={753} width={30} height={40} rx={4} seatState={seatStates[12]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={11}
+            x={1236.5}
+            y={753}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[11]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={12}
+            x={1275.5}
+            y={753}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[12]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={13} x={1121} y={813} width={30} height={40} rx={4} seatState={seatStates[13]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={14} x={1159.5} y={813} width={30} height={40} rx={4} seatState={seatStates[14]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={13}
+            x={1121}
+            y={813}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[13]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={14}
+            x={1159.5}
+            y={813}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[14]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1210} y={835} rowText="4" />
-          <Seat id={15} x={1236.5} y={813} width={30} height={40} rx={4} seatState={seatStates[15]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={16} x={1275.5} y={813} width={30} height={40} rx={4} seatState={seatStates[16]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={15}
+            x={1236.5}
+            y={813}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[15]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={16}
+            x={1275.5}
+            y={813}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[16]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={17} x={1121} y={873} width={30} height={40} rx={4} seatState={seatStates[17]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={18} x={1159.5} y={873} width={30} height={40} rx={4} seatState={seatStates[18]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={17}
+            x={1121}
+            y={873}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[17]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={18}
+            x={1159.5}
+            y={873}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[18]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1210} y={898} rowText="5" />
-          <Seat id={19} x={1236.5} y={873} width={30} height={40} rx={4} seatState={seatStates[19]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={20} x={1275.5} y={873} width={30} height={40} rx={4} seatState={seatStates[20]} seatType="business" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={19}
+            x={1236.5}
+            y={873}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[19]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={20}
+            x={1275.5}
+            y={873}
+            width={30}
+            height={40}
+            rx={4}
+            seatState={seatStates[20]}
+            seatType="business"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
         </g>
 
         {/* Economy class seats */}
-        <g id="economy" data-testid={"economy-class"}>
-          <rect x="1113" y="942" width="200" height="1332" rx="8" fill="white"/>
-          
+        <g id="economy">
+          <rect
+            x="1113"
+            y="942"
+            width="200"
+            height="1332"
+            rx="8"
+            fill="white"
+          />
+
           <Information cx={1126} cy={959} r={6} />
 
-          <Seat id={21} x={1117} y={976} width={22} height={32} rx={4} seatState={seatStates[21]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={22} x={1144} y={976} width={22} height={32} rx={4} seatState={seatStates[22]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={23} x={1171} y={976} width={22} height={32} rx={4} seatState={seatStates[23]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={21}
+            x={1117}
+            y={976}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[21]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={22}
+            x={1144}
+            y={976}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[22]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={23}
+            x={1171}
+            y={976}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[23]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={997} rowText="6" />
-          <Seat id={24} x={1233} y={976} width={22} height={32} rx={4} seatState={seatStates[24]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={25} x={1260} y={976} width={22} height={32} rx={4} seatState={seatStates[25]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={26} x={1287} y={976} width={22} height={32} rx={4} seatState={seatStates[26]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={24}
+            x={1233}
+            y={976}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[24]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={25}
+            x={1260}
+            y={976}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[25]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={26}
+            x={1287}
+            y={976}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[26]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={27} x={1117} y={1020} width={22} height={32} rx={4} seatState={seatStates[27]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={28} x={1144} y={1020} width={22} height={32} rx={4} seatState={seatStates[28]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={29} x={1171} y={1020} width={22} height={32} rx={4} seatState={seatStates[29]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={27}
+            x={1117}
+            y={1020}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[27]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={28}
+            x={1144}
+            y={1020}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[28]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={29}
+            x={1171}
+            y={1020}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[29]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1031} rowText="7" />
-          <Seat id={30} x={1233} y={1020} width={22} height={32} rx={4} seatState={seatStates[30]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={31} x={1260} y={1020} width={22} height={32} rx={4} seatState={seatStates[31]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={32} x={1287} y={1020} width={22} height={32} rx={4} seatState={seatStates[32]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={30}
+            x={1233}
+            y={1020}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[30]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={31}
+            x={1260}
+            y={1020}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[31]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={32}
+            x={1287}
+            y={1020}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[32]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={33} x={1117} y={1064} width={22} height={32} rx={4} seatState={seatStates[33]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={34} x={1144} y={1064} width={22} height={32} rx={4} seatState={seatStates[34]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={35} x={1171} y={1064} width={22} height={32} rx={4} seatState={seatStates[35]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={33}
+            x={1117}
+            y={1064}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[33]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={34}
+            x={1144}
+            y={1064}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[34]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={35}
+            x={1171}
+            y={1064}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[35]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1085} rowText="8" />
-          <Seat id={36} x={1233} y={1064} width={22} height={32} rx={4} seatState={seatStates[36]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={37} x={1260} y={1064} width={22} height={32} rx={4} seatState={seatStates[37]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={38} x={1287} y={1064} width={22} height={32} rx={4} seatState={seatStates[38]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={36}
+            x={1233}
+            y={1064}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[36]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={37}
+            x={1260}
+            y={1064}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[37]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={38}
+            x={1287}
+            y={1064}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[38]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={39} x={1117} y={1108} width={22} height={32} rx={4} seatState={seatStates[39]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={40} x={1144} y={1108} width={22} height={32} rx={4} seatState={seatStates[40]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={41} x={1171} y={1108} width={22} height={32} rx={4} seatState={seatStates[41]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={39}
+            x={1117}
+            y={1108}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[39]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={40}
+            x={1144}
+            y={1108}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[40]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={41}
+            x={1171}
+            y={1108}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[41]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1129} rowText="9" />
-          <Seat id={42} x={1233} y={1108} width={22} height={32} rx={4} seatState={seatStates[42]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={43} x={1260} y={1108} width={22} height={32} rx={4} seatState={seatStates[43]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={44} x={1287} y={1108} width={22} height={32} rx={4} seatState={seatStates[44]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={42}
+            x={1233}
+            y={1108}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[42]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={43}
+            x={1260}
+            y={1108}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[43]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={44}
+            x={1287}
+            y={1108}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[44]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={45} x={1117} y={1152} width={22} height={32} rx={4} seatState={seatStates[45]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={46} x={1144} y={1152} width={22} height={32} rx={4} seatState={seatStates[46]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={47} x={1171} y={1152} width={22} height={32} rx={4} seatState={seatStates[47]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={45}
+            x={1117}
+            y={1152}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[45]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={46}
+            x={1144}
+            y={1152}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[46]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={47}
+            x={1171}
+            y={1152}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[47]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1173} rowText="10" />
-          <Seat id={48} x={1233} y={1152} width={22} height={32} rx={4} seatState={seatStates[48]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={49} x={1260} y={1152} width={22} height={32} rx={4} seatState={seatStates[49]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={50} x={1287} y={1152} width={22} height={32} rx={4} seatState={seatStates[50]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={48}
+            x={1233}
+            y={1152}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[48]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={49}
+            x={1260}
+            y={1152}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[49]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={50}
+            x={1287}
+            y={1152}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[50]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={51} x={1117} y={1196} width={22} height={32} rx={4} seatState={seatStates[51]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={52} x={1144} y={1196} width={22} height={32} rx={4} seatState={seatStates[52]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={53} x={1171} y={1196} width={22} height={32} rx={4} seatState={seatStates[53]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={51}
+            x={1117}
+            y={1196}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[51]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={52}
+            x={1144}
+            y={1196}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[52]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={53}
+            x={1171}
+            y={1196}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[53]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1217} rowText="11" />
-          <Seat id={54} x={1233} y={1196} width={22} height={32} rx={4} seatState={seatStates[54]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={55} x={1260} y={1196} width={22} height={32} rx={4} seatState={seatStates[55]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={56} x={1287} y={1196} width={22} height={32} rx={4} seatState={seatStates[56]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={54}
+            x={1233}
+            y={1196}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[54]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={55}
+            x={1260}
+            y={1196}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[55]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={56}
+            x={1287}
+            y={1196}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[56]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={57} x={1117} y={1240} width={22} height={32} rx={4} seatState={seatStates[57]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={58} x={1144} y={1240} width={22} height={32} rx={4} seatState={seatStates[58]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={59} x={1171} y={1240} width={22} height={32} rx={4} seatState={seatStates[59]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={57}
+            x={1117}
+            y={1240}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[57]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={58}
+            x={1144}
+            y={1240}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[58]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={59}
+            x={1171}
+            y={1240}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[59]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1261} rowText="12" />
-          <Seat id={60} x={1233} y={1240} width={22} height={32} rx={4} seatState={seatStates[60]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={61} x={1260} y={1240} width={22} height={32} rx={4} seatState={seatStates[61]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={62} x={1287} y={1240} width={22} height={32} rx={4} seatState={seatStates[62]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          
-          <Seat id={63} x={1117} y={1284} width={22} height={32} rx={4} seatState={seatStates[63]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={64} x={1144} y={1284} width={22} height={32} rx={4} seatState={seatStates[64]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={65} x={1171} y={1284} width={22} height={32} rx={4} seatState={seatStates[65]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={60}
+            x={1233}
+            y={1240}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[60]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={61}
+            x={1260}
+            y={1240}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[61]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={62}
+            x={1287}
+            y={1240}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[62]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+
+          <Seat
+            id={63}
+            x={1117}
+            y={1284}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[63]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={64}
+            x={1144}
+            y={1284}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[64]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={65}
+            x={1171}
+            y={1284}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[65]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1305} rowText="13" />
-          <Seat id={66} x={1233} y={1284} width={22} height={32} rx={4} seatState={seatStates[66]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={67} x={1260} y={1284} width={22} height={32} rx={4} seatState={seatStates[67]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={68} x={1287} y={1284} width={22} height={32} rx={4} seatState={seatStates[68]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          
+          <Seat
+            id={66}
+            x={1233}
+            y={1284}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[66]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={67}
+            x={1260}
+            y={1284}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[67]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={68}
+            x={1287}
+            y={1284}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[68]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+
           <Information cx={1126} cy={1333} r={6} />
 
-          <Seat id={69} x={1117} y={1350} width={22} height={32} rx={4} seatState={seatStates[69]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={70} x={1144} y={1350} width={22} height={32} rx={4} seatState={seatStates[70]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={71} x={1171} y={1350} width={22} height={32} rx={4} seatState={seatStates[71]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={69}
+            x={1117}
+            y={1350}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[69]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={70}
+            x={1144}
+            y={1350}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[70]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={71}
+            x={1171}
+            y={1350}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[71]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1371} rowText="14" />
-          <Seat id={72} x={1233} y={1350} width={22} height={32} rx={4} seatState={seatStates[72]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={73} x={1260} y={1350} width={22} height={32} rx={4} seatState={seatStates[73]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={74} x={1287} y={1350} width={22} height={32} rx={4} seatState={seatStates[74]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          
-          <Seat id={75} x={1117} y={1394} width={22} height={32} rx={4} seatState={seatStates[75]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={76} x={1144} y={1394} width={22} height={32} rx={4} seatState={seatStates[76]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={77} x={1171} y={1394} width={22} height={32} rx={4} seatState={seatStates[77]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={72}
+            x={1233}
+            y={1350}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[72]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={73}
+            x={1260}
+            y={1350}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[73]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={74}
+            x={1287}
+            y={1350}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[74]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+
+          <Seat
+            id={75}
+            x={1117}
+            y={1394}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[75]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={76}
+            x={1144}
+            y={1394}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[76]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={77}
+            x={1171}
+            y={1394}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[77]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1415} rowText="15" />
-          <Seat id={78} x={1233} y={1394} width={22} height={32} rx={4} seatState={seatStates[78]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={79} x={1260} y={1394} width={22} height={32} rx={4} seatState={seatStates[79]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={80} x={1287} y={1394} width={22} height={32} rx={4} seatState={seatStates[80]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={78}
+            x={1233}
+            y={1394}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[78]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={79}
+            x={1260}
+            y={1394}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[79]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={80}
+            x={1287}
+            y={1394}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[80]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={81} x={1117} y={1438} width={22} height={32} rx={4} seatState={seatStates[81]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={82} x={1144} y={1438} width={22} height={32} rx={4} seatState={seatStates[82]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={83} x={1171} y={1438} width={22} height={32} rx={4} seatState={seatStates[83]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={81}
+            x={1117}
+            y={1438}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[81]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={82}
+            x={1144}
+            y={1438}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[82]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={83}
+            x={1171}
+            y={1438}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[83]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1459} rowText="16" />
-          <Seat id={84} x={1233} y={1438} width={22} height={32} rx={4} seatState={seatStates[84]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={85} x={1260} y={1438} width={22} height={32} rx={4} seatState={seatStates[85]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={86} x={1287} y={1438} width={22} height={32} rx={4} seatState={seatStates[86]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          
-          <Seat id={87} x={1117} y={1482} width={22} height={32} rx={4} seatState={seatStates[87]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={88} x={1144} y={1482} width={22} height={32} rx={4} seatState={seatStates[88]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={89} x={1171} y={1482} width={22} height={32} rx={4} seatState={seatStates[89]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={84}
+            x={1233}
+            y={1438}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[84]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={85}
+            x={1260}
+            y={1438}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[85]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={86}
+            x={1287}
+            y={1438}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[86]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+
+          <Seat
+            id={87}
+            x={1117}
+            y={1482}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[87]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={88}
+            x={1144}
+            y={1482}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[88]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={89}
+            x={1171}
+            y={1482}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[89]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1503} rowText="17" />
-          <Seat id={90} x={1233} y={1482} width={22} height={32} rx={4} seatState={seatStates[90]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={91} x={1260} y={1482} width={22} height={32} rx={4} seatState={seatStates[91]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={92} x={1287} y={1482} width={22} height={32} rx={4} seatState={seatStates[92]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={90}
+            x={1233}
+            y={1482}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[90]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={91}
+            x={1260}
+            y={1482}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[91]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={92}
+            x={1287}
+            y={1482}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[92]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={93} x={1117} y={1526} width={22} height={32} rx={4} seatState={seatStates[93]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={94} x={1144} y={1526} width={22} height={32} rx={4} seatState={seatStates[94]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={95} x={1171} y={1526} width={22} height={32} rx={4} seatState={seatStates[95]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={93}
+            x={1117}
+            y={1526}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[93]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={94}
+            x={1144}
+            y={1526}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[94]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={95}
+            x={1171}
+            y={1526}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[95]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1547} rowText="18" />
-          <Seat id={96} x={1233} y={1526} width={22} height={32} rx={4} seatState={seatStates[96]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={97} x={1260} y={1526} width={22} height={32} rx={4} seatState={seatStates[97]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={98} x={1287} y={1526} width={22} height={32} rx={4} seatState={seatStates[98]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={96}
+            x={1233}
+            y={1526}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[96]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={97}
+            x={1260}
+            y={1526}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[97]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={98}
+            x={1287}
+            y={1526}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[98]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
           <Information cx={1126} cy={1575} r={6} />
 
-          <Seat id={99} x={1117} y={1592} width={22} height={32} rx={4} seatState={seatStates[99]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={100} x={1144} y={1592} width={22} height={32} rx={4} seatState={seatStates[100]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={101} x={1171} y={1592} width={22} height={32} rx={4} seatState={seatStates[101]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={99}
+            x={1117}
+            y={1592}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[99]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={100}
+            x={1144}
+            y={1592}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[100]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={101}
+            x={1171}
+            y={1592}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[101]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1613} rowText="19" />
-          <Seat id={102} x={1233} y={1592} width={22} height={32} rx={4} seatState={seatStates[102]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={103} x={1260} y={1592} width={22} height={32} rx={4} seatState={seatStates[103]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={104} x={1287} y={1592} width={22} height={32} rx={4} seatState={seatStates[104]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={102}
+            x={1233}
+            y={1592}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[102]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={103}
+            x={1260}
+            y={1592}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[103]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={104}
+            x={1287}
+            y={1592}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[104]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={105} x={1117} y={1636} width={22} height={32} rx={4} seatState={seatStates[105]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={106} x={1144} y={1636} width={22} height={32} rx={4} seatState={seatStates[106]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={107} x={1171} y={1636} width={22} height={32} rx={4} seatState={seatStates[107]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={105}
+            x={1117}
+            y={1636}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[105]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={106}
+            x={1144}
+            y={1636}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[106]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={107}
+            x={1171}
+            y={1636}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[107]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1657} rowText="20" />
-          <Seat id={108} x={1233} y={1636} width={22} height={32} rx={4} seatState={seatStates[108]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={109} x={1260} y={1636} width={22} height={32} rx={4} seatState={seatStates[109]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={110} x={1287} y={1636} width={22} height={32} rx={4} seatState={seatStates[110]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={108}
+            x={1233}
+            y={1636}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[108]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={109}
+            x={1260}
+            y={1636}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[109]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={110}
+            x={1287}
+            y={1636}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[110]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={111} x={1117} y={1680} width={22} height={32} rx={4} seatState={seatStates[111]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={112} x={1144} y={1680} width={22} height={32} rx={4} seatState={seatStates[112]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={113} x={1171} y={1680} width={22} height={32} rx={4} seatState={seatStates[113]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={111}
+            x={1117}
+            y={1680}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[111]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={112}
+            x={1144}
+            y={1680}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[112]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={113}
+            x={1171}
+            y={1680}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[113]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1701} rowText="21" />
-          <Seat id={114} x={1233} y={1680} width={22} height={32} rx={4} seatState={seatStates[114]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={115} x={1260} y={1680} width={22} height={32} rx={4} seatState={seatStates[115]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={116} x={1287} y={1680} width={22} height={32} rx={4} seatState={seatStates[116]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={114}
+            x={1233}
+            y={1680}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[114]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={115}
+            x={1260}
+            y={1680}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[115]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={116}
+            x={1287}
+            y={1680}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[116]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={117} x={1117} y={1724} width={22} height={32} rx={4} seatState={seatStates[117]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={118} x={1144} y={1724} width={22} height={32} rx={4} seatState={seatStates[118]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={119} x={1171} y={1724} width={22} height={32} rx={4} seatState={seatStates[119]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={117}
+            x={1117}
+            y={1724}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[117]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={118}
+            x={1144}
+            y={1724}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[118]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={119}
+            x={1171}
+            y={1724}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[119]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1745} rowText="22" />
-          <Seat id={120} x={1233} y={1724} width={22} height={32} rx={4} seatState={seatStates[120]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={121} x={1260} y={1724} width={22} height={32} rx={4} seatState={seatStates[121]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={122} x={1287} y={1724} width={22} height={32} rx={4} seatState={seatStates[122]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={120}
+            x={1233}
+            y={1724}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[120]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={121}
+            x={1260}
+            y={1724}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[121]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={122}
+            x={1287}
+            y={1724}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[122]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={123} x={1117} y={1768} width={22} height={32} rx={4} seatState={seatStates[123]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={124} x={1144} y={1768} width={22} height={32} rx={4} seatState={seatStates[124]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={125} x={1171} y={1768} width={22} height={32} rx={4} seatState={seatStates[125]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={123}
+            x={1117}
+            y={1768}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[123]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={124}
+            x={1144}
+            y={1768}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[124]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={125}
+            x={1171}
+            y={1768}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[125]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1789} rowText="23" />
-          <Seat id={126} x={1233} y={1768} width={22} height={32} rx={4} seatState={seatStates[126]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={127} x={1260} y={1768} width={22} height={32} rx={4} seatState={seatStates[127]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={128} x={1287} y={1768} width={22} height={32} rx={4} seatState={seatStates[128]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={126}
+            x={1233}
+            y={1768}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[126]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={127}
+            x={1260}
+            y={1768}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[127]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={128}
+            x={1287}
+            y={1768}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[128]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={129} x={1117} y={1812} width={22} height={32} rx={4} seatState={seatStates[129]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={130} x={1144} y={1812} width={22} height={32} rx={4} seatState={seatStates[130]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={131} x={1171} y={1812} width={22} height={32} rx={4} seatState={seatStates[131]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={129}
+            x={1117}
+            y={1812}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[129]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={130}
+            x={1144}
+            y={1812}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[130]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={131}
+            x={1171}
+            y={1812}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[131]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1833} rowText="24" />
-          <Seat id={132} x={1233} y={1812} width={22} height={32} rx={4} seatState={seatStates[132]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={133} x={1260} y={1812} width={22} height={32} rx={4} seatState={seatStates[133]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={134} x={1287} y={1812} width={22} height={32} rx={4} seatState={seatStates[134]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={132}
+            x={1233}
+            y={1812}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[132]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={133}
+            x={1260}
+            y={1812}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[133]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={134}
+            x={1287}
+            y={1812}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[134]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={135} x={1117} y={1856} width={22} height={32} rx={4} seatState={seatStates[135]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={136} x={1144} y={1856} width={22} height={32} rx={4} seatState={seatStates[136]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={137} x={1171} y={1856} width={22} height={32} rx={4} seatState={seatStates[137]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={135}
+            x={1117}
+            y={1856}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[135]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={136}
+            x={1144}
+            y={1856}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[136]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={137}
+            x={1171}
+            y={1856}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[137]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1877} rowText="25" />
-          <Seat id={138} x={1233} y={1856} width={22} height={32} rx={4} seatState={seatStates[138]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={139} x={1260} y={1856} width={22} height={32} rx={4} seatState={seatStates[139]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={140} x={1287} y={1856} width={22} height={32} rx={4} seatState={seatStates[140]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={138}
+            x={1233}
+            y={1856}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[138]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={139}
+            x={1260}
+            y={1856}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[139]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={140}
+            x={1287}
+            y={1856}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[140]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={141} x={1117} y={1900} width={22} height={32} rx={4} seatState={seatStates[141]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={142} x={1144} y={1900} width={22} height={32} rx={4} seatState={seatStates[142]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={143} x={1171} y={1900} width={22} height={32} rx={4} seatState={seatStates[143]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={141}
+            x={1117}
+            y={1900}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[141]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={142}
+            x={1144}
+            y={1900}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[142]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={143}
+            x={1171}
+            y={1900}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[143]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1921} rowText="26" />
-          <Seat id={144} x={1233} y={1900} width={22} height={32} rx={4} seatState={seatStates[144]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={145} x={1260} y={1900} width={22} height={32} rx={4} seatState={seatStates[145]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={146} x={1287} y={1900} width={22} height={32} rx={4} seatState={seatStates[146]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={144}
+            x={1233}
+            y={1900}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[144]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={145}
+            x={1260}
+            y={1900}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[145]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={146}
+            x={1287}
+            y={1900}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[146]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={147} x={1117} y={1944} width={22} height={32} rx={4} seatState={seatStates[147]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={148} x={1144} y={1944} width={22} height={32} rx={4} seatState={seatStates[148]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={149} x={1171} y={1944} width={22} height={32} rx={4} seatState={seatStates[149]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={147}
+            x={1117}
+            y={1944}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[147]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={148}
+            x={1144}
+            y={1944}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[148]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={149}
+            x={1171}
+            y={1944}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[149]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={1965} rowText="27" />
-          <Seat id={150} x={1233} y={1944} width={22} height={32} rx={4} seatState={seatStates[150]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={151} x={1260} y={1944} width={22} height={32} rx={4} seatState={seatStates[151]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={152} x={1287} y={1944} width={22} height={32} rx={4} seatState={seatStates[152]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={150}
+            x={1233}
+            y={1944}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[150]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={151}
+            x={1260}
+            y={1944}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[151]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={152}
+            x={1287}
+            y={1944}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[152]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={153} x={1117} y={1988} width={22} height={32} rx={4} seatState={seatStates[153]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={154} x={1144} y={1988} width={22} height={32} rx={4} seatState={seatStates[154]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={155} x={1171} y={1988} width={22} height={32} rx={4} seatState={seatStates[155]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={153}
+            x={1117}
+            y={1988}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[153]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={154}
+            x={1144}
+            y={1988}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[154]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={155}
+            x={1171}
+            y={1988}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[155]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={2009} rowText="28" />
-          <Seat id={156} x={1233} y={1988} width={22} height={32} rx={4} seatState={seatStates[156]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={157} x={1260} y={1988} width={22} height={32} rx={4} seatState={seatStates[157]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={158} x={1287} y={1988} width={22} height={32} rx={4} seatState={seatStates[158]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={156}
+            x={1233}
+            y={1988}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[156]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={157}
+            x={1260}
+            y={1988}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[157]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={158}
+            x={1287}
+            y={1988}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[158]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
           <Information cx={1126} cy={1575} r={6} />
 
-          <Seat id={159} x={1117} y={2054} width={22} height={32} rx={4} seatState={seatStates[159]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={160} x={1144} y={2054} width={22} height={32} rx={4} seatState={seatStates[160]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={161} x={1171} y={2054} width={22} height={32} rx={4} seatState={seatStates[161]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={159}
+            x={1117}
+            y={2054}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[159]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={160}
+            x={1144}
+            y={2054}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[160]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={161}
+            x={1171}
+            y={2054}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[161]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={2075} rowText="29" />
-          <Seat id={162} x={1233} y={2054} width={22} height={32} rx={4} seatState={seatStates[162]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={163} x={1260} y={2054} width={22} height={32} rx={4} seatState={seatStates[163]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={164} x={1287} y={2054} width={22} height={32} rx={4} seatState={seatStates[164]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={162}
+            x={1233}
+            y={2054}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[162]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={163}
+            x={1260}
+            y={2054}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[163]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={164}
+            x={1287}
+            y={2054}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[164]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={165} x={1117} y={2098} width={22} height={32} rx={4} seatState={seatStates[165]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={166} x={1144} y={2098} width={22} height={32} rx={4} seatState={seatStates[166]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={167} x={1171} y={2098} width={22} height={32} rx={4} seatState={seatStates[167]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={165}
+            x={1117}
+            y={2098}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[165]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={166}
+            x={1144}
+            y={2098}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[166]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={167}
+            x={1171}
+            y={2098}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[167]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={2119} rowText="30" />
-          <Seat id={168} x={1233} y={2098} width={22} height={32} rx={4} seatState={seatStates[168]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={169} x={1260} y={2098} width={22} height={32} rx={4} seatState={seatStates[169]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={170} x={1287} y={2098} width={22} height={32} rx={4} seatState={seatStates[170]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={168}
+            x={1233}
+            y={2098}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[168]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={169}
+            x={1260}
+            y={2098}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[169]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={170}
+            x={1287}
+            y={2098}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[170]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={171} x={1117} y={2142} width={22} height={32} rx={4} seatState={seatStates[171]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={172} x={1144} y={2142} width={22} height={32} rx={4} seatState={seatStates[172]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={173} x={1171} y={2142} width={22} height={32} rx={4} seatState={seatStates[173]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={171}
+            x={1117}
+            y={2142}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[171]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={172}
+            x={1144}
+            y={2142}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[172]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={173}
+            x={1171}
+            y={2142}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[173]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={2163} rowText="31" />
-          <Seat id={174} x={1233} y={2142} width={22} height={32} rx={4} seatState={seatStates[174]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={175} x={1260} y={2142} width={22} height={32} rx={4} seatState={seatStates[175]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={176} x={1287} y={2142} width={22} height={32} rx={4} seatState={seatStates[176]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={174}
+            x={1233}
+            y={2142}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[174]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={175}
+            x={1260}
+            y={2142}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[175]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={176}
+            x={1287}
+            y={2142}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[176]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={177} x={1117} y={2186} width={22} height={32} rx={4} seatState={seatStates[177]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={178} x={1144} y={2186} width={22} height={32} rx={4} seatState={seatStates[178]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={179} x={1171} y={2186} width={22} height={32} rx={4} seatState={seatStates[179]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={177}
+            x={1117}
+            y={2186}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[177]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={178}
+            x={1144}
+            y={2186}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[178]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={179}
+            x={1171}
+            y={2186}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[179]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={2207} rowText="32" />
-          <Seat id={180} x={1233} y={2186} width={22} height={32} rx={4} seatState={seatStates[180]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={181} x={1260} y={2186} width={22} height={32} rx={4} seatState={seatStates[181]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={182} x={1287} y={2186} width={22} height={32} rx={4} seatState={seatStates[182]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={180}
+            x={1233}
+            y={2186}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[180]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={181}
+            x={1260}
+            y={2186}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[181]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={182}
+            x={1287}
+            y={2186}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[182]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
 
-          <Seat id={183} x={1117} y={2230} width={22} height={32} rx={4} seatState={seatStates[183]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={184} x={1144} y={2230} width={22} height={32} rx={4} seatState={seatStates[184]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={185} x={1171} y={2230} width={22} height={32} rx={4} seatState={seatStates[185]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
+          <Seat
+            id={183}
+            x={1117}
+            y={2230}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[183]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={184}
+            x={1144}
+            y={2230}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[184]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={185}
+            x={1171}
+            y={2230}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[185]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
           <RowNumber x={1213} y={2251} rowText="33" />
-          <Seat id={186} x={1233} y={2230} width={22} height={32} rx={4} seatState={seatStates[186]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={187} x={1260} y={2230} width={22} height={32} rx={4} seatState={seatStates[187]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-          <Seat id={188} x={1287} y={2230} width={22} height={32} rx={4} seatState={seatStates[188]} seatType="economy" onSeatClick={toggleSeatState} areSeatsInitialized={areSeatsInitialized} />
-
-      </g>
+          <Seat
+            id={186}
+            x={1233}
+            y={2230}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[186]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={187}
+            x={1260}
+            y={2230}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[187]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+          <Seat
+            id={188}
+            x={1287}
+            y={2230}
+            width={22}
+            height={32}
+            rx={4}
+            seatState={seatStates[188]}
+            seatType="economy"
+            onSeatClick={toggleSeatState}
+            areSeatsInitialized={areSeatsInitialized}
+          />
+        </g>
 
         {/* Information components */}
         <Information cx={1126} cy={2037} r={6} />
 
         <defs>
-          <linearGradient id="paint0_linear_2261_2619" x1="151" y1="1312" x2="2275" y2="1312" gradientUnits="userSpaceOnUse">
+          <linearGradient
+            id="paint0_linear_2261_2619"
+            x1="151"
+            y1="1312"
+            x2="2275"
+            y2="1312"
+            gradientUnits="userSpaceOnUse"
+          >
             <stop offset="0.28" stopColor="#FF8600" />
             <stop offset="0.489583" stopColor="#FFAB4D" />
             <stop offset="0.72" stopColor="#FFDAB1" />

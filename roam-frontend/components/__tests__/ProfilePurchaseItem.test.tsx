@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import PurchaseItem from "../PurchaseItem";
-import { Ban } from "lucide-react";
 
 /**
  * Test File: PurchaseItem Component
