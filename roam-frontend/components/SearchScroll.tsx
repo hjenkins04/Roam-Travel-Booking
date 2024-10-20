@@ -3,9 +3,10 @@ import React, { useState } from "react"; // Import useState here
 import SearchItem from "@/components/SearchItem";
 import FlightDetails from "@/components/SearchResultExpansion"; // Import the FlightDetails component
 import flightData from "@/public/data/flightData";
+import { FlightDetailsProps } from "@/public/data/flightDetails";
 
 const SearchScroll = () => {
-    const [selectedFlight, setSelectedFlight] = useState(null); // State to store the selected flight
+    const [selectedFlight, setSelectedFlight] = useState<FlightDetailsProps['flight'] | null>(null);
 
     return (
         <div className="flex mb-10 h-[500px] justify-between">
@@ -22,7 +23,18 @@ const SearchScroll = () => {
                         price={flight.price}
                         tripType={flight.tripType}
                         leftIcon={flight.leftIcon}
-                        onClick={() => setSelectedFlight(flight)} // Set selected flight on button click
+                        onClick={() => setSelectedFlight({
+                            outgoingAirport: flight.outgoingAirport,
+                            incomingAirport: flight.incomingAirport,
+                            outgoingAirportName: flight.outgoingAirportName,
+                            incomingAirportName: flight.incomingAirportName,
+                            tripLength: flight.tripLength,
+                            price: flight.price,
+                            airline: flight.airline,
+                            flightDate: flight.flightDate, // Use flightDate instead of date
+                            time: flight.departureTime, // Use departureTime as the time
+                            baggageAllowance: flight.baggageAllowance,
+                        })}
                     />
                 ))}
             </div>
@@ -31,9 +43,8 @@ const SearchScroll = () => {
             <div className="ml-20 w-[500px] h-full mr-10 mb-20">
                 <FlightDetails flight={selectedFlight} /> {/* Pass selected flight to FlightDetails */}
             </div>
-        </div >
+        </div>
     );
 };
 
 export default SearchScroll;
-
