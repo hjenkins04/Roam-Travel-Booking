@@ -11,7 +11,7 @@ const TrendingLocationsHomeGrid = dynamic(
   { ssr: false }
 );
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div className="relative min-h-screen">
       {/* Background SVG */}

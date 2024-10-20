@@ -10,11 +10,6 @@ import SearchScroll from "@/components/SearchScroll";
 export default function SearchResultsPage() {
   return (
     <div className="relative min-h-screen items-start">
-      {/* Background SVG */}
-      <div className="absolute inset-0 mt-[-80px]">
-        <LandingPageBackground />
-      </div>
-
       <Header
         headerSize={"small"}
         backgroundImage={true}
@@ -22,7 +17,7 @@ export default function SearchResultsPage() {
         displayProfilePicture={true}
       />
 
-      <main className=" z-10 flex flex-col mt-[-70px] items-start pl-4">
+      <main className=" z-10 flex flex-col mt-[-95px] items-start pl-4">
         <div
           className=" relative w-full max-w-screen-xl z-10 py-6"
           style={{

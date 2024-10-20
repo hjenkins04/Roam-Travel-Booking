@@ -10,7 +10,7 @@ const SearchScroll = () => {
 
     return (
         <div className="flex mb-10 h-[500px] justify-between">
-            <div className="hide-scrollbar h-[500px] overflow-y-auto w-[700px] bg-white p-4 rounded-lg overflow-hidden">
+            <div className="hide-scrollbar h-[500px] overflow-y-auto w-[800px] bg-white p-4 rounded-lg overflow-hidden">
                 {flightData.map((flight, index) => (
                     <SearchItem
                         key={index}
