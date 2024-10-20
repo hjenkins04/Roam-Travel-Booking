@@ -8,9 +8,9 @@ interface FilterButtonProps {
     size?: string;
     className?: string;
     customTextColour?: string;
-    onClickRightIcon?: () => void;
-    options: string[]; x
+    options: string[];
     onOptionSelect: (option: string) => void;
+    selectedOption: string | null;
 }
 
 const FilterButton: FC<FilterButtonProps> = ({
@@ -19,20 +19,19 @@ const FilterButton: FC<FilterButtonProps> = ({
     size = "w-[200px]",
     className = "",
     customTextColour = 'text-gray-600',
-    onClickRightIcon,
     options,
     onOptionSelect,
+    selectedOption,
 
 }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false); // State to control dropdown visibility
-    const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
 
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev);
     };
 
     const handleOptionSelect = (option: string) => {
-        setSelectedOption(option);
         onOptionSelect(option); // Call the parent handler
         setDropdownOpen(false);
     };
