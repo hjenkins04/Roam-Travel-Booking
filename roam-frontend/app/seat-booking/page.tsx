@@ -3,6 +3,7 @@ import React, { useState, useRef } from "react";
 import Airplane from "@/components/SeatSelection/Airplane";
 import BookingForm from "@/components/SeatBookingForm";
 import Header from "@/components/Header";
+import SeatBookingFormFooter from "@/components/SeatBookingFormFooter";
 
 export default function SeatBookingPage() {
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
