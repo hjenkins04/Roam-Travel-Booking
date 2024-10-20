@@ -20,22 +20,26 @@ interface PurchaseItemProps {
   title: string;
   outboundFlight: FlightInfo;
   returnFlight: FlightInfo;
+  ban?: boolean;
   onCancelClick: () => void;
 }
 
 const PurchaseItem: React.FC<PurchaseItemProps> = ({
   title,
+  ban = true,
   outboundFlight,
   returnFlight,
   onCancelClick,
 }) => {
   return (
     <section className="relative flex flex-col justify-center p-6 mt-4 bg-white rounded-lg border border-gray-200 max-md:mt-2 max-md:max-w-full">
-      <Ban
-        data-testid="cancel-icon"
-        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 cursor-pointer"
-        onClick={onCancelClick}
-      />
+      {ban && (
+        <Ban
+          data-testid="cancel-icon"
+          className="absolute top-4 right-4 text-gray-400 hover:text-red-500 cursor-pointer"
+          onClick={onCancelClick}
+        />
+      )}
       <div className="flex gap-6 mt-4 max-md:flex-col">
         <FlightDetails {...outboundFlight} />
         <FlightDetails {...returnFlight} isReturn />

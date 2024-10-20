@@ -53,8 +53,8 @@ describe("EditProfile Component", () => {
   test("Submit the form and call the handleSubmit function", () => {
     render(<EditProfile handleSubmit={mockHandleSubmit} />);
 
-    const submitButton = screen.getByTestId("submit-button");
-    fireEvent.click(submitButton);
+    const form = screen.getByTestId("form");
+    fireEvent.submit(form);
 
     expect(mockHandleSubmit).toHaveBeenCalledTimes(1);
   });

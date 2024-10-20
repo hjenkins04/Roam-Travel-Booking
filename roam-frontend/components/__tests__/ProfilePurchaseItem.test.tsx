@@ -17,6 +17,9 @@ import PurchaseItem from "../PurchaseItem";
  *
  * 2. Render the cancel button and test its functionality.
  *    - Expectation: the Ban icon should be rendered and should trigger a function once on click.
+ * 
+ * 3. Don't render the cancel button and when ban is set to false.
+ *   - Expectation: the Ban icon is not rendered.
  */
 
 describe("PurchaseItem Component", () => {
@@ -106,5 +109,22 @@ describe("PurchaseItem Component", () => {
 
     expect(cancelButton).toBeInTheDocument();
     expect(mockCancelClick).toHaveBeenCalledTimes(1);
+  });
+
+  test("Check that the cancel button is not rendered when ban is passed as false", () => {
+    render(
+      <PurchaseItem
+        title="My Flight Booking"
+        outboundFlight={mockOutboundFlight}
+        returnFlight={mockReturnFlight}
+        ban={false}
+        onCancelClick={mockCancelClick}
+      />
+    );
+
+    const cancelButton = screen.queryByTestId("cancel-icon");
+
+    expect(cancelButton).not.toBeInTheDocument();
+    expect(mockCancelClick).toHaveBeenCalledTimes(0);
   });
 });

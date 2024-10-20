@@ -8,7 +8,7 @@ interface EditProfileProps {
 
 const EditProfile: React.FC<EditProfileProps> = ({ handleSubmit }) => {
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} data-testid="form">
       <section className="flex flex-row gap-6 self-stretch mt-5 text-lg">
         <Input name="firstName" placeholder="First Name*" required />
         <Input name="middleName" placeholder="Middle" />

@@ -26,11 +26,11 @@ jest.mock("next/navigation", () => ({
  * 1. Render the Home button and redirection to home page when clicked.
  *    - Expectation: the Home button should be visible, and clicking should redirect to home page.
  *
- * 2. Render the Purchases button and triggers the edit profile function.
+ * 2. Render the Purchases button and trigger the edit profile function.
  *    - Expectation: the Purchases button should be visible, and clicking should call the onEditProfile function once.
  *
- * 3. Render the Log Out button and triggers signOut function, and redirected to home page.
- *    - Expectation: the Log Out button should be visible, and user should be logged out when clicked, and redirected to home page.
+ * 3. Render the Log Out button and trigger signOut function, and ensure redirection to home page.
+ *    - Expectation: the Log Out button should be visible, and user should be logged out when clicked, and then redirected to home page.
  */
 
 describe("Profile Sidebar Component", () => {
