@@ -10,6 +10,7 @@ interface FilterButtonProps {
   customTextColour?: string;
   onClickRightIcon?: () => void;
   options: string[];
+  selectedOption: string | null;
   onOptionSelect: (option: string) => void;
 }
 
