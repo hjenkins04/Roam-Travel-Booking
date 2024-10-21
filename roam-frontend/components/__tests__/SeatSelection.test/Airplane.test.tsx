@@ -34,6 +34,15 @@ describe("Airplane Component", () => {
   });
 
   test("Renders the correct number of seats", async () => {
+    // Supress finDOMNode console warning for this specfic test by mocking console.error
+    const originalConsoleError = console.error;
+    jest.spyOn(console, 'error').mockImplementation((msg) => {
+      if (msg.includes('findDOMNode is deprecated')) {
+        return; // Ignore this specific warning
+      }
+      originalConsoleError(msg); // Allow other warnings to be logged
+    });
+
     // Arrange: Render the Airplane component with mock onSeatClick function
     render(<Airplane onSeatClick={mockOnSeatClick} />);
 

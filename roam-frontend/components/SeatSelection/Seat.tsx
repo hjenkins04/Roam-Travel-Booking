@@ -58,6 +58,7 @@ const Seat: React.FC<SeatProps> = ({
   areSeatsInitialized,
 }) => {
   const seatFillColor = getFillColor(seatType, seatState, areSeatsInitialized);
+  const isInteractive = seatState === "available" || seatState === "selected";
 
   // Add pointer cursor for available or selected seats, default cursor for taken or loading
   const cursorClass =
@@ -65,37 +66,48 @@ const Seat: React.FC<SeatProps> = ({
       ? "cursor-pointer"
       : "cursor-not-allowed";
 
+  const handleClick = () => {
+    if (isInteractive) {
+      onSeatClick(id);
+    }
+  };
+
   // Find the center of the rectangle for the checkmark
   const centerX = x + width / 2;
   const centerY = y + height / 2;
 
   return (
-    <g
-      id={`seat_${id}`}
-      onClick={() => onSeatClick(id)}
-      role="button"
-      aria-pressed={seatState === "selected"}
-    >
-      {/* Seat Rectangle */}
-      <rect
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        rx={rx}
-        fill={seatFillColor}
-        className={cursorClass}
-      />
-      {/* Render checkmark if seat is selected */}
-      {seatState === "selected" && (
-        <g
-          id="checkmark"
-          transform={`translate(${centerX - 12}, ${centerY - 12})`}
-        >
-          <Check size={24} color="#ffffff" />
-        </g>
-      )}
-    </g>
+    <svg>
+      <g
+        id={`${id}`}
+        onClick={handleClick}
+        role="button"
+        aria-pressed={seatState === "selected"}
+        data-testid={`seat-${id}-${seatState}`}
+      >
+        {/* Seat Rectangle */}
+        <rect
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          rx={rx}
+          fill={seatFillColor}
+          className={cursorClass}
+          data-testid={`seat-rect-${id}`}
+        />
+        {/* Render checkmark if seat is selected */}
+        {seatState === "selected" && (
+          <g
+            id="checkmark"
+            data-testid={`seat-checkmark-${id}`}
+            transform={`translate(${centerX - 12}, ${centerY - 12})`}
+          >
+            <Check size={24} color="#ffffff" />
+          </g>
+        )}
+      </g>
+    </svg>
   );
 };
 

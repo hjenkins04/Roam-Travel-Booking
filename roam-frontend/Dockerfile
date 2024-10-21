@@ -66,3 +66,9 @@ ENV PORT=3000
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]
+
+# For testing, we create a new stage to run tests separately
+FROM deps AS test
+COPY . .
+# Run tests
+CMD ["npm", "test"]

@@ -2,6 +2,15 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import SeatBooking from "@/components/SeatBooking";
 
+ // Mock the dependent components to focus on SeatBooking behavior
+ jest.mock("@/components/SeatSelection/Airplane", () => {
+  const Airplane = (props: { onSeatClick: (seatNumber: number) => void }) => (
+    <div data-testid="airplane-seat" onClick={() => props.onSeatClick(1)} />
+  );
+  Airplane.displayName = "Airplane";
+  return Airplane;
+});
+
 /**
  * Test File: SeatBooking Component
  *
@@ -27,21 +36,6 @@ describe("SeatBooking Component", () => {
     jest.clearAllMocks();
   });
 
-  // Mock the dependent components to focus on SeatBooking behavior
-  jest.mock("@/components/SeatSelection/Airplane", () => {
-    const Airplane = (props: { onSeatClick: (seatNumber: number) => void }) => (
-      <div data-testid="airplane-seat" onClick={() => props.onSeatClick(1)} />
-    );
-    Airplane.displayName = "Airplane";
-    return Airplane;
-  });
-
-  jest.mock("@/components/Header", () => {
-    const Header = () => <div data-testid="header" />;
-    Header.displayName = "Header";
-    return Header;
-  });
-
   test("Renders the SeatBooking component", () => {
     // Arrange: Render the SeatBooking component
     render(<SeatBooking />);
@@ -56,7 +50,7 @@ describe("SeatBooking Component", () => {
     // Arrange: Render the SeatBooking component
     render(<SeatBooking />);
 
-    // Act: Simulate seat click to select a seat
+    // Act: Select a seat
     fireEvent.click(screen.getByTestId("airplane-seat"));
 
     // Assert: Ensure that the seat is selected and the seat selection form is shown, i.e. width changes to 2/4

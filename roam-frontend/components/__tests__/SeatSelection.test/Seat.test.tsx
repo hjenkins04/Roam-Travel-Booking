@@ -49,6 +49,7 @@ describe("Seat Booking Seat Component", () => {
 
   const seatTestIdRegex = new RegExp(`^seat-\\d+-[a-zA-Z]+$`);
   const seatRectTestIdRegex = new RegExp(`^seat-rect-\\d+$`);
+  const seatCheckmarkTestIdRegex = new RegExp(`^seat-checkmark-\\d+$`);
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -82,7 +83,7 @@ describe("Seat Booking Seat Component", () => {
     render(<Seat {...defaultProps} seatState="selected" />);
 
     // Act: Look for the checkmark element
-    const checkmark = screen.getByTestId("checkmark");
+    const checkmark = screen.getByTestId(seatCheckmarkTestIdRegex);
 
     // Assert: Check that the checkmark icon exists
     expect(checkmark).toBeInTheDocument();
@@ -93,7 +94,7 @@ describe("Seat Booking Seat Component", () => {
     render(<Seat {...defaultProps} seatState="available" />);
 
     // Act:  Look for the checkmark element
-    const checkmark = screen.queryByTestId("checkmark");
+    const checkmark = screen.queryByTestId(seatCheckmarkTestIdRegex);
 
     // Assert: Check that the checkmark icon doesn't exists
     expect(checkmark).not.toBeInTheDocument();
