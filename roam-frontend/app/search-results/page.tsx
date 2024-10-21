@@ -12,7 +12,7 @@ export default function SearchResultsPage() {
     <div className="relative min-h-screen items-start">
 
       <Header
-        headerSize={"xsmall"}
+        headerSize={"small"}
         backgroundImage={true}
         logoColour={"black"}
         displayProfilePicture={false}
@@ -24,7 +24,7 @@ export default function SearchResultsPage() {
           style={{
             transform: "scale(0.75)",
             transformOrigin: "left",
-            paddingTop: "20px",
+            paddingTop: "40px",
           }}
         >
           <SearchResultBox />

@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({
       </div>
 
 
-      <header className="flex justify-between items-center px-16 py-6 shadow-sm">
+      <header className="flex justify-between items-center px-16 py-6 ">
         {/* Logo with click handler for redirect */}
         <div className="relative w-32 h-[76px] z-10">
           <Image

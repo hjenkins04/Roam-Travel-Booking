@@ -50,7 +50,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
     closeDrawer();
   };
 
-  const handleResetPassword = () => {
+  const handleForgotPassword = () => {
     router.push('/reset-password');
   };
 
@@ -178,7 +178,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
               <span
-                onClick={handleResetPassword}
+                onClick={handleForgotPassword}
                 className="text-sm text-orange-500 hover:underline">
                 Forgot Password?
               </span>
