@@ -10,10 +10,6 @@ import SearchScroll from "@/components/SearchScroll";
 export default function SearchResultsPage() {
   return (
     <div className="relative min-h-screen items-start">
-      {/* Background SVG */}
-      <div className="absolute inset-0 mt-[-80px]">
-        <LandingPageBackground />
-      </div>
 
       <Header
         headerSize={"xsmall"}
