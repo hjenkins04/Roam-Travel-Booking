@@ -3,17 +3,23 @@
 import React from "react";
 import Header from "@/components/Header";
 import SearchResultBox from "@/components/SearchResultBox";
+import TallHeaderBackground from "@/components/Backgrounds/TallHeaderBackground";
 import FilterBox from "@/components/FilterBox";
 import SearchScroll from "@/components/SearchScroll";
 
 export default function SearchResultsPage() {
   return (
     <div className="relative min-h-screen items-start">
+      {/* Background SVG */}
+      <div className="absolute inset-0 mt-[-80px]">
+        <LandingPageBackground />
+      </div>
+
       <Header
-        headerSize={"small"}
+        headerSize={"xsmall"}
         backgroundImage={true}
-        logoColour={"orange"}
-        displayProfilePicture={true}
+        logoColour={"black"}
+        displayProfilePicture={false}
       />
 
       <main className=" z-10 flex flex-col mt-[-95px] items-start pl-4">
@@ -22,7 +28,7 @@ export default function SearchResultsPage() {
           style={{
             transform: "scale(0.75)",
             transformOrigin: "left",
-            paddingTop: "60px",
+            paddingTop: "20px",
           }}
         >
           <SearchResultBox />

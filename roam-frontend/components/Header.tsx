@@ -54,6 +54,13 @@ const Header: React.FC<HeaderProps> = ({
     router.push("/dashboard");
   };
 
+  // Calculate dynamic padding based on backgroundImage and headerSize
+  const paddingBottom = backgroundImage
+    ? headerSize === 'tall'
+      ? 'pb-48 pt-8'  // Large padding for tall headers with background image
+      : 'pb-10 pt-8'  // Smaller padding for regular headers with background image
+    : 'pb-6';     // Default padding if no background image
+
   return (
     <>
       {/* Conditionally render the background based on headerSize */}

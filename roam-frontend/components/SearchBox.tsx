@@ -48,7 +48,7 @@ const SearchBox = () => {
   };
 
   const handleButtonClick = () => {
-    router.push('/SearchResultsPage');
+    router.push('/search-results');
   };
 
   return (
