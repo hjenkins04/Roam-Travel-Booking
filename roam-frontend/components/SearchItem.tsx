@@ -33,8 +33,8 @@ const SearchItem: FC<SearchItemProps> = ({
       className="flex items-center justify-between w-[700px] p-4 bg-white rounded-lg shadow hover:bg-gray-100 transition-all"
       onClick={onClick}
     >
-      {/* Left Side */}
-      <div className="flex items-center">
+      {/* Box for Left Icon and Airline */}
+      <div className="flex items-center w-[200px]">
         <Image
           src={leftIcon}
           alt="Left Icon"
@@ -48,30 +48,28 @@ const SearchItem: FC<SearchItemProps> = ({
         </div>
       </div>
 
-      {/* Left Middle Section */}
-      <div className="flex flex-col items-start">
+      {/* Box for Departure and Arrival Times */}
+      <div className="flex flex-col items-center w-[200px]">
         <div className="flex items-center">
-          <span className="text-md  text-gray-500 font-semibold">
+          <span className="text-md text-gray-500 font-semibold mr-2">
             {departureTime}
           </span>
           <span className="mx-2"> - </span>
-          <span className="text-md  text-gray-500 font-semibold">
+          <span className="text-md text-gray-500 font-semibold">
             {arrivalTime}
           </span>
         </div>
       </div>
 
-      {/* Right Middle Section */}
-      <div className="flex flex-col items-start">
-        <div className="flex items-center">
-          <span className="text-sm text-gray-500">{numStops}</span>
-        </div>
-        <span className="text-sm text-gray-500">{stopInfo}</span>
+      {/* Box for Number of Stops and Stop Info */}
+      <div className="flex flex-col ml-4 items-center w-[200px]">
+        <span className="text-sm text-gray-500">{numStops}</span>
+        <span className="text-sm text-gray-500 whitespace-normal">{stopInfo}</span>
       </div>
-      
-      {/* Right Side */}
-      <div className="flex flex-col items-end">
-        <span className="text-lg  text-gray-500 font-semibold">{price}</span>
+
+      {/* Box for Price and Trip Type */}
+      <div className="flex flex-col items-end w-[200px]">
+        <span className="text-lg text-gray-500 font-semibold">{price}</span>
         <span className="text-sm text-gray-500">{tripType}</span>
       </div>
     </button>
@@ -79,3 +77,4 @@ const SearchItem: FC<SearchItemProps> = ({
 };
 
 export default SearchItem;
+

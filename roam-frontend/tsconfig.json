@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
-    "types": ["@testing-library/jest-dom"],
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": [
+      "@testing-library/jest-dom"
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,9 +26,20 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../types.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "../types.tsx",
+    "components/FlightSearch.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

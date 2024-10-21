@@ -8,7 +8,7 @@ interface FilterButtonProps {
     className?: string;
     customTextColour?: string;
     options: string[];
-    onOptionSelect: (option: string) => void;
+    onOptionSelect: (option: string | null) => void; // Allow null for reset
     selectedOption: string | null;
 }
 
@@ -20,16 +20,14 @@ const FilterButton: FC<FilterButtonProps> = ({
     options,
     onOptionSelect,
     selectedOption,
-
 }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false); // State to control dropdown visibility
-
 
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev);
     };
 
-    const handleOptionSelect = (option: string) => {
+    const handleOptionSelect = (option: string | null) => {
         onOptionSelect(option); // Call the parent handler
         setDropdownOpen(false);
     };
@@ -56,7 +54,7 @@ const FilterButton: FC<FilterButtonProps> = ({
                                 {mainTextRight}
                             </span>
                             <span
-                                className={`text-xs font-medium text-left ${customTextColour} `}
+                                className={`text-xs font-medium text-left ${customTextColour}`}
                             >
                                 {selectedOption}
                             </span>
@@ -77,6 +75,13 @@ const FilterButton: FC<FilterButtonProps> = ({
                                 {option}
                             </li>
                         ))}
+                        {/* Add Reset Option */}
+                        <li
+                            className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                            onClick={() => handleOptionSelect(null)} // Reset selection
+                        >
+                            Reset
+                        </li>
                     </ul>
                 </div>
             )}

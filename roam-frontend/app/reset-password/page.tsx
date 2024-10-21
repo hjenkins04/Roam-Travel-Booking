@@ -10,7 +10,7 @@ import SearchButton from "@/components/SearchButton";
 const ResetPasswordPage: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleSubmit = (newpassword) => {
+    const handleSubmit = () => {
         // Handle password reset logic
     };
 

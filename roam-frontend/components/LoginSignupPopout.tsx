@@ -51,7 +51,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
   };
 
   const handleForgotPassword = () => {
-    router.push('/reset-password');
+    router.push('/forgot-password');
   };
 
   return (
