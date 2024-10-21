@@ -2,29 +2,11 @@
 
 import React from "react";
 import { Ban } from "lucide-react";
-import AirlinePhoto from "./Images/AirlinePhoto";
+import AirlinePhoto from "@/components/Images/AirlinePhoto";
 
-interface FlightInfo {
-  date: string;
-  departure: string;
-  airline: string;
-  flightNumber: string;
-  seat: string;
-  duration: string;
-  departureTime: string;
-  arrivalTime: string;
-  layover?: string;
-}
+import { FlightInfo, TripInfo } from "@/types";
 
-interface PurchaseItemProps {
-  title: string;
-  outboundFlight: FlightInfo;
-  returnFlight: FlightInfo;
-  ban?: boolean;
-  onCancelClick: () => void;
-}
-
-const PurchaseItem: React.FC<PurchaseItemProps> = ({
+const PurchaseItem: React.FC<TripInfo> = ({
   ban = true,
   outboundFlight,
   returnFlight,

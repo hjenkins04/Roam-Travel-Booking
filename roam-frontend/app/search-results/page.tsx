@@ -3,7 +3,6 @@
 import React from "react";
 import Header from "@/components/Header";
 import SearchResultBox from "@/components/SearchResultBox";
-import LandingPageBackground from "@/components/Backgrounds/TallHeaderBackground";
 import FilterBox from "@/components/FilterBox";
 import SearchScroll from "@/components/SearchScroll";
 

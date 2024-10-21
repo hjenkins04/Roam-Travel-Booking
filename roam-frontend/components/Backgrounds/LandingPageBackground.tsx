@@ -6,8 +6,8 @@ const LandingPageBackground: React.FC = () => (
     <Image
       src="/images/landing-page-background.png"
       alt="Landing Page Background"
-      layout="fill"
-      objectFit="cover"
+      fill
+      style={{ position: "absolute", objectFit: "cover",  bottom: 0}}
       priority={true}
     />
   </div>

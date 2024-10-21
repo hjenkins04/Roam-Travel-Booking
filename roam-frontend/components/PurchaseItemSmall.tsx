@@ -3,22 +3,11 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import AirlinePhoto from "./Images/AirlinePhoto";
-
-interface FlightInfo {
-  date: string;
-  departure: string;
-  airline: string;
-  flightNumber: string;
-  seat: string;
-  duration: string;
-  departureTime: string;
-  arrivalTime: string;
-  layover?: string;
-}
+import { FlightInfo } from "@/types";
 
 interface PurchaseItemSmallProps {
   outboundFlight: FlightInfo;
-  returnFlight?: FlightInfo | null; // Return flight can be null for one-way trips
+  returnFlight?: FlightInfo | null;
 }
 
 const PurchaseItemSmall: React.FC<PurchaseItemSmallProps> = ({
