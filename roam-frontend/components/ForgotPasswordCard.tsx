@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface ForgotPasswordCardProps {
@@ -8,6 +8,15 @@ interface ForgotPasswordCardProps {
 const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({ onSubmit }) => {
     const [email, setEmail] = useState(''); // State for email input
     const router = useRouter();
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
+
+    if (!hasMounted) {
+        return null; // Prevent rendering on server
+    }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent default form submission
