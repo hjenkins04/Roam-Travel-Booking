@@ -2,8 +2,19 @@ import React from 'react'; // Import React
 import { render, screen, fireEvent } from '@testing-library/react';
 import SearchScroll from '@/components/SearchScroll';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
+interface ImageProps {
+    src: string;
+    alt: string;
+    [key: string]: any; // Allow any additional props
+}
 
+jest.mock('next/image', () => {
+    return function MockImage({ src, alt, ...props }: ImageProps) {
+        return <img src={src} alt={alt} {...props} />;
+    };
+});
 // Mock the useRouter hook
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
