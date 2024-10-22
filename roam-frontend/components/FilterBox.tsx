@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import FilterButtonGroup from "@/components/FilterButtonGroup";
@@ -5,7 +6,7 @@ import FilterButton from "@/components/FilterButton";
 import SearchButton from "@/components/SearchButton";
 
 interface FilterBoxProps {
-    onFilterChange: (newFilters: FilterOptions) => void;
+    onFilterChange: (newFilters: any) => void;
 }
 
 export interface FilterOptions {
@@ -39,6 +40,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
             <div className="relative bg-white rounded-md p-2 max-w-[97%] w-full z-1">
                 <FilterButtonGroup className="w-full justify-start space-y-2 sm:space-y-1">
                     <FilterButton
+                        dataTestId="filter-button-1"
                         rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                         mainTextRight="Max Price"
                         options={["$200", "$300", "$400", "$500", "$600", "$700"]}
@@ -46,6 +48,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
                         onOptionSelect={setMaxPrice}
                     />
                     <FilterButton
+                        dataTestId="filter-button-2"
                         rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                         mainTextRight="Stops"
                         options={["0", "1", "2", "2+"]}
@@ -54,6 +57,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
                     />
 
                     <FilterButton
+                        dataTestId="filter-button-3"
                         rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                         mainTextRight="Departure Time"
                         options={["Morning", "Afternoon", "Evening"]}
@@ -61,6 +65,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
                         onOptionSelect={setDepartureTime}
                     />
                     <FilterButton
+                        dataTestId="filter-button-4"
                         rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                         mainTextRight="Arrival Time"
                         options={["Morning", "Afternoon", "Evening"]}
@@ -68,6 +73,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
                         onOptionSelect={setArrivalTime}
                     />
                     <FilterButton
+                        dataTestId="filter-button-5"
                         rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                         mainTextRight="Airline"
                         options={["Airline A", "Airline B", "Airline C"]}

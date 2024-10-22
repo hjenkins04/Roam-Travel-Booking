@@ -1,5 +1,4 @@
 "use client";
-
 import React, { FC } from "react";
 
 interface SearchButtonProps {
@@ -18,6 +17,7 @@ const SearchButton: FC<SearchButtonProps> = ({
 }) => {
     return (
         <div
+            data-testid='search-button'
             className={`relative flex items-center justify-center bg-[#FF9A2A] rounded-md shadow-md p-3 border border-[#FF9A2A] ${className}`}
             style={{ minHeight: "40px", cursor: "pointer" }}
             onClick={onClick}
