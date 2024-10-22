@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import React, { FC } from "react";
 import Image from "next/image";
 
 interface SearchItemProps {
