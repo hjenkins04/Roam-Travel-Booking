@@ -1,6 +1,6 @@
 export function getTimeCategory(time: string): "Morning" | "Afternoon" | "Evening" {
     const [hour, minutePart] = time.split(":");
-    const [minute, period] = minutePart.split(" ");
+    const [period] = minutePart.split(" ");
     const hourNum = parseInt(hour);
     const isAM = period.toLowerCase() === "am";
 
@@ -8,7 +8,7 @@ export function getTimeCategory(time: string): "Morning" | "Afternoon" | "Evenin
         if (hourNum < 12) {
             return "Morning"; // 12:00 AM - 11:59 AM
         } else {
-            return "Afternoon"; // 12:00 PM (noon) should be treated as afternoon.
+            return "Afternoon"; // 12:00 PM
         }
     } else {
         if (hourNum >= 1 && hourNum < 5) {

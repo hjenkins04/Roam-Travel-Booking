@@ -8,12 +8,9 @@ import PasswordChangeHeader from "@/components/Text/PasswordChangeHeading";
 
 const ResetPasswordPage: React.FC = () => {
     const [isModalOpen, setModalOpen] = useState(false);
-    const [modalMessage, setModalMessage] = useState('');
     const [email, setEmail] = useState(''); // Keep track of email for the modal
 
     const handleSubmit = (email: string) => {
-        // Logic to send the reset email here
-        setModalMessage(`Reset link sent to ${email}`);
         setEmail(email); // Store the email for the modal
         setModalOpen(true); // Open the modal
     };

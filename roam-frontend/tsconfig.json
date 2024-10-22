@@ -37,7 +37,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "../types.tsx",
-    "components/FlightSearch.js"
   ],
   "exclude": [
     "node_modules"

@@ -62,7 +62,7 @@ describe('SearchScroll Component', () => {
         });
 
         render(<SearchScroll filters={filters} />);
-        expect(screen.getByText((content, element) =>
+        expect(screen.getByText((content) =>
             content.startsWith("No results found")
         )).toBeInTheDocument();
 

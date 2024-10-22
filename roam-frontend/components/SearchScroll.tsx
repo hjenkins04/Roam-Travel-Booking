@@ -3,8 +3,8 @@ import SearchItem from "@/components/SearchItem";
 import SearchResultExpansion from "@/components/SearchResultExpansion";
 import flightData from "@/public/data/flightData";
 import { FlightDetailsProps } from "@/public/data/flightDetails";
-import { getTimeCategory } from "@/components/HelperFunctions/timeFilter";
-import { getNumStops } from "@/components/HelperFunctions/numStopsFilter";
+import { getTimeCategory } from "@/components/HelperFunctions/TimeFilter";
+import { getNumStops } from "@/components/HelperFunctions/NumStopsFilter";
 
 // Define the FilterOptions type
 type FilterOptions = {

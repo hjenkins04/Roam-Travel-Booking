@@ -43,8 +43,6 @@ import FilterBox from '../FilterBox';
 
  */
 
-const mockOnFilterChange = jest.fn();
-
 describe('FilterButton Component', () => {
     const mockOnOptionSelect = jest.fn();
     const mockApplyFilters = jest.fn();

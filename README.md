@@ -11,7 +11,7 @@ To run the front-end project located in the `roam-frontend` folder, follow these
 3. Build your container: `docker build -t roam-frontend .`.
 4. Run your container: `docker run -p 3000:3000 roam-frontend`.
 5. Open your browser and navigate to `http://localhost:3000` to see the webpage.
-6. To run the tests run the container with: `docker run --rm roam-frontend npm test`.
+6. To run the tests see the instructions below to setup the dev dependencies and then run: `npm test`.
 
 You can view your images created with `docker images`.
 
@@ -96,6 +96,15 @@ pnpm run dev
 This will start the development server. By default, you can access the application in your browser at `http://localhost:3000`.
 
 ### Additional Commands
+- To test the application:
+    ```bash
+    npm test
+    ```
+    or
+    ```bash
+    pnpm test
+    ```
+
 - To build the application for production:
     ```bash
     npm run build

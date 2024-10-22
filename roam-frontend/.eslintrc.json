@@ -4,6 +4,8 @@
     {
       "files": ["components/ui/command.tsx", "components/ui/input.tsx", "components/ui/calendar.tsx"],
       "rules": {
+        "@next/next/no-document-import-in-page": "off",
+        "@next/next/no-title-in-document-head": "off",
         "@typescript-eslint/no-empty-object-type": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off",

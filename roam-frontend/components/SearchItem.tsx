@@ -36,7 +36,7 @@ const SearchItem: FC<SearchItemProps> = ({
       {/* Box for Left Icon and Airline */}
       <div className="flex items-center w-[200px]">
         <Image
-          src={leftIcon}
+          src={leftIcon || '/images/default.png'}
           alt="Left Icon"
           width={36}
           height={36}
