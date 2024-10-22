@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// Import necessary components and UI elements
 import ProfileHeader from "./ProfileHeader";
 import PurchaseItem from "./PurchaseItem";
 import Sidebar from "./ProfileSidebar";
@@ -16,10 +17,12 @@ import {
 import EditProfile from "./EditProfile";
 
 const ProfilePage: React.FC = () => {
+  // State variables for managing profile editing and modals
   const [editProfile, setEditProfile] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
+  // Event handlers for form submission and cancellation
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSuccessModalOpen(true);
@@ -34,6 +37,7 @@ const ProfilePage: React.FC = () => {
     setCancelModalOpen(false);
   };
 
+  // Mock data for previous purchases
   const purchases = [
     {
       title: "Round Trip - Toronto to Honolulu February 2024",
@@ -90,6 +94,7 @@ const ProfilePage: React.FC = () => {
   return (
     <>
       <div className="relative min-h-screen">
+        {/* Header component */}
         <Header
           headerSize={"tall"}
           backgroundImage={true}
@@ -97,6 +102,7 @@ const ProfilePage: React.FC = () => {
           displayProfilePicture={false}
         />
         <main className="pl-16 mt-3 w-full max-md:pl-5 max-md:max-w-full relative">
+          {/* Profile picture and header section */}
           <div className="flex flex-row">
             <div className="relative z-20 mt-[3%]">
               <ProfilePicture pictureSize={"200px"} />
@@ -112,6 +118,7 @@ const ProfilePage: React.FC = () => {
           </div>
 
           <div className="flex flex-row w-full mr-28 gap-10">
+            {/* Sidebar section */}
             <section className="">
               <h1 className="text-2xl font-semibold text-orange-400 mt-5">
                 My Profile
@@ -121,7 +128,7 @@ const ProfilePage: React.FC = () => {
               </div>
             </section>
 
-            {/* Show the purchases section only when not editing the profile */}
+            {/* Main content section - toggles between purchases and edit profile */}
             {!editProfile ? (
               <section className="flex flex-col items-start mt-2.5 mr-40">
                 <h2 className="text-2xl font-bold text-orange-400">
@@ -135,7 +142,9 @@ const ProfilePage: React.FC = () => {
                   <div className="flex flex-col px-4 bg-white rounded-lg max-md:max-w-full">
                     {purchases.map((purchase, index) => (
                       <>
-                        <h2 className="text-xl mt-5 font-semibold text-gray-700">{purchase.title}</h2>
+                        <h2 className="text-xl mt-5 font-semibold text-gray-700">
+                          {purchase.title}
+                        </h2>
                         <PurchaseItem
                           key={index}
                           {...purchase}
@@ -164,6 +173,7 @@ const ProfilePage: React.FC = () => {
         </main>
       </div>
 
+      {/* Success modal for profile update */}
       <Dialog open={successModalOpen} onOpenChange={setSuccessModalOpen}>
         <DialogContent>
           <DialogTitle>Account Updated</DialogTitle>
@@ -180,6 +190,7 @@ const ProfilePage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Confirmation modal for ticket cancellation */}
       <Dialog open={cancelModalOpen} onOpenChange={setCancelModalOpen}>
         <DialogContent>
           <DialogTitle>Confirm Ticket Refund</DialogTitle>

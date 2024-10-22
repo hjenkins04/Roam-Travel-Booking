@@ -2,18 +2,23 @@ import React from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
+// Define props interface for the Sidebar component
 interface ProfileSidebarProps {
   onEditProfile: () => void;
 }
 
 const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
+  // Use authentication context for sign out functionality
   const { signOut } = useAuth();
+  // Use Next.js router for navigation
   const router = useRouter();
 
+  // Handler for Home button click
   const handleHomeClick = () => {
     router.push("/");
   };
 
+  // Handler for Log Out button click
   const handleLogOut = async () => {
     await signOut();
     router.push("/");
@@ -21,8 +26,9 @@ const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
 
   return (
     <nav className="flex flex-col h-full z-10 max-w-full text-s leading-none text-amber-500 w-[218px] max-md:h-auto">
-      {/* Top section: Home and Purchases */}
+      {/* Top section: Home and Purchases buttons */}
       <div className="flex flex-col gap-6 flex-grow">
+        {/* Home button */}
         <a
           data-testid="home-button"
           href="#"
@@ -31,6 +37,7 @@ const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
         >
           Home
         </a>
+        {/* Purchases button (triggers edit profile) */}
         <a
           data-testid="purchases-button"
           href="#"

@@ -2,6 +2,7 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+// Define props interface for the EditProfile component
 interface EditProfileProps {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
@@ -9,11 +10,14 @@ interface EditProfileProps {
 const EditProfile: React.FC<EditProfileProps> = ({ handleSubmit }) => {
   return (
     <form onSubmit={handleSubmit} data-testid="form">
+      {/* Name input section */}
       <section className="flex flex-row gap-6 self-stretch mt-5 text-lg">
         <Input name="firstName" placeholder="First Name*" required />
         <Input name="middleName" placeholder="Middle" />
         <Input name="lastName" placeholder="Last Name*" required />
       </section>
+
+      {/* Suffix and Date of Birth section */}
       <section className="flex flex-row gap-6 mt-6">
         <Input name="suffix" placeholder="Suffix" className="max-w-48" />
         <div className="flex flex-col grow max-w-48">
@@ -23,6 +27,8 @@ const EditProfile: React.FC<EditProfileProps> = ({ handleSubmit }) => {
           </p>
         </div>
       </section>
+
+      {/* Contact information section */}
       <section className="flex flex-row gap-5 self-stretch mt-6 text-lg">
         <Input
           name="email"
@@ -32,6 +38,8 @@ const EditProfile: React.FC<EditProfileProps> = ({ handleSubmit }) => {
         />
         <Input name="phone" placeholder="Phone Number*" type="tel" required />
       </section>
+
+      {/* Address section */}
       <section className="flex flex-col self-stretch mt-6 w-full text-lg max-md:max-w-full">
         <Input name="streetAddress" placeholder="Street Address*" required />
       </section>
@@ -54,6 +62,8 @@ const EditProfile: React.FC<EditProfileProps> = ({ handleSubmit }) => {
           className="w-40"
         />
       </section>
+
+      {/* Submit button */}
       <Button
         data-testid="submit-button"
         type="submit"
