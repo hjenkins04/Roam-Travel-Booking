@@ -15,16 +15,6 @@ type FilterOptions = {
     airline: string | null;
 };
 
-interface SearchScrollProps {
-    filters: FilterOptions;
-    departureCity: string;
-    arrivalCity: string;
-    departureDate?: Date;
-    returnDate?: Date;
-    isRoundTrip: boolean;
-    passengers: { class: string }[]; // Update as per your structure
-}
-
 
 const SearchScroll: React.FC<{ filters: FilterOptions }> = ({ filters }) => {
     const [selectedFlight, setSelectedFlight] = useState<FlightDetailsProps['flight'] | null>(null);

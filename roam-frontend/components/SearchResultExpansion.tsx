@@ -4,9 +4,9 @@ import BookFlightButton from "@/components/SearchButton";
 import { FlightDetailsProps } from "@/public/data/flightDetails"
 import { useRouter } from "next/navigation";
 
-const FlightDetails: React.FC<FlightDetailsProps> = ({ flight }) => {
+const SearchResultExpansion: React.FC<FlightDetailsProps> = ({ flight }) => {
     const router = useRouter();
-    
+
     if (!flight) return null; // Render nothing if no flight is selected
 
     return (
@@ -62,4 +62,4 @@ const FlightDetails: React.FC<FlightDetailsProps> = ({ flight }) => {
     );
 };
 
-export default FlightDetails;
+export default SearchResultExpansion;
