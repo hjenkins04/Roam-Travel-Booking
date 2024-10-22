@@ -18,14 +18,20 @@ const ButtonPage: React.FC = () => {
       <Button onClick={() => handleNavigation("/search-results")} className="w-40">
         Search Results
       </Button>
-      <Button onClick={() => handleNavigation("/checkout")} className="w-40">
-        Checkout
-      </Button>
       <Button onClick={() => handleNavigation("/seat-booking")} className="w-40">
         Seat Booking
       </Button>
+      <Button onClick={() => handleNavigation("/checkout")} className="w-40">
+        Checkout
+      </Button>
       <Button onClick={() => handleNavigation("/dashboard")} className="w-40">
         Dashboard
+      </Button>
+      <Button onClick={() => handleNavigation("/forgot-password")} className="w-40">
+        Forgot Password
+      </Button>
+      <Button onClick={() => handleNavigation("/reset-password")} className="w-40">
+        Reset Password
       </Button>
     </div>
   );

@@ -177,11 +177,11 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
                 />
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
-              <span
+              <button
                 onClick={handleForgotPassword}
-                className="text-sm text-orange-500 hover:underline">
+                className="text-sm text-orange-500 hover:underline cursor-pointer bg-transparent border-none p-0 m-0">
                 Forgot Password?
-              </span>
+              </button>
             </div>
           )}
 
