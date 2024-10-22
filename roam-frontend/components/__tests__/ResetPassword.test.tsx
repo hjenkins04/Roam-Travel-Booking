@@ -80,5 +80,6 @@ describe('ResetPasswordCard Component', () => {
         fireEvent.submit(form);
 
         expect(mockOnSubmit).not.toHaveBeenCalled();
+        expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
     });
 });

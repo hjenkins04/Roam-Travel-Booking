@@ -11,6 +11,7 @@ const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({ onSubmit }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
     const [hasMounted, setHasMounted] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         setHasMounted(true);
@@ -22,6 +23,11 @@ const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({ onSubmit }) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (newPassword !== confirmPassword) {
+            setError('Passwords do not match');
+            return; // Prevent submission
+        }
+        setError(null);
         onSubmit(newPassword);
     };
 
@@ -34,7 +40,7 @@ const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({ onSubmit }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md border border-gray-300">
+        <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md border border-gray-300" data-testid="reset-password-form">
             <div className="mb-6 relative">
                 <label htmlFor="newPassword" className="block text-sm font-medium text-gray-500 mb-5">
                     New Password
@@ -77,6 +83,10 @@ const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({ onSubmit }) => {
                     {isConfirmPasswordVisible ? <EyeOff /> : <Eye />}
                 </button>
             </div>
+            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+            <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-lg">
+                Submit
+            </button>
         </form>
     );
 };
