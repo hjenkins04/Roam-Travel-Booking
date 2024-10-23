@@ -2,6 +2,33 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ResetPasswordCard from '@/components/ResetPasswordCard';
 
+/**
+ * Test File: Reset Password Form 
+ *
+ * Purpose:
+ * - Ensures the functionality and rendering behavior of the Reset Password Form Component. 
+ * - The Reset Password Form Component includes:
+ *      - Two input sections: New Password and Confirm Password 
+ *
+ * Test Cases:
+ * 1. Render the form correctly. 
+ *    - Expectation: The two input sections new password and confirm password are visible. 
+ * 
+ * 2. Can toggle visibility of New Password Input 
+ *    - Expectation: Clicking the toggle button should switch the new password type between 
+ *      password and text. 
+ * 
+ * 3. Can toggle visibility of Confirm Password Input 
+ *    - Expectation: Clicking the toggle button should switch the confirm password type between 
+ *      password and text. 
+ * 
+ * 4. Form submits if passwords match
+ *    - Expectation: If password inputs match, the onSubmit function will be called once. 
+ * 
+ * 5. Form does not submit if passwords do not match
+ *    - Expectation:If password inputs do not match, the onSubmit function will not be called. 
+*/
+
 describe('ResetPasswordCard Component', () => {
     const mockOnSubmit = jest.fn();
 
@@ -16,7 +43,7 @@ describe('ResetPasswordCard Component', () => {
         expect(screen.getByLabelText(/Confirm Password/i)).toBeInTheDocument();
     });
 
-    test('toggles password visibility', () => {
+    test('toggles new password visibility', () => {
         render(<ResetPasswordCard onSubmit={mockOnSubmit} />);
 
         const passwordInput = screen.getByLabelText(/New Password/i);

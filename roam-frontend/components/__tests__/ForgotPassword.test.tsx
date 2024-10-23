@@ -3,6 +3,29 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import ForgotPasswordCard from '@/components/ForgotPasswordCard';
 
+/**
+ * Test File: Forgot Password Form 
+ *
+ * Purpose:
+ * - Ensures the functionality and rendering behavior of the Forgot Password Form Component. 
+ * - The Forgot Password Form Component includes:
+ *      - Text indicating functionality of the input bar, an email input section, and two buttons 
+ *        (a cancel button and reset password button). 
+ *
+ * Test Cases:
+ * 1. Render the form correctly. 
+ *    - Expectation: Render the text "enter your email", an email input section, a reset password button and a cancel button. 
+ * 
+ * 2. Can submit the form if there is an email input. 
+ *    - Expectation: if there is an email entered in the email input OnSubmit will be called once. 
+ * 
+ * 3. Cannot submit the form if there is NOT an email input.  
+ *    - Expectation: if there is not an email entered in the email input OnSubmit will not be called.
+ * 
+ * 4. The cancel button routes to the previous page. 
+ *    - Expectation: If the cancel button is pressed, router.back() will be called once. 
+ */
+
 // Mock the useRouter hook
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),

@@ -4,6 +4,33 @@ import SearchScroll from '@/components/SearchScroll';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
+
+/**
+ * Test File: Reset Password Form 
+ *
+ * Purpose:
+ * - Ensures the functionality and rendering behavior of the Forgot Password Form Component. 
+ * - The Forgot Password Form Component includes:
+ *      - Text indicating functionality of the input bar, an email input section, and two buttons 
+ *        (a cancel button and reset password button). 
+ *
+ * Test Cases:
+ * 1. Renders correctly based on applied filters - flights that contain 1 stop. 
+ *    - Expectation: There will be no flights listed that contain the text "non-stop"
+ * 
+ * 2. If no results for the given filters, displays "No results match your search criteria"
+ *    - Expectation: That 'no results' text is visible. 
+ * 
+ * 3. Search result expansion is not open automatically. 
+ *    - Expectation: Book My Ticket text is not visible. 
+ * 
+ * 4. Search result expansion opens when a search item is clicked. 
+ *    - Expectation: That Book My Ticket text is now visible. 
+ * 
+ * 5. Book My Ticket Button routes to the checkout page 
+ *    - Expectation: Router.push() will be called with /checkout
+*/
+
 interface ImageProps {
     src: string;
     alt: string;
@@ -42,7 +69,7 @@ describe('SearchScroll Component', () => {
     test('displays flight options based on filters', () => {
         const filters = {
             maxPrice: null,
-            stops: null,
+            stops: "1",
             arrivalTime: null,
             departureTime: null,
             airline: null,
@@ -55,8 +82,7 @@ describe('SearchScroll Component', () => {
 
         render(<SearchScroll filters={filters} />);
 
-        // Assuming "Delta Airlines" should be displayed in the filtered results
-        expect(screen.getByText("Delta Airlines")).toBeInTheDocument();
+        expect(screen.queryByText(/Non-Stop/i)).toBeNull();
     });
     test('No Search Results if Nothing Matches the Filter', () => {
         const filters = {
@@ -93,7 +119,8 @@ describe('SearchScroll Component', () => {
         });
 
         render(<SearchScroll filters={filters} />);
-        expect(screen.queryByText(/flight details/i)).toBeNull();
+        expect(screen.queryByText(/Book My Ticket Now/i)).toBeNull();
+
     });
     test('Search Result Expansion Is Open after a Click', () => {
         const filters = {
@@ -111,8 +138,8 @@ describe('SearchScroll Component', () => {
 
         render(<SearchScroll filters={filters} />);
 
-        // Click on the first flight item (adjust selector as necessary)
-        const firstFlightItem = screen.getByText("Delta Airlines"); // Change as needed for your flight item
+        // Click on the first flight item 
+        const firstFlightItem = screen.getByText("Delta Airlines");
         fireEvent.click(firstFlightItem);
 
         // Check if the expansion is visible after clicking
@@ -136,8 +163,8 @@ describe('SearchScroll Component', () => {
 
         render(<SearchScroll filters={filters} />);
 
-        // Click on the first flight item (adjust selector as necessary)
-        const firstFlightItem = screen.getByText("Delta Airlines"); // Change as needed for your flight item
+        // Click on the first flight item 
+        const firstFlightItem = screen.getByText("Delta Airlines");
         fireEvent.click(firstFlightItem);
 
         // Check if the expansion is visible after clicking
