@@ -6,13 +6,12 @@ import Image from 'next/image';
 
 
 /**
- * Test File: Reset Password Form 
+ * Test File: Search Scroll Component
  *
  * Purpose:
- * - Ensures the functionality and rendering behavior of the Forgot Password Form Component. 
- * - The Forgot Password Form Component includes:
- *      - Text indicating functionality of the input bar, an email input section, and two buttons 
- *        (a cancel button and reset password button). 
+ * - Ensures the functionality and rendering behavior of the Search Scroll Component. 
+ * - The Search Scroll Component includes:
+ *      - Some number of search items in a cointainer, overflowing items beyond the size of the container are accessed by scrolling. 
  *
  * Test Cases:
  * 1. Renders correctly based on applied filters - flights that contain 1 stop. 
@@ -66,7 +65,7 @@ jest.mock('@/public/data/flightData', () => [
 ]);
 
 describe('SearchScroll Component', () => {
-    test('displays flight options based on filters', () => {
+    test('Displays flight options based on filters', () => {
         const filters = {
             maxPrice: null,
             stops: "1",
