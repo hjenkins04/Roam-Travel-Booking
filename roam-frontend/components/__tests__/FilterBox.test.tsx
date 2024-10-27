@@ -40,7 +40,6 @@ import FilterBox from '../FilterBox';
  * 6. Render the Search Button and when clicked the dropdown selections of the filter buttons should be applied to update the search results in Search Scroll. 
  *    - Expectation: Upon clicking, applyFilters should be called. 
  *
-
  */
 
 describe('FilterButton Component', () => {
@@ -58,9 +57,9 @@ describe('FilterButton Component', () => {
         const dropdownList = await screen.findByTestId('dropdown-list');
         expect(dropdownList).toBeInTheDocument();
 
-        const option = screen.getByTestId('dropdown-selection-0'); // Ensure this matches your option IDs
+        const option = screen.getByTestId('dropdown-selection-0');
         fireEvent.click(option); // Select the first option
-        expect(maxPriceButton).toHaveTextContent('$200'); // Adjust based on what option is selected
+        expect(maxPriceButton).toHaveTextContent('$200');
 
         // Click the button again to close the dropdown
         fireEvent.click(maxPriceButton);
@@ -75,9 +74,9 @@ describe('FilterButton Component', () => {
         const dropdownList = await screen.findByTestId('dropdown-list');
         expect(dropdownList).toBeInTheDocument();
 
-        const option = screen.getByTestId('dropdown-selection-0'); // Ensure this matches your option IDs
+        const option = screen.getByTestId('dropdown-selection-0');
         fireEvent.click(option); // Select the first option
-        expect(maxPriceButton).toHaveTextContent('0'); // Adjust based on what option is selected
+        expect(maxPriceButton).toHaveTextContent('0');
 
         // Click the button again to close the dropdown
         fireEvent.click(maxPriceButton);
@@ -92,9 +91,9 @@ describe('FilterButton Component', () => {
         const dropdownList = await screen.findByTestId('dropdown-list');
         expect(dropdownList).toBeInTheDocument();
 
-        const option = screen.getByTestId('dropdown-selection-0'); // Ensure this matches your option IDs
+        const option = screen.getByTestId('dropdown-selection-0');
         fireEvent.click(option); // Select the first option
-        expect(maxPriceButton).toHaveTextContent('Morning'); // Adjust based on what option is selected
+        expect(maxPriceButton).toHaveTextContent('Morning');
 
         // Click the button again to close the dropdown
         fireEvent.click(maxPriceButton);
@@ -109,9 +108,9 @@ describe('FilterButton Component', () => {
         const dropdownList = await screen.findByTestId('dropdown-list');
         expect(dropdownList).toBeInTheDocument();
 
-        const option = screen.getByTestId('dropdown-selection-0'); // Ensure this matches your option IDs
+        const option = screen.getByTestId('dropdown-selection-0');
         fireEvent.click(option); // Select the first option
-        expect(maxPriceButton).toHaveTextContent('Morning'); // Adjust based on what option is selected
+        expect(maxPriceButton).toHaveTextContent('Morning');
 
         // Click the button again to close the dropdown
         fireEvent.click(maxPriceButton);
@@ -126,9 +125,9 @@ describe('FilterButton Component', () => {
         const dropdownList = await screen.findByTestId('dropdown-list');
         expect(dropdownList).toBeInTheDocument();
 
-        const option = screen.getByTestId('dropdown-selection-0'); // Ensure this matches your option IDs
+        const option = screen.getByTestId('dropdown-selection-0');
         fireEvent.click(option); // Select the first option
-        expect(maxPriceButton).toHaveTextContent('Airline A'); // Adjust based on what option is selected
+        expect(maxPriceButton).toHaveTextContent('Airline A');
 
         // Click the button again to close the dropdown
         fireEvent.click(maxPriceButton);

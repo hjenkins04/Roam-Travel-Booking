@@ -4,9 +4,9 @@ import SearchResultExpansion from "@/components/SearchResultExpansion";
 import flightData from "@/public/data/flightData";
 import { FlightDetailsProps } from "@/public/data/flightDetails";
 import { getTimeCategory } from "@/components/HelperFunctions/TimeFilter";
-import { getNumStops } from "@/components/HelperFunctions/NumStopsFilter";
+import { getNumStops } from "@/components/HelperFunctions/numStopsFilter";
 
-// Define the FilterOptions type
+
 type FilterOptions = {
     maxPrice: string | null;
     stops: string | null;

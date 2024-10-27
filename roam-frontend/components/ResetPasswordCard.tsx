@@ -39,9 +39,11 @@ const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({ onSubmit }) => {
         setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
     };
 
+    {/* Reset Password Form with Toggle Input Visibility*/ }
     return (
         <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md border border-gray-300" data-testid="reset-password-form">
             <div className="mb-6 relative">
+                {/* New Password Input */}
                 <label htmlFor="newPassword" className="block text-sm font-medium text-gray-500 mb-5">
                     New Password
                 </label>
@@ -63,6 +65,7 @@ const ResetPasswordCard: React.FC<ResetPasswordCardProps> = ({ onSubmit }) => {
                 </button>
             </div>
             <div className="mb-6 relative">
+                {/* Confirm Password Input */}
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-500 mb-5">
                     Confirm Password
                 </label>
