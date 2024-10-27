@@ -3,6 +3,9 @@ from typing import List, Dict, Optional
 from app.repositories.user_repository import UserRepository
 from app.models.dto.user_dto import UserDTO
 from app.models.entities.user_entity import UserEntity
+import jwt
+from datetime import datetime, timedelta, timezone
+from flask import current_app
 
 class UserService:
     @staticmethod
@@ -19,6 +22,26 @@ class UserService:
         )
         user_entity = UserEntity.from_dto(user_dto, password=password)
         UserRepository.add(user_entity)
+        
+    @staticmethod
+    def login(email: str, password: str) -> str:
+        user = UserRepository.find_by_email(email)
+        if not user or not user.check_password(password):
+            raise ValueError("Invalid email or password.")
+
+        # Generate JWT token
+        token = UserService.generate_jwt(user.guid)
+        return token
+    
+    
+    @staticmethod
+    def generate_jwt(user_guid: str) -> str:
+        expiration = datetime.now(timezone.utc) + timedelta(hours=1)  # Token valid for 1 hour
+        payload = {
+            "sub": user_guid,
+            "exp": expiration
+        }
+        return jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm="HS256")
 
     @staticmethod
     def get_all_users() -> List[UserDTO]:

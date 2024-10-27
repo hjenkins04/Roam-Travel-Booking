@@ -2,6 +2,7 @@ from typing import List, Dict, Optional
 import uuid
 from app.services.user_service import UserService
 from flask import Blueprint, request, jsonify, Response
+from middleware import token_required
 
 user_bp = Blueprint('user', __name__)
 
@@ -54,3 +55,10 @@ def check_email_exists() -> Response:
         return jsonify({"error": "Email parameter is required"}), 400
     exists = UserService.email_exists(email)
     return jsonify({"exists": exists}), 200
+
+
+
+@user_bp.route('/api/users/protected', methods=['GET'])
+@token_required
+def protected_endpoint():
+    return ("success"), 200
