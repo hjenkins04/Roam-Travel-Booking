@@ -7,6 +7,7 @@ interface HumpButton2Props {
   secondaryColor: string;
   primaryText: string;
   secondaryText: string;
+  isPrimaryActive?: boolean;
   onPrimaryClick: () => void;
   onSecondaryClick: () => void;
   width?: number;
@@ -18,20 +19,20 @@ const HumpButton2: React.FC<HumpButton2Props> = ({
   secondaryColor,
   primaryText,
   secondaryText,
+  isPrimaryActive = true,
   onPrimaryClick,
   onSecondaryClick,
   width = 540,
   height = 58,
 }) => {
-  const [isPrimaryActive, setIsPrimaryActive] = useState(true);
 
   const handlePrimaryClick = () => {
-    setIsPrimaryActive(true);
+    isPrimaryActive = true;
     onPrimaryClick();
   };
 
   const handleSecondaryClick = () => {
-    setIsPrimaryActive(false);
+    isPrimaryActive = false;
     onSecondaryClick();
   };
 

@@ -10,79 +10,78 @@ import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
 import { useRouter } from "next/navigation";
 
+import { useSearchContext } from "@/context/SearchContext";
 import { Airport } from "@/models";
 
-const SearchBox = () => {
-  const [airports, setAirports] = useState<Airport[]>([]);
-  const [departureAirport, setDepartureAirport] = useState<Airport | null>(null);
-  const [arrivalAirport, setArrivalAirport] = useState<Airport | null>(null);
-  const [departureDate, setDepartureDate] = useState<Date>();
-  const [returnDate, setReturnDate] = useState<Date>();
-  const [passengers, setPassengers] = useState([{ class: "Economy" }]);
-  const [isRoundTrip, setIsRoundTrip] = useState(true);
+interface SearchBoxProps {
+  airports: Airport[];
+}
+
+const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
+  const { searchData, setSearchData } = useSearchContext();
   const router = useRouter();
 
-  // Fetch the list of airports from the backend
-  async function fetchAirports(): Promise<Airport[]> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/airports`);
-    if (!response.ok) throw new Error("Failed to fetch airports");
-    const data = await response.json();
-    return data;
-  }
-
-  useEffect(() => {
-    // Fetch airports and set state
-    fetchAirports()
-      .then((data) => {
-        setAirports(data);
-      })
-      .catch((error) => console.error("Error fetching airports:", error));
-  }, []);
-
   const handleDepartureChange = (value: Airport) => {
-    setDepartureAirport(value);
-    if (value === arrivalAirport) setArrivalAirport(null);
+    setSearchData((prev) => ({
+      ...prev,
+      departureAirport: value,
+      arrivalAirport: prev.arrivalAirport?.iata_code === value.iata_code ? null : prev.arrivalAirport, // Reset arrival if same
+    }));
   };
 
   const handleArrivalChange = (value: Airport) => {
-    setArrivalAirport(value);
-    if (value === departureAirport) setDepartureAirport(null);
+    setSearchData((prev) => ({
+      ...prev,
+      arrivalAirport: value,
+      departureAirport: prev.departureAirport?.iata_code === value.iata_code ? null : prev.departureAirport, // Reset departure if same
+    }));
   };
 
   const swapAirports = () => {
-    setDepartureAirport(arrivalAirport);
-    setArrivalAirport(departureAirport);
+    setSearchData((prev) => ({
+      ...prev,
+      departureAirport: prev.arrivalAirport,
+      arrivalAirport: prev.departureAirport,
+    }));
   };
 
   const addPassenger = () => {
-    setPassengers([...passengers, { class: "Economy" }]);
+    setSearchData((prev) => ({
+      ...prev,
+      passengers: prev.passengers + 1,
+      seatTypeMapping: { ...prev.seatTypeMapping, [prev.passengers]: "Economy" },
+    }));
   };
 
   const removePassenger = () => {
-    if (passengers.length > 1) {
-      setPassengers(passengers.slice(0, -1));
-    }
+    setSearchData((prev) => {
+      const updatedSeatTypeMapping = { ...prev.seatTypeMapping };
+      delete updatedSeatTypeMapping[prev.passengers - 1];
+      return {
+        ...prev,
+        passengers: prev.passengers > 1 ? prev.passengers - 1 : 1,
+        seatTypeMapping: updatedSeatTypeMapping,
+      };
+    });
   };
 
   const updatePassengerClass = (index: number, newClass: "Business" | "Economy") => {
-    const updatedPassengers = [...passengers];
-    updatedPassengers[index].class = newClass;
-    setPassengers(updatedPassengers);
+    setSearchData((prev) => ({
+      ...prev,
+      seatTypeMapping: { ...prev.seatTypeMapping, [index]: newClass },
+    }));
   };
 
-  const getPassengerTypesButton = () => {
-    const allBusiness = passengers.every((p) => p.class === "Business");
-    const allEconomy = passengers.every((p) => p.class === "Economy");
-
-    if (allBusiness) return `Business`;
-    if (allEconomy) return `Economy`;
-    return `Varying`;
+  const getPassengerTypeSummary = () => {
+    const seatTypes = Object.values(searchData.seatTypeMapping);
+    const allBusiness = seatTypes.every((type) => type === "Business");
+    const allEconomy = seatTypes.every((type) => type === "Economy");
+  
+    if (allBusiness) return "Business";
+    if (allEconomy) return "Economy";
+    return "Mixed";
   };
-
-  const getNumberOfPassengersButton = () => {
-    const count = passengers.length;
-    return `${count}`;
-  };
+  
 
   const handleButtonClick = () => {
     router.push('/search-results');
@@ -98,8 +97,9 @@ const SearchBox = () => {
             secondaryColor="#FFFFFF"
             primaryText="Round Trip"
             secondaryText="One Way"
-            onPrimaryClick={() => setIsRoundTrip(true)}
-            onSecondaryClick={() => setIsRoundTrip(false)}
+            isPrimaryActive={searchData.isRoundTrip}
+            onPrimaryClick={() => setSearchData((prev) => ({ ...prev, isRoundTrip: true }))}
+            onSecondaryClick={() => setSearchData((prev) => ({ ...prev, isRoundTrip: false }))}
           />
         </div>
 
@@ -115,9 +115,9 @@ const SearchBox = () => {
                     leftIcon={<PlaneTakeoff className="text-gray-500 h-4 w-4" />}
                     rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                     headerText="DEPARTURE CITY"
-                    mainTextLeft={departureAirport?.iata_code || "Select City"}
-                    mainTextRight={departureAirport?.municipality_name || ""}
-                    subTextRight={departureAirport?.short_name || ""}
+                    mainTextLeft={searchData.departureAirport?.iata_code || "Select City"}
+                    mainTextRight={searchData.departureAirport?.municipality_name || ""}
+                    subTextRight={searchData.departureAirport?.short_name || ""}
                     size="w-[230px]"
                     className="-bottom-2.5"
                   />
@@ -126,7 +126,7 @@ const SearchBox = () => {
               <PopoverContent className="w-[230px] p-4">
                 <div className="space-y-2">
                   {airports
-                    .filter((airport) => airport.iata_code !== arrivalAirport?.iata_code) // Exclude selected arrival airport
+                    ?.filter((airport) => airport.iata_code !== searchData.arrivalAirport?.iata_code)
                     .map((airport) => (
                       <div
                         key={airport.guid}
@@ -139,8 +139,7 @@ const SearchBox = () => {
                 </div>
               </PopoverContent>
             </Popover>
-
-
+            
             {/* Swap Icon between Departure and Arrival */}
             <div className="bg-orange-500 rounded-full p-2 z-10 cursor-pointer"
               onClick={swapAirports}
@@ -152,7 +151,7 @@ const SearchBox = () => {
             >
               <ArrowLeftRight className="w-5 h-5 text-white" />
             </div>
-
+            
             {/* Arrival City Dropdown */}
             <Popover>
               <PopoverTrigger asChild>
@@ -161,9 +160,9 @@ const SearchBox = () => {
                     leftIcon={<PlaneLanding className="text-gray-500 h-4 w-4" />}
                     rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                     headerText="ARRIVAL CITY"
-                    mainTextLeft={arrivalAirport?.iata_code || "Select City"}
-                    mainTextRight={arrivalAirport?.municipality_name || ""}
-                    subTextRight={arrivalAirport?.short_name || ""}
+                    mainTextLeft={searchData.arrivalAirport?.iata_code || "Select City"}
+                    mainTextRight={searchData.arrivalAirport?.municipality_name || ""}
+                    subTextRight={searchData.arrivalAirport?.short_name || ""}
                     size="w-[230px]"
                   />
                 </div>
@@ -171,7 +170,7 @@ const SearchBox = () => {
               <PopoverContent className="w-[230px] p-4">
                 <div className="space-y-2">
                   {airports
-                    .filter((airport) => airport.iata_code !== departureAirport?.iata_code) // Exclude selected departure airport
+                    ?.filter((airport) => airport.iata_code !== searchData.departureAirport?.iata_code)
                     .map((airport) => (
                       <div
                         key={airport.guid}
@@ -185,7 +184,7 @@ const SearchBox = () => {
               </PopoverContent>
             </Popover>
 
-            {isRoundTrip && (
+            {searchData.isRoundTrip && (
               <>
                 <Popover>
                   {/* Departure Date Button */}
@@ -195,17 +194,23 @@ const SearchBox = () => {
                         leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
                         rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                         headerText="DEPARTURE DATE"
-                        mainTextLeft={departureDate ? format(departureDate, "dd") : "DD"}
+                        mainTextLeft={searchData.departureDate ? format(searchData.departureDate, "dd") : "DD"}
                         subTextLeft=""
-                        mainTextRight={departureDate ? format(departureDate, "EEE") : "Day"}
-                        subTextRight={departureDate ? format(departureDate, "MMMM") : "Month"}
+                        mainTextRight={searchData.departureDate ? format(searchData.departureDate, "EEE") : "Day"}
+                        subTextRight={searchData.departureDate ? format(searchData.departureDate, "MMMM") : "Month"}
                         size="w-[175px]"
                         onClickMainButton={() => { }}
                       />
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} />
+                  <Calendar
+                    mode="single"
+                    selected={searchData.departureDate || undefined}
+                    onSelect={(date) => 
+                      setSearchData((prev) => ({ ...prev, departureDate: date || null }))
+                    }
+                  />
                   </PopoverContent>
                 </Popover>
 
@@ -217,23 +222,29 @@ const SearchBox = () => {
                         leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
                         rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                         headerText="RETURN DATE"
-                        mainTextLeft={returnDate ? format(returnDate, "dd") : "DD"}
+                        mainTextLeft={searchData.returnDate ? format(searchData.returnDate, "dd") : "DD"}
                         subTextLeft=""
-                        mainTextRight={returnDate ? format(returnDate, "EEE") : "Day"}
-                        subTextRight={returnDate ? format(returnDate, "MMMM") : "Month"}
+                        mainTextRight={searchData.returnDate ? format(searchData.returnDate, "EEE") : "Day"}
+                        subTextRight={searchData.returnDate ? format(searchData.returnDate, "MMMM") : "Month"}
                         size="w-[175px]"
                         onClickMainButton={() => { }}
                       />
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" selected={returnDate} onSelect={setReturnDate} />
+                  <Calendar
+                    mode="single"
+                    selected={searchData.returnDate || undefined}
+                    onSelect={(date) => 
+                      setSearchData((prev) => ({ ...prev, returnDate: date || null }))
+                    }
+                  />
                   </PopoverContent>
                 </Popover>
               </>
             )}
 
-            {!isRoundTrip && (
+            {!searchData.isRoundTrip && (
               <Popover>
                 {/* Departure Date Button */}
                 <PopoverTrigger asChild>
@@ -242,79 +253,88 @@ const SearchBox = () => {
                       leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
                       rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
                       headerText="DEPARTURE DATE"
-                      mainTextLeft={departureDate ? format(departureDate, "dd") : "DD"}
+                      mainTextLeft={searchData.departureDate ? format(searchData.departureDate, "dd") : "DD"}
                       subTextLeft=""
-                      mainTextRight={departureDate ? format(departureDate, "EEEE") : "Day"}
-                      subTextRight={departureDate ? format(departureDate, "MMMM") : "Month"}
+                      mainTextRight={searchData.departureDate ? format(searchData.departureDate, "EEEE") : "Day"}
+                      subTextRight={searchData.departureDate ? format(searchData.departureDate, "MMMM") : "Month"}
                       size="w-[230px]"
                       onClickMainButton={() => { }}
                     />
                   </div>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="single" selected={departureDate} onSelect={setDepartureDate} />
+                <Calendar
+                    mode="single"
+                    selected={searchData.departureDate || undefined}
+                    onSelect={(date) => 
+                      setSearchData((prev) => ({ ...prev, departureDate: date || null }))
+                    }
+                  />
                 </PopoverContent>
               </Popover>
             )}
 
-            {/* Traveler & Class Button */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <div>
-                  <SearchBoxButton
-                    leftIcon={
-                      getNumberOfPassengersButton() != "1" ?
-                        (<Users className="text-gray-500 h-4 w-4" />)
-                        :
-                        (<UserIcon className="text-gray-500 h-4 w-4" />)
-                    }
-                    rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
-                    headerText="TRAVELER & CLASS"
-                    mainTextLeft={getNumberOfPassengersButton()}
-                    subTextLeft=""
-                    mainTextRight={getPassengerTypesButton()}
-                    subTextRight=""
-                    size="w-[195px]"
-                    onClickMainButton={() => { }}
-                  />
-                </div>
-              </PopoverTrigger>
-              <PopoverContent className="w-64 p-4">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Passengers</span>
-                    <div className="flex items-center space-x-2">
-                      <Button size="sm" variant="outline" onClick={removePassenger} disabled={passengers.length === 1}>
-                        <MinusIcon className="h-4 w-4" />
-                      </Button>
-                      <span>{passengers.length}</span>
-                      <Button size="sm" variant="outline" onClick={addPassenger}>
-                        <PlusIcon className="h-4 w-4" />
-                      </Button>
-                    </div>
+          {/* Traveler & Class Button */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <div>
+                <SearchBoxButton
+                  leftIcon={
+                    searchData.passengers > 1 ? (
+                      <Users className="text-gray-500 h-4 w-4" />
+                    ) : (
+                      <UserIcon className="text-gray-500 h-4 w-4" />
+                    )
+                  }
+                  rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                  headerText="TRAVELER & CLASS"
+                  mainTextLeft={`${searchData.passengers}`} // Number of passengers
+                  subTextLeft=""
+                  mainTextRight={getPassengerTypeSummary()} // Summary of passenger types
+                  subTextRight=""
+                  size="w-[195px]"
+                  onClickMainButton={() => {}}
+                />
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 p-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">Passengers</span>
+                  <div className="flex items-center space-x-2">
+                    <Button size="sm" variant="outline" onClick={removePassenger} disabled={searchData.passengers === 1}>
+                      <MinusIcon className="h-4 w-4" />
+                    </Button>
+                    <span>{searchData.passengers}</span>
+                    <Button size="sm" variant="outline" onClick={addPassenger}>
+                      <PlusIcon className="h-4 w-4" />
+                    </Button>
                   </div>
-                  {passengers.map((passenger, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <span>Passenger {index + 1}</span>
-                      <Select
-                        value={passenger.class}
-                        onValueChange={(value: "Business" | "Economy") => updatePassengerClass(index, value)}
-                      >
-                        <SelectTrigger className="w-[120px]">
-                          <SelectValue placeholder="Select class" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Economy">Economy</SelectItem>
-                          <SelectItem value="Business">Business</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  ))}
                 </div>
-              </PopoverContent>
-            </Popover>
-          </SearchBoxButtonList>
+                {Array.from({ length: searchData.passengers }).map((_, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <span>Passenger {index + 1}</span>
+                    <Select
+                      value={searchData.seatTypeMapping[index] || "Economy"}
+                      onValueChange={(value: "Business" | "Economy") => updatePassengerClass(index, value)}
+                    >
+                      <SelectTrigger className="w-[120px]">
+                        <SelectValue placeholder="Select class" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Economy">Economy</SelectItem>
+                        <SelectItem value="Business">Business</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
 
+
+          </SearchBoxButtonList>
+          
           {/* Search Button */}
           <div className="flex justify-center pt-6 relative">
             <Button
