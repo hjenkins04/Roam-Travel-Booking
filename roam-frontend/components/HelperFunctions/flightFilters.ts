@@ -1,4 +1,4 @@
-import { getTimeCategory } from "@/components/HelperFunctions/TimeFilter";
+import { getTimeCategory } from "@/components/HelperFunctions/timeFilter";
 
 interface Flight {
   id: string;
