@@ -7,19 +7,23 @@ from app.models.entities.user_entity import UserEntity
 class UserRepository:
     @staticmethod
     def add(user_entity: UserEntity) -> None:
+        """Add a new user to the database."""
         db.session.add(user_entity)
         db.session.commit()
 
     @staticmethod
     def get_all() -> List[UserEntity]:
+        """Retrieve all users from the database."""
         return UserEntity.query.all()
 
     @staticmethod
     def find_by_email(email: str) -> Optional[UserEntity]:
+        """Find a user by their email address."""
         return UserEntity.query.filter_by(email=email).first()
     
     @staticmethod
     def find_by_id(user_id: uuid) -> Optional[UserEntity]:
+        """Find a user by their unique ID."""
         return UserEntity.query.filter_by(id=user_id).first()
     
     @staticmethod

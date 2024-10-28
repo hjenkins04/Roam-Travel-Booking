@@ -1,21 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search, ArrowLeftRight } from "lucide-react";
+import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search, ArrowLeftRight, PlaneTakeoff, PlaneLanding } from "lucide-react";
 import SearchBoxButtonList from "@/components/SearchBoxButtonList";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
 import { useRouter } from "next/navigation";
 
+import { Airport } from "@/models";
+
 const SearchBox = () => {
+  const [airports, setAirports] = useState<Airport[]>([]);
+  const [departureAirport, setDepartureAirport] = useState<Airport | null>(null);
+  const [arrivalAirport, setArrivalAirport] = useState<Airport | null>(null);
   const [departureDate, setDepartureDate] = useState<Date>();
   const [returnDate, setReturnDate] = useState<Date>();
   const [passengers, setPassengers] = useState([{ class: "Economy" }]);
   const [isRoundTrip, setIsRoundTrip] = useState(true);
   const router = useRouter();
+
+  // Fetch the list of airports from the backend
+  async function fetchAirports(): Promise<Airport[]> {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/airports`);
+    if (!response.ok) throw new Error("Failed to fetch airports");
+    const data = await response.json();
+    return data;
+  }
+
+  useEffect(() => {
+    // Fetch airports and set state
+    fetchAirports()
+      .then((data) => {
+        setAirports(data);
+      })
+      .catch((error) => console.error("Error fetching airports:", error));
+  }, []);
+
+  const handleDepartureChange = (value: Airport) => {
+    setDepartureAirport(value);
+    if (value === arrivalAirport) setArrivalAirport(null);
+  };
+
+  const handleArrivalChange = (value: Airport) => {
+    setArrivalAirport(value);
+    if (value === departureAirport) setDepartureAirport(null);
+  };
+
+  const swapAirports = () => {
+    setDepartureAirport(arrivalAirport);
+    setArrivalAirport(departureAirport);
+  };
 
   const addPassenger = () => {
     setPassengers([...passengers, { class: "Economy" }]);
@@ -70,42 +107,83 @@ const SearchBox = () => {
         <div className="relative bg-white rounded-2xl shadow-lg p-4 max-w-[97%] w-full z-2">
           {/* Search Form (Button List) */}
           <SearchBoxButtonList className="w-full justify-center space-y-4 sm:space-y-6">
-            {/* Departure City Button */}
-            <SearchBoxButton
-              leftIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
-              rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
-              headerText="DEPARTURE CITY"
-              mainTextLeft="YYZ"
-              subTextLeft=""
-              mainTextRight="Toronto"
-              subTextRight="Pearson International"
-              size="w-[230px]"
-              className="-bottom-2.5"
-              onClickMainButton={() => console.log("Departure City Clicked")}
-            />
+            {/* Departure City Dropdown */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <div>
+                  <SearchBoxButton
+                    leftIcon={<PlaneTakeoff className="text-gray-500 h-4 w-4" />}
+                    rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                    headerText="DEPARTURE CITY"
+                    mainTextLeft={departureAirport?.iata_code || "Select City"}
+                    mainTextRight={departureAirport?.municipality_name || ""}
+                    subTextRight={departureAirport?.short_name || ""}
+                    size="w-[230px]"
+                    className="-bottom-2.5"
+                  />
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="w-[230px] p-4">
+                <div className="space-y-2">
+                  {airports
+                    .filter((airport) => airport.iata_code !== arrivalAirport?.iata_code) // Exclude selected arrival airport
+                    .map((airport) => (
+                      <div
+                        key={airport.guid}
+                        onClick={() => handleDepartureChange(airport)}
+                        className="cursor-pointer p-2 hover:bg-gray-100 rounded-md"
+                      >
+                        {airport.short_name} ({airport.iata_code})
+                      </div>
+                    ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+
 
             {/* Swap Icon between Departure and Arrival */}
-            <div className="bg-orange-500 rounded-full p-2 z-10"
+            <div className="bg-orange-500 rounded-full p-2 z-10 cursor-pointer"
+              onClick={swapAirports}
               style={{
-                position: 'relative',
-                transform: 'translateX(25%)',
-                margin: '-18px'
-              }}>
+                position: "relative",
+                transform: "translateX(25%)",
+                margin: "-18px",
+              }}
+            >
               <ArrowLeftRight className="w-5 h-5 text-white" />
             </div>
 
-            {/* Arrival City Button */}
-            <SearchBoxButton
-              leftIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
-              rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
-              headerText="ARRIVAL CITY"
-              mainTextLeft="HNL"
-              subTextLeft=""
-              mainTextRight="Honolulu"
-              subTextRight="Daniel K. Inouye International"
-              size="w-[230px]"
-              onClickMainButton={() => console.log("Arrival City Clicked")}
-            />
+            {/* Arrival City Dropdown */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <div>
+                  <SearchBoxButton
+                    leftIcon={<PlaneLanding className="text-gray-500 h-4 w-4" />}
+                    rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                    headerText="ARRIVAL CITY"
+                    mainTextLeft={arrivalAirport?.iata_code || "Select City"}
+                    mainTextRight={arrivalAirport?.municipality_name || ""}
+                    subTextRight={arrivalAirport?.short_name || ""}
+                    size="w-[230px]"
+                  />
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="w-[230px] p-4">
+                <div className="space-y-2">
+                  {airports
+                    .filter((airport) => airport.iata_code !== departureAirport?.iata_code) // Exclude selected departure airport
+                    .map((airport) => (
+                      <div
+                        key={airport.guid}
+                        onClick={() => handleArrivalChange(airport)}
+                        className="cursor-pointer p-2 hover:bg-gray-100 rounded-md"
+                      >
+                        {airport.short_name} ({airport.iata_code})
+                      </div>
+                    ))}
+                </div>
+              </PopoverContent>
+            </Popover>
 
             {isRoundTrip && (
               <>
