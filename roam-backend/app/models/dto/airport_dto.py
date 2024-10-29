@@ -32,9 +32,9 @@ class AirportDTO:
     def create_location_dto(self, location: Optional[Union[Dict, LocationDTO]]) -> Optional[LocationDTO]:
         if isinstance(location, dict):
             return LocationDTO(
-                guid=location.get('guid'),
-                latitude=location.get('latitude'),
-                longitude=location.get('longitude')
+                guid=location.get("guid"),
+                latitude=location.get("latitude"),
+                longitude=location.get("longitude")
             )
         elif isinstance(location, LocationDTO):
             return location
@@ -43,9 +43,9 @@ class AirportDTO:
     def create_country_dto(self, country: Optional[Union[Dict, CountryDTO]]) -> Optional[CountryDTO]:
         if isinstance(country, dict):
             return CountryDTO(
-                guid=country.get('guid'),
-                code=country.get('code'),
-                name=country.get('name')
+                guid=country.get("guid"),
+                code=country.get("code"),
+                name=country.get("name")
             )
         elif isinstance(country, CountryDTO):
             return country
@@ -54,9 +54,9 @@ class AirportDTO:
     def create_continent_dto(self, continent: Optional[Union[Dict, ContinentDTO]]) -> Optional[ContinentDTO]:
         if isinstance(continent, dict):
             return ContinentDTO(
-                guid=continent.get('guid'),
-                code=continent.get('code'),
-                name=continent.get('name')
+                guid=continent.get("guid"),
+                code=continent.get("code"),
+                name=continent.get("name")
             )
         elif isinstance(continent, ContinentDTO):
             return continent

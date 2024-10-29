@@ -17,7 +17,7 @@ class AirportService:
 
     @staticmethod
     def get_airport_by_id(guid: str) -> Optional[AirportEntity]:
-        """Retrieve an airport by its unique GUID."""
+        """Retrieve an airport by its GUID."""
         return AirportRepository.get_by_guid(guid)
 
     @staticmethod
@@ -32,5 +32,5 @@ class AirportService:
 
     @staticmethod
     def delete_airport(guid: str) -> bool:
-        """Delete an airport by its unique GUID."""
+        """Delete an airport by its GUID."""
         return AirportRepository.delete_airport(guid)
