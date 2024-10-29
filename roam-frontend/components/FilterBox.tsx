@@ -4,6 +4,8 @@ import FilterButtonGroup from "@/components/FilterButtonGroup";
 import FilterButton from "@/components/FilterButton";
 import SearchButton from "@/components/SearchButton";
 
+
+{/* Container of All Filter Options of Search Results */}
 interface FilterBoxProps {
     onFilterChange: (newFilters: FilterOptions) => void;
 }
@@ -34,6 +36,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
         <div className="flex flex-col items-center justify-start relative">
             {/* Main search container */}
             <div className="relative bg-white rounded-md p-2 max-w-[97%] w-full z-1">
+                
                 {/* Filter Form */}
                 <FilterButtonGroup className="w-full justify-start space-y-2 sm:space-y-1">
                     {/* Max Price Button */}
@@ -55,7 +58,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
                         onOptionSelect={setStops}
                     />
 
-                    {/* Arrival Time */}
+                    {/* Departure Time */}
                     <FilterButton
                         dataTestId="filter-button-3"
                         rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
@@ -64,7 +67,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
                         selectedOption={departureTime}
                         onOptionSelect={setDepartureTime}
                     />
-                    {/* Departure Time */}
+                    {/* Arrival Time */}
                     <FilterButton
                         dataTestId="filter-button-4"
                         rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}

@@ -21,6 +21,7 @@ const SearchResultsOverviewBox = () => {
       <div className="flex flex-col items-center justify-center relative">
         {/* Search Form (Button List) */}
         <SearchBoxButtonList className="w-full justify-center space-y-4 sm:space-y-6 space-x-3">
+          
           {/* Departure City Button */}
           <SearchBoxButton
             headerText="DEPARTURE CITY"

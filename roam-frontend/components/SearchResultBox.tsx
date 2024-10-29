@@ -47,9 +47,9 @@ const SearchResultBox = () => {
 
     return (
         <>
-            <div className=" flex flex-col items-start  relative" >
+            <div className=" flex flex-col items-start relative" >
                 {/* Toggle Button Container */}
-                <div className="relative flex -mb-0.5 justify-center items-center">
+                <div className="relative flex ml-3 -mb-0.5 justify-center items-center">
                     <HumpButton
                         primaryColor="#FF9A2A"
                         secondaryColor="#FFFFFF"
