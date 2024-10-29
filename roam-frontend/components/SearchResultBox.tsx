@@ -48,6 +48,7 @@ const SearchResultBox = () => {
     return (
         <>
             <div className=" flex flex-col items-start  relative" >
+
                 {/* Toggle Button Container */}
                 <div className="relative flex -mb-0.5 justify-center items-center">
                     <HumpButton

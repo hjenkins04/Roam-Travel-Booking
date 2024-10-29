@@ -36,7 +36,7 @@ describe('ForgotPasswordCard', () => {
         jest.clearAllMocks();
     });
 
-    it('renders the form correctly', () => {
+    it('Renders the form correctly', () => {
         render(<ForgotPasswordCard onSubmit={() => { }} />);
 
         // Check if the email label and input are present
@@ -48,7 +48,7 @@ describe('ForgotPasswordCard', () => {
         expect(screen.getByText(/reset password/i)).toBeInTheDocument();
     });
 
-    it('calls onSubmit with the entered email when the form is submitted', () => {
+    it('Calls onSubmit with the entered email when the form is submitted', () => {
         const mockOnSubmit = jest.fn();
         render(<ForgotPasswordCard onSubmit={mockOnSubmit} />);
 
@@ -65,7 +65,7 @@ describe('ForgotPasswordCard', () => {
         expect(mockOnSubmit).toHaveBeenCalledWith('test@example.com');
     });
 
-    it('does not call onSubmit if the email input is empty', () => {
+    it('Does not call onSubmit if the email input is empty', () => {
         const mockOnSubmit = jest.fn();
         render(<ForgotPasswordCard onSubmit={mockOnSubmit} />);
 
@@ -78,7 +78,7 @@ describe('ForgotPasswordCard', () => {
         expect(mockOnSubmit).not.toHaveBeenCalled();
     });
 
-    it('calls router.back() when the cancel button is clicked', () => {
+    it('Calls router.back() when the cancel button is clicked', () => {
         const mockRouterBack = jest.fn();
         (useRouter as jest.Mock).mockReturnValue({ back: mockRouterBack });
 
