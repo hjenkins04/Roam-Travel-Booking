@@ -1,24 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search, ArrowLeftRight, PlaneTakeoff, PlaneLanding } from "lucide-react";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { Search } from "lucide-react";
 import SearchBoxButtonList from "@/components/SearchBoxButtonList";
-import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import SearchBoxButtonSkeleton from "@/components/SearchBoxButtonSkeleton";
 
 const SearchBox: React.FC = () => {
-    
   return (
     <>
       <div className="flex flex-col items-center justify-center relative">
-       {/* Toggle Button Container */}
-       <div className="relative flex -mb-0.5 justify-center items-center">
+        {/* Toggle Button Container */}
+        <div className="relative flex -mb-0.5 justify-center items-center">
           <HumpButton
             primaryColor="#FF9A2A"
             secondaryColor="#FFFFFF"
@@ -29,7 +23,7 @@ const SearchBox: React.FC = () => {
           />
         </div>
 
-         {/* Main search container */}
+        {/* Main search container */}
         <div className="relative bg-white rounded-2xl shadow-lg p-4 max-w-[97%] w-full z-2">
           {/* Search Form (Button List) */}
           <SearchBoxButtonList className="w-full justify-center space-y-4 sm:space-y-6">
@@ -37,24 +31,24 @@ const SearchBox: React.FC = () => {
             <Popover>
               <PopoverTrigger asChild>
                 <SearchBoxButtonSkeleton
-                    size="w-[230px]"
-                    className="-bottom-2.5"
-                  />
+                  size="w-[230px]"
+                  className="-bottom-2.5"
+                />
               </PopoverTrigger>
             </Popover>
 
             {/* Swap Icon between Departure and Arrival */}
-            <div className="bg-orange-500 rounded-full p-5 z-10 cursor-pointer"
+            <div
+              className="bg-orange-500 rounded-full p-5 z-10 cursor-pointer"
               onClick={() => {}}
               style={{
                 position: "relative",
                 transform: "translateX(25%)",
                 margin: "-18px",
               }}
-            >
-            </div>
-            
-             {/* Arrival City Dropdown */}
+            ></div>
+
+            {/* Arrival City Dropdown */}
             <Popover>
               <PopoverTrigger asChild>
                 <SearchBoxButtonSkeleton size="w-[230px]" />
@@ -62,29 +56,27 @@ const SearchBox: React.FC = () => {
             </Popover>
 
             <Popover>
-                {/* Departure Date Button */}
-                <PopoverTrigger asChild>
-                  <SearchBoxButtonSkeleton size="w-[175px]" />
-                </PopoverTrigger>
+              {/* Departure Date Button */}
+              <PopoverTrigger asChild>
+                <SearchBoxButtonSkeleton size="w-[175px]" />
+              </PopoverTrigger>
             </Popover>
 
             <Popover>
-                {/* Return Date Button */}
-                <PopoverTrigger asChild>
-                  <SearchBoxButtonSkeleton size="w-[175px]" />
-                </PopoverTrigger>
+              {/* Return Date Button */}
+              <PopoverTrigger asChild>
+                <SearchBoxButtonSkeleton size="w-[175px]" />
+              </PopoverTrigger>
             </Popover>
 
-          {/* Traveler & Class Button */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <SearchBoxButtonSkeleton size="w-[195px]" />
-            </PopoverTrigger>
-          </Popover>
-
-
+            {/* Traveler & Class Button */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <SearchBoxButtonSkeleton size="w-[195px]" />
+              </PopoverTrigger>
+            </Popover>
           </SearchBoxButtonList>
-          
+
           {/* Search Button */}
           <div className="flex justify-center pt-6 relative">
             <Button

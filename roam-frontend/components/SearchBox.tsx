@@ -1,10 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search, ArrowLeftRight, PlaneTakeoff, PlaneLanding } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  CalendarIcon,
+  UserIcon,
+  Users,
+  PlusIcon,
+  MinusIcon,
+  ChevronDown,
+  Search,
+  ArrowLeftRight,
+  PlaneTakeoff,
+  PlaneLanding,
+} from "lucide-react";
 import SearchBoxButtonList from "@/components/SearchBoxButtonList";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
@@ -25,7 +46,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
     setSearchData((prev) => ({
       ...prev,
       departureAirport: value,
-      arrivalAirport: prev.arrivalAirport?.iata_code === value.iata_code ? null : prev.arrivalAirport, // Reset arrival if same
+      arrivalAirport:
+        prev.arrivalAirport?.iata_code === value.iata_code
+          ? null
+          : prev.arrivalAirport, // Reset arrival if same
     }));
   };
 
@@ -33,7 +57,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
     setSearchData((prev) => ({
       ...prev,
       arrivalAirport: value,
-      departureAirport: prev.departureAirport?.iata_code === value.iata_code ? null : prev.departureAirport, // Reset departure if same
+      departureAirport:
+        prev.departureAirport?.iata_code === value.iata_code
+          ? null
+          : prev.departureAirport, // Reset departure if same
     }));
   };
 
@@ -49,7 +76,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
     setSearchData((prev) => ({
       ...prev,
       passengers: prev.passengers + 1,
-      seatTypeMapping: { ...prev.seatTypeMapping, [prev.passengers]: "Economy" },
+      seatTypeMapping: {
+        ...prev.seatTypeMapping,
+        [prev.passengers]: "Economy",
+      },
     }));
   };
 
@@ -65,7 +95,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
     });
   };
 
-  const updatePassengerClass = (index: number, newClass: "Business" | "Economy") => {
+  const updatePassengerClass = (
+    index: number,
+    newClass: "Business" | "Economy"
+  ) => {
     setSearchData((prev) => ({
       ...prev,
       seatTypeMapping: { ...prev.seatTypeMapping, [index]: newClass },
@@ -76,15 +109,14 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
     const seatTypes = Object.values(searchData.seatTypeMapping);
     const allBusiness = seatTypes.every((type) => type === "Business");
     const allEconomy = seatTypes.every((type) => type === "Economy");
-  
+
     if (allBusiness) return "Business";
     if (allEconomy) return "Economy";
     return "Mixed";
   };
-  
 
   const handleButtonClick = () => {
-    router.push('/search-results');
+    router.push("/search-results");
   };
 
   return (
@@ -98,8 +130,12 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
             primaryText="Round Trip"
             secondaryText="One Way"
             isPrimaryActive={searchData.isRoundTrip}
-            onPrimaryClick={() => setSearchData((prev) => ({ ...prev, isRoundTrip: true }))}
-            onSecondaryClick={() => setSearchData((prev) => ({ ...prev, isRoundTrip: false }))}
+            onPrimaryClick={() =>
+              setSearchData((prev) => ({ ...prev, isRoundTrip: true }))
+            }
+            onSecondaryClick={() =>
+              setSearchData((prev) => ({ ...prev, isRoundTrip: false }))
+            }
           />
         </div>
 
@@ -112,11 +148,19 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
               <PopoverTrigger asChild>
                 <div>
                   <SearchBoxButton
-                    leftIcon={<PlaneTakeoff className="text-gray-500 h-4 w-4" />}
-                    rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                    leftIcon={
+                      <PlaneTakeoff className="text-gray-500 h-4 w-4" />
+                    }
+                    rightIcon={
+                      <ChevronDown className="text-gray-500 h-4 w-4" />
+                    }
                     headerText="DEPARTURE CITY"
-                    mainTextLeft={searchData.departureAirport?.iata_code || "Select City"}
-                    mainTextRight={searchData.departureAirport?.municipality_name || ""}
+                    mainTextLeft={
+                      searchData.departureAirport?.iata_code || "Select City"
+                    }
+                    mainTextRight={
+                      searchData.departureAirport?.municipality_name || ""
+                    }
                     subTextRight={searchData.departureAirport?.short_name || ""}
                     size="w-[230px]"
                     className="-bottom-2.5"
@@ -126,7 +170,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
               <PopoverContent className="w-[230px] p-4">
                 <div className="space-y-2">
                   {airports
-                    ?.filter((airport) => airport.iata_code !== searchData.arrivalAirport?.iata_code)
+                    ?.filter(
+                      (airport) =>
+                        airport.iata_code !==
+                        searchData.arrivalAirport?.iata_code
+                    )
                     .map((airport) => (
                       <div
                         key={airport.guid}
@@ -139,9 +187,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
                 </div>
               </PopoverContent>
             </Popover>
-            
+
             {/* Swap Icon between Departure and Arrival */}
-            <div className="bg-orange-500 rounded-full p-2 z-10 cursor-pointer"
+            <div
+              className="bg-orange-500 rounded-full p-2 z-10 cursor-pointer"
               onClick={swapAirports}
               style={{
                 position: "relative",
@@ -151,17 +200,25 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
             >
               <ArrowLeftRight className="w-5 h-5 text-white" />
             </div>
-            
+
             {/* Arrival City Dropdown */}
             <Popover>
               <PopoverTrigger asChild>
                 <div>
                   <SearchBoxButton
-                    leftIcon={<PlaneLanding className="text-gray-500 h-4 w-4" />}
-                    rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                    leftIcon={
+                      <PlaneLanding className="text-gray-500 h-4 w-4" />
+                    }
+                    rightIcon={
+                      <ChevronDown className="text-gray-500 h-4 w-4" />
+                    }
                     headerText="ARRIVAL CITY"
-                    mainTextLeft={searchData.arrivalAirport?.iata_code || "Select City"}
-                    mainTextRight={searchData.arrivalAirport?.municipality_name || ""}
+                    mainTextLeft={
+                      searchData.arrivalAirport?.iata_code || "Select City"
+                    }
+                    mainTextRight={
+                      searchData.arrivalAirport?.municipality_name || ""
+                    }
                     subTextRight={searchData.arrivalAirport?.short_name || ""}
                     size="w-[230px]"
                   />
@@ -170,7 +227,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
               <PopoverContent className="w-[230px] p-4">
                 <div className="space-y-2">
                   {airports
-                    ?.filter((airport) => airport.iata_code !== searchData.departureAirport?.iata_code)
+                    ?.filter(
+                      (airport) =>
+                        airport.iata_code !==
+                        searchData.departureAirport?.iata_code
+                    )
                     .map((airport) => (
                       <div
                         key={airport.guid}
@@ -191,26 +252,45 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
                   <PopoverTrigger asChild>
                     <div>
                       <SearchBoxButton
-                        leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
-                        rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                        leftIcon={
+                          <CalendarIcon className="text-gray-500 h-4 w-4" />
+                        }
+                        rightIcon={
+                          <ChevronDown className="text-gray-500 h-4 w-4" />
+                        }
                         headerText="DEPARTURE DATE"
-                        mainTextLeft={searchData.departureDate ? format(searchData.departureDate, "dd") : "DD"}
+                        mainTextLeft={
+                          searchData.departureDate
+                            ? format(searchData.departureDate, "dd")
+                            : "DD"
+                        }
                         subTextLeft=""
-                        mainTextRight={searchData.departureDate ? format(searchData.departureDate, "EEE") : "Day"}
-                        subTextRight={searchData.departureDate ? format(searchData.departureDate, "MMMM") : "Month"}
+                        mainTextRight={
+                          searchData.departureDate
+                            ? format(searchData.departureDate, "EEE")
+                            : "Day"
+                        }
+                        subTextRight={
+                          searchData.departureDate
+                            ? format(searchData.departureDate, "MMMM")
+                            : "Month"
+                        }
                         size="w-[175px]"
-                        onClickMainButton={() => { }}
+                        onClickMainButton={() => {}}
                       />
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={searchData.departureDate || undefined}
-                    onSelect={(date) => 
-                      setSearchData((prev) => ({ ...prev, departureDate: date || null }))
-                    }
-                  />
+                    <Calendar
+                      mode="single"
+                      selected={searchData.departureDate || undefined}
+                      onSelect={(date) =>
+                        setSearchData((prev) => ({
+                          ...prev,
+                          departureDate: date || null,
+                        }))
+                      }
+                    />
                   </PopoverContent>
                 </Popover>
 
@@ -219,26 +299,45 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
                   <PopoverTrigger asChild>
                     <div>
                       <SearchBoxButton
-                        leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
-                        rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                        leftIcon={
+                          <CalendarIcon className="text-gray-500 h-4 w-4" />
+                        }
+                        rightIcon={
+                          <ChevronDown className="text-gray-500 h-4 w-4" />
+                        }
                         headerText="RETURN DATE"
-                        mainTextLeft={searchData.returnDate ? format(searchData.returnDate, "dd") : "DD"}
+                        mainTextLeft={
+                          searchData.returnDate
+                            ? format(searchData.returnDate, "dd")
+                            : "DD"
+                        }
                         subTextLeft=""
-                        mainTextRight={searchData.returnDate ? format(searchData.returnDate, "EEE") : "Day"}
-                        subTextRight={searchData.returnDate ? format(searchData.returnDate, "MMMM") : "Month"}
+                        mainTextRight={
+                          searchData.returnDate
+                            ? format(searchData.returnDate, "EEE")
+                            : "Day"
+                        }
+                        subTextRight={
+                          searchData.returnDate
+                            ? format(searchData.returnDate, "MMMM")
+                            : "Month"
+                        }
                         size="w-[175px]"
-                        onClickMainButton={() => { }}
+                        onClickMainButton={() => {}}
                       />
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={searchData.returnDate || undefined}
-                    onSelect={(date) => 
-                      setSearchData((prev) => ({ ...prev, returnDate: date || null }))
-                    }
-                  />
+                    <Calendar
+                      mode="single"
+                      selected={searchData.returnDate || undefined}
+                      onSelect={(date) =>
+                        setSearchData((prev) => ({
+                          ...prev,
+                          returnDate: date || null,
+                        }))
+                      }
+                    />
                   </PopoverContent>
                 </Popover>
               </>
@@ -250,91 +349,126 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
                 <PopoverTrigger asChild>
                   <div>
                     <SearchBoxButton
-                      leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
-                      rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
+                      leftIcon={
+                        <CalendarIcon className="text-gray-500 h-4 w-4" />
+                      }
+                      rightIcon={
+                        <ChevronDown className="text-gray-500 h-4 w-4" />
+                      }
                       headerText="DEPARTURE DATE"
-                      mainTextLeft={searchData.departureDate ? format(searchData.departureDate, "dd") : "DD"}
+                      mainTextLeft={
+                        searchData.departureDate
+                          ? format(searchData.departureDate, "dd")
+                          : "DD"
+                      }
                       subTextLeft=""
-                      mainTextRight={searchData.departureDate ? format(searchData.departureDate, "EEEE") : "Day"}
-                      subTextRight={searchData.departureDate ? format(searchData.departureDate, "MMMM") : "Month"}
+                      mainTextRight={
+                        searchData.departureDate
+                          ? format(searchData.departureDate, "EEEE")
+                          : "Day"
+                      }
+                      subTextRight={
+                        searchData.departureDate
+                          ? format(searchData.departureDate, "MMMM")
+                          : "Month"
+                      }
                       size="w-[230px]"
-                      onClickMainButton={() => { }}
+                      onClickMainButton={() => {}}
                     />
                   </div>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
+                  <Calendar
                     mode="single"
                     selected={searchData.departureDate || undefined}
-                    onSelect={(date) => 
-                      setSearchData((prev) => ({ ...prev, departureDate: date || null }))
+                    onSelect={(date) =>
+                      setSearchData((prev) => ({
+                        ...prev,
+                        departureDate: date || null,
+                      }))
                     }
                   />
                 </PopoverContent>
               </Popover>
             )}
 
-          {/* Traveler & Class Button */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <div>
-                <SearchBoxButton
-                  leftIcon={
-                    searchData.passengers > 1 ? (
-                      <Users className="text-gray-500 h-4 w-4" />
-                    ) : (
-                      <UserIcon className="text-gray-500 h-4 w-4" />
-                    )
-                  }
-                  rightIcon={<ChevronDown className="text-gray-500 h-4 w-4" />}
-                  headerText="TRAVELER & CLASS"
-                  mainTextLeft={`${searchData.passengers}`} // Number of passengers
-                  subTextLeft=""
-                  mainTextRight={getPassengerTypeSummary()} // Summary of passenger types
-                  subTextRight=""
-                  size="w-[195px]"
-                  onClickMainButton={() => {}}
-                />
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="w-64 p-4">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">Passengers</span>
-                  <div className="flex items-center space-x-2">
-                    <Button size="sm" variant="outline" onClick={removePassenger} disabled={searchData.passengers === 1}>
-                      <MinusIcon className="h-4 w-4" />
-                    </Button>
-                    <span>{searchData.passengers}</span>
-                    <Button size="sm" variant="outline" onClick={addPassenger}>
-                      <PlusIcon className="h-4 w-4" />
-                    </Button>
-                  </div>
+            {/* Traveler & Class Button */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <div>
+                  <SearchBoxButton
+                    leftIcon={
+                      searchData.passengers > 1 ? (
+                        <Users className="text-gray-500 h-4 w-4" />
+                      ) : (
+                        <UserIcon className="text-gray-500 h-4 w-4" />
+                      )
+                    }
+                    rightIcon={
+                      <ChevronDown className="text-gray-500 h-4 w-4" />
+                    }
+                    headerText="TRAVELER & CLASS"
+                    mainTextLeft={`${searchData.passengers}`} // Number of passengers
+                    subTextLeft=""
+                    mainTextRight={getPassengerTypeSummary()} // Summary of passenger types
+                    subTextRight=""
+                    size="w-[195px]"
+                    onClickMainButton={() => {}}
+                  />
                 </div>
-                {Array.from({ length: searchData.passengers }).map((_, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <span>Passenger {index + 1}</span>
-                    <Select
-                      value={searchData.seatTypeMapping[index] || "Economy"}
-                      onValueChange={(value: "Business" | "Economy") => updatePassengerClass(index, value)}
-                    >
-                      <SelectTrigger className="w-[120px]">
-                        <SelectValue placeholder="Select class" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Economy">Economy</SelectItem>
-                        <SelectItem value="Business">Business</SelectItem>
-                      </SelectContent>
-                    </Select>
+              </PopoverTrigger>
+              <PopoverContent className="w-64 p-4">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">Passengers</span>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={removePassenger}
+                        disabled={searchData.passengers === 1}
+                      >
+                        <MinusIcon className="h-4 w-4" />
+                      </Button>
+                      <span>{searchData.passengers}</span>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={addPassenger}
+                      >
+                        <PlusIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </PopoverContent>
-          </Popover>
-
-
+                  {Array.from({ length: searchData.passengers }).map(
+                    (_, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between"
+                      >
+                        <span>Passenger {index + 1}</span>
+                        <Select
+                          value={searchData.seatTypeMapping[index] || "Economy"}
+                          onValueChange={(value: "Business" | "Economy") =>
+                            updatePassengerClass(index, value)
+                          }
+                        >
+                          <SelectTrigger className="w-[120px]">
+                            <SelectValue placeholder="Select class" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Economy">Economy</SelectItem>
+                            <SelectItem value="Business">Business</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )
+                  )}
+                </div>
+              </PopoverContent>
+            </Popover>
           </SearchBoxButtonList>
-          
+
           {/* Search Button */}
           <div className="flex justify-center pt-6 relative">
             <Button

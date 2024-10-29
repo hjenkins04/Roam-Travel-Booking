@@ -9,7 +9,7 @@ interface FilterButtonProps {
     customTextColour?: string;
     options: string[];
     dataTestId: string;
-    onOptionSelect: (option: string | null) => void; // Allow null for reset
+    onOptionSelect: (option: string | null) => void; // Allow null for reset button 
     selectedOption: string | null;
 }
 
@@ -45,7 +45,8 @@ const FilterButton: FC<FilterButtonProps> = ({
             >
                 {/* Main Text */}
                 <div className="flex flex-col text-left">
-                    {/* Default text or selected option */}
+
+                    {/* Display Default Button text or on option select Default Text and selected option */}
                     {!selectedOption ? (
                         <span
                             className={`text-sm font-medium text-left ${customTextColour}`}
@@ -60,13 +61,15 @@ const FilterButton: FC<FilterButtonProps> = ({
                             <span
                                 className={`text-xs font-medium text-left ${customTextColour} `}
                             >
-                                {selectedOption}
+                                {selectedOption} 
                             </span>
                         </>
                     )}
                 </div>
                 <div className="ml-2 cursor-pointer">{rightIcon}</div>
             </div>
+            
+            {/* Button Dropdown that Displays Arguments Passed to it */}
             {isDropdownOpen && (
                 <div className="absolute z-10 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg">
                     <ul data-testid="dropdown-list" className="py-2">
@@ -80,7 +83,8 @@ const FilterButton: FC<FilterButtonProps> = ({
                                 {option}
                             </li>
                         ))}
-                        {/* Add Reset Option */}
+
+                        {/* Reset Option In Dropdown Options*/}
                         <li
                             data-testid="reset-button"
                             className="px-4 py-2 hover:bg-gray-200 cursor-pointer"

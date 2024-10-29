@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { getTimeCategory } from "@/components/HelperFunctions/TimeFilter";
+import React, { useEffect, useState } from "react";
+import { getTimeCategory } from "@/components/HelperFunctions/timeFilter";
 
 interface Flight {
   id: string;
@@ -23,14 +23,21 @@ interface FlightSearchResultsProps {
   filters: Filters;
 }
 
-const FlightSearchResults: React.FC<FlightSearchResultsProps> = ({ flightData, filters }) => {
+const FlightSearchResults: React.FC<FlightSearchResultsProps> = ({
+  flightData,
+  filters,
+}) => {
   const [filteredFlights, setFilteredFlights] = useState<Flight[]>([]);
 
   useEffect(() => {
     const filterFlights = () => {
-      return flightData.filter(flight => {
+      return flightData.filter((flight) => {
         // Filter by max price
-        if (filters.maxPrice && parseInt(flight.price.replace('$', '')) > parseInt(filters.maxPrice.replace('$', ''))) {
+        if (
+          filters.maxPrice &&
+          parseInt(flight.price.replace("$", "")) >
+            parseInt(filters.maxPrice.replace("$", ""))
+        ) {
           return false;
         }
 
@@ -41,13 +48,19 @@ const FlightSearchResults: React.FC<FlightSearchResultsProps> = ({ flightData, f
 
         // Filter by arrival time category
         const flightArrivalCategory = getTimeCategory(flight.arrivalTime);
-        if (filters.arrivalTime && flightArrivalCategory !== filters.arrivalTime) {
+        if (
+          filters.arrivalTime &&
+          flightArrivalCategory !== filters.arrivalTime
+        ) {
           return false;
         }
 
         // Filter by departure time category
         const flightDepartureCategory = getTimeCategory(flight.departureTime);
-        if (filters.departureTime && flightDepartureCategory !== filters.departureTime) {
+        if (
+          filters.departureTime &&
+          flightDepartureCategory !== filters.departureTime
+        ) {
           return false;
         }
 
@@ -66,7 +79,7 @@ const FlightSearchResults: React.FC<FlightSearchResultsProps> = ({ flightData, f
   return (
     <div>
       {filteredFlights.length > 0 ? (
-        filteredFlights.map(flight => (
+        filteredFlights.map((flight) => (
           <div key={flight.id}>
             <p>Airline: {flight.airline}</p>
             <p>Price: {flight.price}</p>
