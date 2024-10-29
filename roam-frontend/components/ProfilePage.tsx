@@ -110,8 +110,8 @@ const ProfilePage: React.FC = () => {
             <div className="relative mt-[6%] w-[85%] ml-[-3%]">
               {/* Pass setEditProfile as a prop to ProfileHeader */}
               <ProfileHeader
-                name="John Smith"
-                email="place@holder.com"
+                name="User Fake"
+                email="user@email.com"
                 onEditProfile={() => setEditProfile(true)} // Set editProfile to true on click
               />
             </div>
