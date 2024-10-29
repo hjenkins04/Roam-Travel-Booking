@@ -1,10 +1,17 @@
 "use client";
 
+import React, { Suspense, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import SearchBox from "@/components/SearchBox";
 import LandingPageBackground from "@/components/Backgrounds/LandingPageBackground";
 import LandingPageText from "@/components/Text/LandingPageText";
+
+import { SearchProvider } from "@/context/SearchContext";
+
+import SearchBoxSkeletonLoader from "@/components/SearchBoxSkeletonLoader";
+import { fetchAirports } from "@/api/FetchAirports";
+import { Airport } from "@/models";
 
 const TrendingLocationsHomeGrid = dynamic(
   () => import("@/components/TrendingLocationsHomeGrid"),
@@ -12,6 +19,22 @@ const TrendingLocationsHomeGrid = dynamic(
 );
 
 export default function HomePage() {
+  const [airports, setAirports] = useState<Airport[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch airports on load
+    fetchAirports()
+      .then((data: Airport[]) => {
+        setAirports(data);
+        setLoading(false);
+      })
+      .catch((error: unknown) => {
+        console.error("Error fetching airports:", error);
+        setLoading(false);
+      });
+  }, []);  
+
   return (
     <div className="relative min-h-screen">
       {/* Background SVG */}
@@ -35,11 +58,16 @@ export default function HomePage() {
         </div>
 
         {/* Search Box (Center Overlap with Background) */}
-        <div
-          className="relative w-full max-w-6xl z-10 -top-14 py-10"
-          style={{ paddingTop: "calc(50vh - 150px)" }}
-        >
-          <SearchBox />
+        <div className="relative w-full max-w-6xl z-10 -top-14 py-10" style={{ paddingTop: "calc(50vh - 150px)" }} >
+        <SearchProvider>
+            <Suspense fallback={<SearchBoxSkeletonLoader/>}>
+              {!loading ? (
+                <SearchBox airports={airports} />
+              ) : (
+                <SearchBoxSkeletonLoader />
+              )}
+            </Suspense>
+          </SearchProvider>
         </div>
       </main>
 
