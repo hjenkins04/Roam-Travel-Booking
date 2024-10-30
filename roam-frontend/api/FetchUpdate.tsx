@@ -8,7 +8,7 @@ export async function fetchUpdate(
   phoneNumber: string
 ): Promise<LoginResponse> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/users/${guid}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/${guid}`,
     {
       method: "PATCH",
       headers: {
