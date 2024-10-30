@@ -12,3 +12,11 @@ class CountryDTO:
             "code": self.code,
             "name": self.name,
         }
+        
+    @staticmethod
+    def from_dict(data: Dict[str, str]) -> "CountryDTO":
+        return CountryDTO(
+            guid=data["guid"],
+            code=data["code"],
+            name=data["name"]
+        )

@@ -15,3 +15,12 @@ class AirlineDTO:
             "name": self.name,
             "logo_path": self.logo_path
         }
+        
+    @staticmethod
+    def from_dict(data: Dict[str, str]) -> "AirlineDTO":
+        return AirlineDTO(
+            guid=data["guid"],
+            icao_code=data["icao_code"],
+            name=data["name"],
+            logo_path=data.get("logo_path")
+        )

@@ -8,19 +8,18 @@ airport_bp = Blueprint('airport', __name__)
 @airport_bp.route('/api/airports', methods=['POST'])
 def create_airport() -> Response:
     data = request.json
+    
+    # Check if data is a list of dict or a single dict
+    airports_data = data if isinstance(data, list) else [data]
+    
     try:
-        airport_dto = AirportDTO(
-            guid=data.get('guid'),
-            full_name=data.get('full_name'),
-            short_name=data.get('short_name'),
-            municipality_name=data.get('municipality_name'),
-            iata_code=data.get('iata_code'),
-            location=data.get('location'),
-            country=data.get('country'),
-            continent=data.get('continent')
-        )
-        AirportService.create_airport(airport_dto)
-        return jsonify({"message": "Airport created successfully"}), 201
+        airport_dtos = [AirportDTO.from_dict(airport_data) for airport_data in airports_data]
+        
+        for dto in airport_dtos:
+            AirportService.create_airport(dto)
+        
+        return jsonify({"message": f"{len(airport_dtos)} airport(s) created successfully"}), 201
+    
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
 

@@ -14,25 +14,7 @@ def create_flight() -> Response:
     flights_data = data if isinstance(data, list) else [data]
     
     try:
-        flight_dtos = []
-        
-        for flight_data in flights_data:
-            flight_dto = FlightDTO(
-                guid=flight_data.get("guid"),
-                flight_time_minutes=flight_data.get("flight_time_minutes"),
-                departure_time=flight_data.get("departure_time"),
-                arrival_time=flight_data.get("arrival_time"),
-                num_stops=flight_data.get("num_stops"),
-                price_economy=flight_data.get("price_economy"),
-                price_business=flight_data.get("price_business"),
-                baggage_allowance=flight_data.get("baggage_allowance"),
-                airline=flight_data.get("airline"),
-                departure_airport=flight_data.get("departure_airport"),
-                arrival_airport=flight_data.get("arrival_airport"),
-                layover=flight_data.get("layover"),
-                seat_configuration_id=flight_data.get("seat_configuration_id")
-            )
-            flight_dtos.append(flight_dto)
+        flight_dtos = [FlightDTO.from_dict(flight_data) for flight_data in flights_data]
         
         for dto in flight_dtos:
             FlightService.create_flight(dto)

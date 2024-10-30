@@ -11,3 +11,10 @@ class LoginResponseDTO:
             "token": self.token,
             "guid": self.guid
         }
+        
+    @staticmethod
+    def from_dict(data: Dict[str, str]) -> "LoginResponseDTO":
+        return LoginResponseDTO(
+            token=data.get("token", ""),
+            guid=data.get("guid", "")
+        )

@@ -12,3 +12,11 @@ class ContinentDTO:
             "code": self.code,
             "name": self.name,
         }
+        
+    @staticmethod
+    def from_dict(data: Dict[str, str]) -> "ContinentDTO":
+        return ContinentDTO(
+            guid=data["guid"],
+            code=data["code"],
+            name=data["name"]
+        )

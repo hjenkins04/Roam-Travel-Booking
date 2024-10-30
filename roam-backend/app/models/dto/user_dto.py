@@ -16,3 +16,13 @@ class UserDTO:
             "email": self.email,
             "phone": self.phone
         }
+        
+    @staticmethod
+    def from_dict(data: Dict[str, Optional[str]]) -> "UserDTO":
+        return UserDTO(
+            guid=data["guid"],
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+            email=data["email"],
+            phone=data.get("phone")
+        )

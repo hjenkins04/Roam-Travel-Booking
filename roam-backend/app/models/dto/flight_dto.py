@@ -40,6 +40,25 @@ class FlightDTO:
             "layover": self.layover.to_dict() if self.layover else None,
             "seat_configuration_id": self.seat_configuration_id,
         }
+        
+    @staticmethod
+    def from_dict(data: Dict[str, Union[str, int, float, Dict]]) -> "FlightDTO":
+        return FlightDTO(
+            guid=data["guid"],
+            flight_time_minutes=data["flight_time_minutes"],
+            departure_time=data["departure_time"],
+            arrival_time=data["arrival_time"],
+            num_stops=data["num_stops"],
+            price_economy=data["price_economy"],
+            price_business=data["price_business"],
+            baggage_allowance=data["baggage_allowance"],
+            airline=AirlineDTO.from_dict(data["airline"]) if data.get("airline") else None,
+            departure_airport=AirportDTO.from_dict(data["departure_airport"]) if data.get("departure_airport") else None,
+            arrival_airport=AirportDTO.from_dict(data["arrival_airport"]) if data.get("arrival_airport") else None,
+            seat_configuration_id=data.get("seat_configuration_id"),
+            layover=LayoverDTO.from_dict(data["layover"]) if data.get("layover") else None
+        )
+
 
     def create_airline_dto(self, airline: Union[Dict, AirlineDTO]) -> AirlineDTO:
         if isinstance(airline, dict):

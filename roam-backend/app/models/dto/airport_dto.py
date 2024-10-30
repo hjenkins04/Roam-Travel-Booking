@@ -28,6 +28,19 @@ class AirportDTO:
             "country": self.country.to_dict() if self.country else None,
             "continent": self.continent.to_dict() if self.continent else None,
         }
+        
+    @staticmethod
+    def from_dict(data: Dict[str, Union[str, Dict]]) -> "AirportDTO":
+        return AirportDTO(
+            guid=data["guid"],
+            full_name=data["full_name"],
+            short_name=data["short_name"],
+            municipality_name=data["municipality_name"],
+            iata_code=data.get("iata_code"),
+            location=LocationDTO.from_dict(data["location"]) if data.get("location") else None,
+            country=CountryDTO.from_dict(data["country"]) if data.get("country") else None,
+            continent=ContinentDTO.from_dict(data["continent"]) if data.get("continent") else None
+        )
 
     def create_location_dto(self, location: Optional[Union[Dict, LocationDTO]]) -> Optional[LocationDTO]:
         if isinstance(location, dict):

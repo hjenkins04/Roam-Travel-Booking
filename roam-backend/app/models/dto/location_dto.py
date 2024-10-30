@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, Union
 
 class LocationDTO:
     def __init__(self, guid: str, latitude: float, longitude: float) -> None:
@@ -12,3 +12,11 @@ class LocationDTO:
             "latitude": self.latitude,
             "longitude": self.longitude,
         }
+        
+    @staticmethod
+    def from_dict(data: Dict[str, Union[str, float]]) -> "LocationDTO":
+        return LocationDTO(
+            guid=data.get("guid", ""),
+            latitude=data.get("latitude", 0.0),
+            longitude=data.get("longitude", 0.0)
+        )

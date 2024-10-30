@@ -2,12 +2,14 @@ from typing import List, Dict, Optional
 from app import db
 import uuid
 from app.models.entities.user_entity import UserEntity
+from app.models.dto.user_dto import UserDTO
 
 
 class UserRepository:
     @staticmethod
-    def add(user_entity: UserEntity) -> None:
+    def add(user_dto: UserDTO) -> None:
         """Add a new user to the database."""
+        user_entity = UserEntity.from_dto(user_dto, password=user_dto.password)
         db.session.add(user_entity)
         db.session.commit()
 

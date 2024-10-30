@@ -1,6 +1,7 @@
 from typing import List, Dict, Optional
 import uuid
 from app.services.user_service import UserService
+from app.models.dto.user_dto import UserDTO
 from flask import Blueprint, request, jsonify, Response
 from middleware import token_required
 
@@ -10,13 +11,8 @@ user_bp = Blueprint('user', __name__)
 def add_user() -> Response:
     data = request.json
     try:
-        UserService.create_user(
-            email=data.get('email'),
-            phone=data.get('phone'),
-            first_name=data.get('first_name'),
-            last_name=data.get('last_name'),
-            password=data.get('password')
-        )
+        user_dto = UserDTO.from_dict(data)
+        UserService.create_user(user_dto)
         return jsonify({"message": "User created successfully"}), 201
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
@@ -33,7 +29,8 @@ def update_user(guid: str) -> Response:
     try:
         if data.get('guid') != guid:
             return jsonify({"error": "Guid mismatch"}), 400
-        UserService.update_user(guid=data.get('guid'), email=data.get('email'), phone=data.get('phoneNumber'), first_name=data.get('firstName'), last_name=data.get('lastName'), password=data.get('password'))
+        user_dto = UserDTO.from_dict(data)
+        UserService.update_user(user_dto)
         return jsonify({"message": "User updated successfully"}), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
@@ -41,7 +38,7 @@ def update_user(guid: str) -> Response:
         return jsonify({"error": "Internal Server Error"}), 500
 
 @user_bp.route('/api/users/<uuid:user_id>', methods=['GET'])
-def get_user_by_id(user_id: uuid) -> Response:
+def get_user_by_id(user_id: uuid.UUID) -> Response:
     try:
         user = UserService.get_user_by_id(user_id)
         return jsonify(user.to_dict()), 200
@@ -59,7 +56,7 @@ def delete_user(user_id: uuid.UUID) -> Response:
         return jsonify({"error": str(e)}), 404
     except Exception:
         return jsonify({"error": "Internal Server Error"}), 500
-    
+
 @user_bp.route('/api/users/check-email', methods=['GET'])
 def check_email_exists() -> Response:
     email = request.args.get('email')
@@ -71,4 +68,4 @@ def check_email_exists() -> Response:
 @user_bp.route('/api/users/protected', methods=['GET'])
 @token_required
 def protected_endpoint():
-    return ("success"), 200
+    return "success", 200

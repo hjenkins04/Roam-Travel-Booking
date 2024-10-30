@@ -16,6 +16,15 @@ class FlightSeatsDTO:
             "seat_configuration": self.seat_configuration
         }
         
+    @staticmethod
+    def from_dict(data: Dict[str, Union[str, int, List[Dict[str, Union[int, str, bool]]]]]) -> "FlightSeatsDTO":
+        return FlightSeatsDTO(
+            guid=data.get("guid", ""),
+            seats_available=data.get("seats_available", 0),
+            flight_id=data.get("flight_id", ""),
+            seat_configuration=data.get("seat_configuration", [])
+        )
+        
     def create_seat_configuration(self, seat_configuration: List[Dict[str, Union[int, str, bool]]]) -> List[Dict[str, Union[int, str, bool]]]:
         # Each seat should have a seat_id, type, position, and availablity
         return [
