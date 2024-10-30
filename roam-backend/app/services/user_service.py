@@ -6,6 +6,7 @@ from app.models.entities.user_entity import UserEntity
 import jwt
 from datetime import datetime, timedelta, timezone
 from flask import current_app
+from app.models.dto.login_response_dto import LoginResponseDTO
 
 class UserService:
     @staticmethod
@@ -22,16 +23,21 @@ class UserService:
         )
         user_entity = UserEntity.from_dto(user_dto, password=password)
         UserRepository.add(user_entity)
+
+    @staticmethod
+    def update_user(guid: uuid.UUID, email: Optional[str] = None, phone: Optional[str] = None,
+                    first_name: Optional[str] = None, last_name: Optional[str] = None, password: Optional[str] = None) -> None:
+        UserRepository.update_user(guid=guid, email=email, phone=phone, first_name=first_name, last_name=last_name, password=password)
         
     @staticmethod
-    def login(email: str, password: str) -> str:
+    def login(email: str, password: str) -> LoginResponseDTO:
         user = UserRepository.find_by_email(email)
         if not user or not user.check_password(password):
             raise ValueError("Invalid email or password.")
 
         # Generate JWT token
         token = UserService.generate_jwt(user.guid)
-        return token
+        return LoginResponseDTO(token, user.guid)
     
     
     @staticmethod

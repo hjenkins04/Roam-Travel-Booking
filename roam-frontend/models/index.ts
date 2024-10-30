@@ -7,3 +7,5 @@ export * from "./flight";
 export * from "./layover";
 export * from "./flight_search";
 export * from "./filter_options";
+export * from "./user";
+export * from "./login_response";

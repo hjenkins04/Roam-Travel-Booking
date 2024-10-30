@@ -15,17 +15,29 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import EditProfile from "./EditProfile";
+import { AuthProvider, useAuthContext } from "@/context/AuthContext";
+import { fetchUpdate } from "@/api/FetchUpdate";
 
 const ProfilePage: React.FC = () => {
   // State variables for managing profile editing and modals
   const [editProfile, setEditProfile] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const { authData, setAuthData } = useAuthContext();
 
   // Event handlers for form submission and cancellation
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSuccessModalOpen(true);
+    try {
+      await fetchUpdate(authData.guid, firstName, lastName, email, phoneNumber);
+      setSuccessModalOpen(true);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   const handleCancel = () => {
@@ -92,7 +104,7 @@ const ProfilePage: React.FC = () => {
   ];
 
   return (
-    <>
+    <AuthProvider>
       <div className="relative min-h-screen">
         {/* Header component */}
         <Header
@@ -165,7 +177,17 @@ const ProfilePage: React.FC = () => {
                 </p>
 
                 <div className="flex flex-col self-stretch pt-2 mt-2 bg-white rounded-lg max-md:pt-24 max-md:max-w-full">
-                  <EditProfile handleSubmit={handleSubmit} />
+                  <EditProfile
+                    handleSubmit={handleSubmit}
+                    firstName={firstName}
+                    setFirstName={setFirstName}
+                    lastName={lastName}
+                    setLastName={setLastName}
+                    email={email}
+                    setEmail={setEmail}
+                    phoneNumber={phoneNumber}
+                    setPhoneNumber={setPhoneNumber}
+                  />
                 </div>
               </section>
             )}
@@ -214,7 +236,7 @@ const ProfilePage: React.FC = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </AuthProvider>
   );
 };
 

@@ -1,4 +1,6 @@
-export async function fetchLogin() {
+import { LoginResponse } from "@/models";
+
+export async function fetchLogin(): Promise<LoginResponse> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`,
     {
@@ -12,6 +14,6 @@ export async function fetchLogin() {
   if (!response.ok) {
     throw new Error("Failed to login");
   }
-  const data = await response.json();
+  const data: LoginResponse = await response.json();
   return data;
 }
