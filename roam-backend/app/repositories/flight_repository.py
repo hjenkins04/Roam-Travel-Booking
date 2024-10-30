@@ -1,6 +1,7 @@
 from typing import List, Optional
 from app import db
 from app.models.entities.flight_entity import FlightEntity
+from app.models.entities.flight_seats_entity import FlightSeatsEntity
 from app.models.dto.flight_dto import FlightDTO
 
 class FlightRepository:
@@ -35,6 +36,18 @@ class FlightRepository:
     def find_by_airline_id(airline_id: str) -> List[FlightEntity]:
         """Find flights by airline ID."""
         return FlightEntity.query.filter_by(airline_id=airline_id).all()
+    
+    @staticmethod
+    def find_by_departure_and_arrival(departure_airport_id: str, arrival_airport_id: str) -> List[FlightEntity]:
+        """Find flights by departure and arrival airport IDs."""
+        query = FlightEntity.query
+
+        if departure_airport_id:
+            query = query.filter_by(departure_airport_id=departure_airport_id)
+        if arrival_airport_id:
+            query = query.filter_by(arrival_airport_id=arrival_airport_id)
+        
+        return query.all()
 
     @staticmethod
     def delete_flight(guid: str) -> bool:
@@ -45,3 +58,13 @@ class FlightRepository:
             db.session.commit()
             return True
         return False
+    
+    @staticmethod
+    def get_seat_configuration_by_flight_id(flight_id: str) -> Optional[FlightSeatsEntity]:
+        """Retrieve seat configuration for a given flight ID."""
+        return FlightSeatsEntity.query.filter_by(flight_id=flight_id).first()
+
+    @staticmethod
+    def get_seat_configuration_by_id(seat_configuration_id: str) -> Optional[FlightSeatsEntity]:
+        """Retrieve seat configuration by its own ID."""
+        return FlightSeatsEntity.query.filter_by(guid=seat_configuration_id).first()
