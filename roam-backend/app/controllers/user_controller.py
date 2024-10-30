@@ -33,7 +33,7 @@ def update_user(guid: str) -> Response:
     try:
         if data.get('guid') != guid:
             return jsonify({"error": "Guid mismatch"}), 400
-        UserService.update_user(guid=data.get('guid'), email=data.get('email'), phone=data.get('phone'), first_name=data.get('first_name'), last_name=data.get('last_name'), password=data.get('password'))
+        UserService.update_user(guid=data.get('guid'), email=data.get('email'), phone=data.get('phoneNumber'), first_name=data.get('firstName'), last_name=data.get('lastName'), password=data.get('password'))
         return jsonify({"message": "User updated successfully"}), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
