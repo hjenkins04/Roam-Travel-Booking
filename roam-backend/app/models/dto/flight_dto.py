@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Union
+from typing import Optional, Dict, Union, List
 from app.models.dto.airline_dto import AirlineDTO
 from app.models.dto.airport_dto import AirportDTO
 from app.models.dto.layover_dto import LayoverDTO
@@ -6,13 +6,15 @@ from app.models.dto.layover_dto import LayoverDTO
 class FlightDTO:
     def __init__(self, guid: str, airline: Union[Dict, AirlineDTO], departure_airport: Union[Dict, AirportDTO],
                  arrival_airport: Union[Dict, AirportDTO], flight_time_minutes: int,
-                 layover: Optional[Union[Dict, LayoverDTO]] = None) -> None:
+                 seat_configuration_id: str = None,
+                 layover: Optional[Union[Dict, LayoverDTO]] = None,) -> None:
         self.guid = guid
         self.airline = self.create_airline_dto(airline)
         self.departure_airport = self.create_airport_dto(departure_airport)
         self.arrival_airport = self.create_airport_dto(arrival_airport)
         self.flight_time_minutes = flight_time_minutes
         self.layover = self.create_layover_dto(layover)
+        self.seat_configuration_id = seat_configuration_id
 
     def to_dict(self) -> Dict[str, Optional[Dict]]:
         return {
@@ -21,6 +23,7 @@ class FlightDTO:
             "departure_airport": self.departure_airport.to_dict() if self.departure_airport else None,
             "arrival_airport": self.arrival_airport.to_dict() if self.arrival_airport else None,
             "flight_time_minutes": self.flight_time_minutes,
+            "seat_configuration_id": self.seat_configuration_id,
             "layover": self.layover.to_dict() if self.layover else None
         }
 

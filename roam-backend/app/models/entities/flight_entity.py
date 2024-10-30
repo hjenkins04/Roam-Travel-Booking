@@ -1,8 +1,10 @@
 import uuid
 from app import db
+import random
 from app.models.entities.airline_entity import AirlineEntity
 from app.models.entities.airport_entity import AirportEntity
 from app.models.entities.layover_entity import LayoverEntity
+from app.models.entities.flight_seats_entity import FlightSeatsEntity
 from app.models.dto.flight_dto import FlightDTO
 
 class FlightEntity(db.Model):
@@ -19,7 +21,9 @@ class FlightEntity(db.Model):
     airline = db.relationship("AirlineEntity", back_populates="flights")
     departure_airport = db.relationship("AirportEntity", foreign_keys=[departure_airport_id])
     arrival_airport = db.relationship("AirportEntity", foreign_keys=[arrival_airport_id])
-    layover = db.relationship("LayoverEntity", back_populates="flight", uselist=False, cascade="all, delete-orphan")
+    seat_configuration = db.relationship("FlightSeatsEntity", back_populates="flight", uselist=False, single_parent=True, cascade="all, delete")
+    layover = db.relationship("LayoverEntity", back_populates="flight", uselist=False, single_parent=True, cascade="all, delete-orphan")
+    
 
     def to_dto(self) -> FlightDTO:
         return FlightDTO(
@@ -28,6 +32,7 @@ class FlightEntity(db.Model):
             departure_airport=self.departure_airport.to_dto(),
             arrival_airport=self.arrival_airport.to_dto(),
             flight_time_minutes=self.flight_time_minutes,
+            seat_configuration_id=self.seat_configuration.guid,
             layover=self.layover.to_dto() if self.layover else None
         )
 
@@ -54,6 +59,13 @@ class FlightEntity(db.Model):
                 arrival_airport = AirportEntity.from_dto(dto.arrival_airport)
                 db.session.add(arrival_airport)
                 
+        # Check for flight seat configuration and create it if it doesn't exist
+        seat_config = FlightSeatsEntity.query.filter_by(flight_id=dto.guid).first()
+        if not seat_config:
+            seat_config = FlightSeatsEntity(guid=str(uuid.uuid4()), flight_id=dto.guid)
+            seat_config.generate_seat_configuration()
+            db.session.add(seat_config)
+                
         # Check for layover and create it if it doesn't exist
         layover = None
         if dto.layover:
@@ -68,7 +80,8 @@ class FlightEntity(db.Model):
             airline=airline,
             departure_airport=departure_airport,
             arrival_airport=arrival_airport,
-            flight_time_minutes=dto.flight_time_minutes
+            flight_time_minutes=dto.flight_time_minutes,
+            seat_configuration= seat_config 
         )
 
         if layover:
