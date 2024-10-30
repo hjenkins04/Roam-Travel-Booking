@@ -7,12 +7,12 @@ import HumpButton from "@/components/Buttons/HumpButton";
 
 import SearchBoxButtonSkeleton from "@/components/SearchBoxButtonSkeleton";
 
-const SearchBoxSkeletonLoader: React.FC = () => {
+const SearchResultBoxSkeletonLoader: React.FC = () => {
   return (
     <>
-      <div className="flex flex-col items-center justify-center relative">
+      <div className=" flex flex-col items-start relative" >
         {/* Toggle Button Container */}
-        <div className="relative flex -mb-0.5 justify-center items-center">
+        <div className="relative flex ml-3 -mb-0.5 justify-center items-center">
           <HumpButton
             primaryColor="#FF9A2A"
             secondaryColor="#FFFFFF"
@@ -76,21 +76,10 @@ const SearchBoxSkeletonLoader: React.FC = () => {
               </PopoverTrigger>
             </Popover>
           </SearchBoxButtonList>
-
-          {/* Search Button */}
-          <div className="flex justify-center pt-6 relative">
-            <Button
-              onClick={() => {}}
-              className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2"
-            >
-              <span>Search Flights</span>
-              <Search className="w-5 h-5 text-white" />
-            </Button>
-          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default SearchBoxSkeletonLoader;
+export default SearchResultBoxSkeletonLoader;

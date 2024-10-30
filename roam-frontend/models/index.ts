@@ -2,3 +2,8 @@ export * from "./continent";
 export * from "./country";
 export * from "./location";
 export * from "./airport";
+export * from "./airline";
+export * from "./flight";
+export * from "./layover";
+export * from "./flight_search";
+export * from "./filter_options";

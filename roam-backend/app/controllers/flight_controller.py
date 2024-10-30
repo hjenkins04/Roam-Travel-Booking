@@ -58,8 +58,8 @@ def get_flights_by_airline_id(airline_id: str) -> Response:
     flight_list = [flight.to_dto().to_dict() for flight in flights]
     return jsonify(flight_list), 200
 
-@flight_bp.route('/api/flights/search', methods=['GET'])
-def get_flights_by_destination_id() -> Response:
+@flight_bp.route('/api/flights/search', methods=['POST'])
+def get_flights_by_search_query() -> Response:
     data = request.json
     flight_search_dto = FlightSearchDTO(
         departure_airport_id=data.get('departure_airport_id'),

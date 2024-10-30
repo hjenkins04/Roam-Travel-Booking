@@ -1,31 +1,10 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  CalendarIcon,
-  UserIcon,
-  Users,
-  PlusIcon,
-  MinusIcon,
-  ChevronDown,
-  Search,
-  ArrowLeftRight,
-  PlaneTakeoff,
-  PlaneLanding,
-} from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search, ArrowLeftRight, PlaneTakeoff, PlaneLanding } from "lucide-react";
 import SearchBoxButtonList from "@/components/SearchBoxButtonList";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
@@ -276,7 +255,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
                             : "Month"
                         }
                         size="w-[175px]"
-                        onClickMainButton={() => {}}
+                        onClickMainButton={() => { }}
                       />
                     </div>
                   </PopoverTrigger>
@@ -323,7 +302,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
                             : "Month"
                         }
                         size="w-[175px]"
-                        onClickMainButton={() => {}}
+                        onClickMainButton={() => { }}
                       />
                     </div>
                   </PopoverTrigger>
@@ -373,7 +352,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
                           : "Month"
                       }
                       size="w-[230px]"
-                      onClickMainButton={() => {}}
+                      onClickMainButton={() => { }}
                     />
                   </div>
                 </PopoverTrigger>
@@ -413,7 +392,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
                     mainTextRight={getPassengerTypeSummary()} // Summary of passenger types
                     subTextRight=""
                     size="w-[195px]"
-                    onClickMainButton={() => {}}
+                    onClickMainButton={() => { }}
                   />
                 </div>
               </PopoverTrigger>

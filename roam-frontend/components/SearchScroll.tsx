@@ -3,21 +3,19 @@ import SearchItem from "@/components/SearchItem";
 import SearchResultExpansion from "@/components/SearchResultExpansion";
 import flightData from "@/public/data/flightData";
 import { FlightDetailsProps } from "@/public/data/flightDetails";
-import { getTimeCategory } from "@/components/HelperFunctions/timeFilter";
-import { getNumStops } from "@/components/HelperFunctions/numStopsFilter";
+import { getTimeCategory } from "@/components/HelperFunctions/TimeFilter";
+import { getNumStops } from "@/components/HelperFunctions/NumStopsFilter";
 
-type FilterOptions = {
-  maxPrice: string | null;
-  stops: string | null;
-  arrivalTime: string | null;
-  departureTime: string | null;
-  airline: string | null;
-};
+import { Flight, FilterOptions } from "@/models"
 
-const SearchScroll: React.FC<{ filters: FilterOptions }> = ({ filters }) => {
-  const [selectedFlight, setSelectedFlight] = useState<
-    FlightDetailsProps["flight"] | null
-  >(null);
+
+interface SearchScrollProps {
+  filters: FilterOptions;
+  flights: Flight[];
+}
+
+const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
+  const [selectedFlight, setSelectedFlight] = useState<FlightDetailsProps["flight"] | null>(null);
 
   const filterFlights = () => {
     return flightData.filter((flight) => {
