@@ -13,11 +13,12 @@ import { useRouter } from "next/navigation";
 import { useSearchContext } from "@/context/SearchContext";
 import { Airport } from "@/models";
 
-interface SearchBoxProps {
+interface SearchResultBoxProps {
   airports: Airport[];
+  UpdatedFlightsSearch: (departureAirportId: string, arrivalAirportId: string) => Promise<void>;
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
+const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlightsSearch }) => {
   const { searchData, setSearchData } = useSearchContext();
   const router = useRouter();
 
@@ -30,6 +31,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
           ? null
           : prev.arrivalAirport, // Reset arrival if same
     }));
+    // Call UpdatedFlightsSearch to updated the displayed results
+    if (value.guid && searchData.arrivalAirport?.guid) {
+      UpdatedFlightsSearch(value.guid, searchData.arrivalAirport.guid);
+    }
   };
 
   const handleArrivalChange = (value: Airport) => {
@@ -41,6 +46,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
           ? null
           : prev.departureAirport, // Reset departure if same
     }));
+    // Call UpdatedFlightsSearch to updated the displayed results
+    if (searchData.departureAirport?.guid && value.guid) {
+      UpdatedFlightsSearch(searchData.departureAirport.guid, value.guid);
+    }
   };
 
   const swapAirports = () => {
@@ -92,10 +101,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
     if (allBusiness) return "Business";
     if (allEconomy) return "Economy";
     return "Mixed";
-  };
-
-  const handleButtonClick = () => {
-    router.push("/search-results");
   };
 
   return (
@@ -453,4 +458,4 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
   );
 };
 
-export default SearchBox;
+export default SearchResultBox;

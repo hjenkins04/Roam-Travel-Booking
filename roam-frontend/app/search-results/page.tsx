@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useCallback } from "react";
 import Header from "@/components/Header";
 import SearchResultBox from "@/components/SearchResultBox";
 import FilterBox from "@/components/FilterBox";
@@ -24,6 +24,7 @@ function SearchResultsContent() {
   });
 
   const [loading, setLoading] = useState(true);
+  const [resultsLoading, setResultsLoading] = useState(true);
   const [airports, setAirports] = useState<Airport[]>([]);
   const [flights, setFlights] = useState<Flight[]>([]);
   const { searchData, setSearchData } = useSearchContext();
@@ -31,6 +32,26 @@ function SearchResultsContent() {
   const handleFilterChange = (newFilters: FilterOptions) => {
     setFilters(newFilters);
   };
+
+  // Used only by child SearchResultBox
+  const UpdatedFlightsSearch = useCallback(
+    async (departureAirportId: string, arrivalAirportId: string) => {
+      try {
+        setResultsLoading(true);
+        const searchQuery: FlightSearch = {
+          departure_airport_id: departureAirportId,
+          arival_airport_id: arrivalAirportId,
+        };
+        const flightsData = await fetchFlightsBySearchQuery(searchQuery);
+        setFlights(flightsData);
+      } catch (error) {
+        console.error("Error fetching flights:", error);
+      } finally {
+        setResultsLoading(false);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     const fetchAirportsAndFlights = async () => {
@@ -74,7 +95,7 @@ function SearchResultsContent() {
           <div className="relative w-full max-w-screen-xl z-10 py-6" style={{ transform: "scale(0.75)", transformOrigin: "left", paddingTop: "40px" }}>
             <Suspense fallback={<SearchResultBoxSkeletonLoader/>}>
               {!loading ? (
-                <SearchResultBox airports={[]} />
+                <SearchResultBox airports={airports} UpdatedFlightsSearch={UpdatedFlightsSearch} />
               ) : (
                 <SearchResultBoxSkeletonLoader />
               )}
@@ -85,8 +106,8 @@ function SearchResultsContent() {
           </div>
           <div className="relative w-full h-full z-2" style={{ marginTop: "10px" }}>
             <Suspense fallback={<SearchScrollSkeletonLoader/>}>
-              {!loading ? (
-                <SearchScroll filters={filters} flights={[]}/>
+              {!loading || !resultsLoading ? (
+                <SearchScroll filters={filters} flights={flights}/>
               ) : (
                 <SearchScrollSkeletonLoader />
               )}

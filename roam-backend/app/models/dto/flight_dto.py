@@ -4,27 +4,41 @@ from app.models.dto.airport_dto import AirportDTO
 from app.models.dto.layover_dto import LayoverDTO
 
 class FlightDTO:
-    def __init__(self, guid: str, airline: Union[Dict, AirlineDTO], departure_airport: Union[Dict, AirportDTO],
+    def __init__(self, guid: str, departure_time: str, arrival_time: str, num_stops: int,
+                 price_economy: float, price_business:float, baggage_allowance: str,
+                 airline: Union[Dict, AirlineDTO], departure_airport: Union[Dict, AirportDTO],
                  arrival_airport: Union[Dict, AirportDTO], flight_time_minutes: int,
                  seat_configuration_id: str = None,
                  layover: Optional[Union[Dict, LayoverDTO]] = None,) -> None:
         self.guid = guid
+        self.flight_time_minutes = flight_time_minutes
+        self.departure_time = departure_time
+        self.arrival_time = arrival_time
+        self.num_stops = num_stops
+        self.price_economy = price_economy
+        self.price_business = price_business
+        self.baggage_allowance = baggage_allowance
         self.airline = self.create_airline_dto(airline)
         self.departure_airport = self.create_airport_dto(departure_airport)
         self.arrival_airport = self.create_airport_dto(arrival_airport)
-        self.flight_time_minutes = flight_time_minutes
         self.layover = self.create_layover_dto(layover)
         self.seat_configuration_id = seat_configuration_id
 
     def to_dict(self) -> Dict[str, Optional[Dict]]:
         return {
             "guid": self.guid,
+            "flight_time_minutes": self.flight_time_minutes,
+            "departure_time": self.departure_time,
+            "arrival_time": self.arrival_time,
+            "num_stops": self.num_stops,
+            "price_economy": self.price_economy,
+            "price_business": self.price_business,
+            "baggage_allowance": self.baggage_allowance,
             "airline": self.airline.to_dict() if self.airline else None,
             "departure_airport": self.departure_airport.to_dict() if self.departure_airport else None,
             "arrival_airport": self.arrival_airport.to_dict() if self.arrival_airport else None,
-            "flight_time_minutes": self.flight_time_minutes,
+            "layover": self.layover.to_dict() if self.layover else None,
             "seat_configuration_id": self.seat_configuration_id,
-            "layover": self.layover.to_dict() if self.layover else None
         }
 
     def create_airline_dto(self, airline: Union[Dict, AirlineDTO]) -> AirlineDTO:

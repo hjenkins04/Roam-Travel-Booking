@@ -11,6 +11,12 @@ class FlightEntity(db.Model):
     __tablename__ = 'flights'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     flight_time_minutes: int = db.Column(db.Integer, nullable=False)  # Flight duration in minutes
+    departure_time: str = db.Column(db.String(5), nullable=False)  # Time in HH:MM format
+    arrival_time: str = db.Column(db.String(5), nullable=False)  # Time in HH:MM format
+    num_stops: int = db.Column(db.Integer, nullable=True)
+    price_economy: float = db.Column(db.Float, nullable=False)
+    price_business: float = db.Column(db.Float, nullable=True)
+    baggage_allowance: str = db.Column(db.String(50), nullable=False)
     
     # Foreign keys
     airline_id: str = db.Column(db.String(36), db.ForeignKey('airlines.guid'), nullable=False)
@@ -28,12 +34,18 @@ class FlightEntity(db.Model):
     def to_dto(self) -> FlightDTO:
         return FlightDTO(
             guid=self.guid,
+            flight_time_minutes=self.flight_time_minutes,
+            departure_time=self.departure_time,
+            arrival_time=self.arrival_time,
+            num_stops=self.num_stops,
+            price_economy=self.price_economy,
+            price_business=self.price_business,
+            baggage_allowance=self.baggage_allowance,
             airline=self.airline.to_dto(),
             departure_airport=self.departure_airport.to_dto(),
             arrival_airport=self.arrival_airport.to_dto(),
-            flight_time_minutes=self.flight_time_minutes,
-            seat_configuration_id=self.seat_configuration.guid,
-            layover=self.layover.to_dto() if self.layover else None
+            layover=self.layover.to_dto() if self.layover else None,
+            seat_configuration_id=self.seat_configuration.guid if self.seat_configuration else None
         )
 
     @staticmethod
@@ -77,10 +89,16 @@ class FlightEntity(db.Model):
 
         flight = FlightEntity(
             guid=dto.guid,
+            flight_time_minutes=dto.flight_time_minutes,
+            departure_time=dto.departure_time,
+            arrival_time=dto.arrival_time,
+            num_stops=dto.num_stops,
+            price_economy=dto.price_economy,
+            price_business=dto.price_business,
+            baggage_allowance=dto.baggage_allowance,
             airline=airline,
             departure_airport=departure_airport,
             arrival_airport=arrival_airport,
-            flight_time_minutes=dto.flight_time_minutes,
             seat_configuration= seat_config 
         )
 

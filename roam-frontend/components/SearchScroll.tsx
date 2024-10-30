@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import SearchItem from "@/components/SearchItem";
 import SearchResultExpansion from "@/components/SearchResultExpansion";
-import flightData from "@/public/data/flightData";
-import { FlightDetailsProps } from "@/public/data/flightDetails";
 import { getTimeCategory } from "@/components/HelperFunctions/TimeFilter";
 import { getNumStops } from "@/components/HelperFunctions/NumStopsFilter";
 
-import { Flight, FilterOptions } from "@/models"
+import { SearchProvider, useSearchContext } from "@/context/SearchContext";
+
+import { Flight, FilterOptions, getPriceByPassengerType } from "@/models"
+import flightData from "@/public/data/flightData";
 
 
 interface SearchScrollProps {
@@ -15,31 +16,30 @@ interface SearchScrollProps {
 }
 
 const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
-  const [selectedFlight, setSelectedFlight] = useState<FlightDetailsProps["flight"] | null>(null);
+  const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
+  const { searchData, setSearchData } = useSearchContext();
 
   const filterFlights = () => {
-    return flightData.filter((flight) => {
+    return flights.filter((flight) => {
       const priceCheck =
-        !filters.maxPrice ||
-        parseInt(flight.price.replace("$", "")) <=
-          parseInt(filters.maxPrice.replace("$", ""));
+        !filters.maxPrice || getPriceByPassengerType(searchData.seatTypeMapping, flight) <= parseInt(filters.maxPrice.replace("$", ""));
       const stopsCheck =
-        !filters.stops || getNumStops(flight.numStops) === filters.stops;
+        !filters.stops || String(flight.num_stops) === filters.stops;
       const arrivalCheck =
         !filters.arrivalTime ||
-        getTimeCategory(flight.arrivalTime) === filters.arrivalTime;
+        getTimeCategory(flight.arrival_time) === filters.arrivalTime;
       const departureCheck =
         !filters.departureTime ||
-        getTimeCategory(flight.departureTime) === filters.departureTime;
-      const airlineCheck =
-        !filters.airline || flight.airline === filters.airline;
+        getTimeCategory(flight.departure_time) === filters.departureTime;
+      // const airlineCheck =
+      //   !filters.airline || flight.airline === filters.airline;
 
       return (
         priceCheck &&
         stopsCheck &&
         arrivalCheck &&
-        departureCheck &&
-        airlineCheck
+        departureCheck //&&
+        //airlineCheck
       );
     });
   };
@@ -57,21 +57,8 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
           filteredFlights.map((flight, index) => (
             <SearchItem
               key={index}
-              {...flight}
-              onClick={() =>
-                setSelectedFlight({
-                  outgoingAirport: flight.outgoingAirport,
-                  incomingAirport: flight.incomingAirport,
-                  outgoingAirportName: flight.outgoingAirportName,
-                  incomingAirportName: flight.incomingAirportName,
-                  tripLength: flight.tripLength,
-                  price: flight.price,
-                  airline: flight.airline,
-                  flightDate: flight.flightDate,
-                  time: `${flight.departureTime} - ${flight.arrivalTime}`,
-                  baggageAllowance: flight.baggageAllowance,
-                })
-              }
+              flight={flight}
+              onClick={() => setSelectedFlight(flight)}
             />
           ))
         )}
