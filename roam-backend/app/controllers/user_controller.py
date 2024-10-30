@@ -27,6 +27,18 @@ def get_users() -> Response:
     user_list = [user.to_dict() for user in users]
     return jsonify(user_list), 200
 
+@user_bp.route('/api/users/<string:guid>', methods=['PATCH'])
+def update_user(guid: str) -> Response:
+    data = request.json
+    try:
+        if data.get('guid') != guid:
+            return jsonify({"error": "Guid mismatch"}), 400
+        UserService.update_user(guid=data.get('guid'), email=data.get('email'), phone=data.get('phone'), first_name=data.get('first_name'), last_name=data.get('last_name'), password=data.get('password'))
+        return jsonify({"message": "User updated successfully"}), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception:
+        return jsonify({"error": "Internal Server Error"}), 500
 
 @user_bp.route('/api/users/<uuid:user_id>', methods=['GET'])
 def get_user_by_id(user_id: uuid) -> Response:
@@ -55,8 +67,6 @@ def check_email_exists() -> Response:
         return jsonify({"error": "Email parameter is required"}), 400
     exists = UserService.email_exists(email)
     return jsonify({"exists": exists}), 200
-
-
 
 @user_bp.route('/api/users/protected', methods=['GET'])
 @token_required

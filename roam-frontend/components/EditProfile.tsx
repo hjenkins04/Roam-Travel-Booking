@@ -5,16 +5,46 @@ import { Button } from "@/components/ui/button";
 // Define props interface for the EditProfile component
 interface EditProfileProps {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  firstName: string;
+  setFirstName: React.Dispatch<React.SetStateAction<string>>;
+  lastName: string;
+  setLastName: React.Dispatch<React.SetStateAction<string>>;
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  phoneNumber: string;
+  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const EditProfile: React.FC<EditProfileProps> = ({ handleSubmit }) => {
+const EditProfile: React.FC<EditProfileProps> = ({
+  handleSubmit,
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  email,
+  setEmail,
+  phoneNumber,
+  setPhoneNumber,
+}) => {
   return (
     <form onSubmit={handleSubmit} data-testid="form">
       {/* Name input section */}
       <section className="flex flex-row gap-6 self-stretch mt-5 text-lg">
-        <Input name="firstName" placeholder="First Name*" required />
+        <Input
+          name="firstName"
+          placeholder="First Name*"
+          required
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
         <Input name="middleName" placeholder="Middle" />
-        <Input name="lastName" placeholder="Last Name*" required />
+        <Input
+          name="lastName"
+          placeholder="Last Name*"
+          required
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
       </section>
 
       {/* Suffix and Date of Birth section */}
@@ -35,8 +65,17 @@ const EditProfile: React.FC<EditProfileProps> = ({ handleSubmit }) => {
           placeholder="Email Address*"
           type="email"
           required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <Input name="phone" placeholder="Phone Number*" type="tel" required />
+        <Input
+          name="phone"
+          placeholder="Phone Number*"
+          type="tel"
+          required
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+        />
       </section>
 
       {/* Address section */}

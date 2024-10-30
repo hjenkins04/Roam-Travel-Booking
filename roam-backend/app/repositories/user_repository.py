@@ -12,6 +12,24 @@ class UserRepository:
         db.session.commit()
 
     @staticmethod
+    def update_user(guid: uuid.UUID, email: Optional[str] = None, phone: Optional[str] = None,
+                    first_name: Optional[str] = None, last_name: Optional[str] = None, password: Optional[str] = None) -> None:
+        user = UserRepository.find_by_id(guid)
+        if not user:
+            raise ValueError("User not found.")
+        if email: 
+            user.email = email
+        if phone: 
+            user.phone = phone
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+        if password:
+            user.set_password(password)
+        db.session.commit()
+
+    @staticmethod
     def get_all() -> List[UserEntity]:
         """Retrieve all users from the database."""
         return UserEntity.query.all()
@@ -22,14 +40,14 @@ class UserRepository:
         return UserEntity.query.filter_by(email=email).first()
     
     @staticmethod
-    def find_by_id(user_id: uuid) -> Optional[UserEntity]:
+    def find_by_id(guid: uuid) -> Optional[UserEntity]:
         """Find a user by their unique ID."""
-        return UserEntity.query.filter_by(id=user_id).first()
+        return UserEntity.query.filter_by(guid=guid).first()
     
     @staticmethod
-    def delete_user(user_id: uuid) -> bool:
+    def delete_user(guid: uuid) -> bool:
         """Delete a user by their ID."""
-        user = UserRepository.find_by_id(user_id)
+        user = UserRepository.find_by_id(guid)
         if user:
             db.session.delete(user)
             db.session.commit()
