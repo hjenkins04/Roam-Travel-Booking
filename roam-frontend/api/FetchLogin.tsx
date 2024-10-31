@@ -8,7 +8,10 @@ export async function fetchLogin(): Promise<LoginResponse> {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: "user@email.com", password: "password" }),
+      body: JSON.stringify({
+        email: "update@email.com",
+        password: "password123",
+      }),
     }
   );
   if (!response.ok) {

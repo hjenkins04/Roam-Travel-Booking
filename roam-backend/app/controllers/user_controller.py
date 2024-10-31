@@ -11,6 +11,9 @@ user_bp = Blueprint('user', __name__)
 def add_user() -> Response:
     data = request.json
     try:
+        if 'password' not in data:
+            return jsonify({"error": "Password is required"}), 400
+            
         user_dto = UserDTO.from_dict(data)
         UserService.create_user(user_dto)
         return jsonify({"message": "User created successfully"}), 201

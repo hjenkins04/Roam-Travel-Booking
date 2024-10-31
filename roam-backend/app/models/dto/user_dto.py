@@ -1,12 +1,13 @@
 from typing import List, Dict, Optional
 
 class UserDTO:
-    def __init__(self, guid: str, first_name: str, last_name: str, email: str, phone: Optional[str]) -> None:
+    def __init__(self, guid: str, first_name: str, last_name: str, email: str, phone: Optional[str], password: Optional[str] = None) -> None:
         self.guid: str = guid
         self.first_name: str = first_name
         self.last_name: str = last_name
         self.email: str = email
         self.phone: Optional[str] = phone
+        self.password: Optional[str] = password
 
     def to_dict(self) -> Dict[str, str]:
         return {
@@ -24,5 +25,6 @@ class UserDTO:
             first_name=data["first_name"],
             last_name=data["last_name"],
             email=data["email"],
-            phone=data.get("phone")
+            phone=data.get("phone"),
+            password=data.get("password")
         )
