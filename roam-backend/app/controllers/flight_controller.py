@@ -61,10 +61,7 @@ def get_flights_by_airline_id(airline_id: str) -> Response:
 @flight_bp.route("/api/flights/search", methods=["POST"])
 def get_flights_by_search_query() -> Response:
     data = request.json
-    flight_search_dto = FlightSearchDTO(
-        departure_airport_id=data.get("departure_airport_id"),
-        arival_airport_id=data.get("arival_airport_id")
-    )
+    flight_search_dto = FlightSearchDTO.from_dict(data)
     flights = FlightService.get_flights_by_search_query(flight_search_dto)
     flight_list = [flight.to_dto().to_dict() for flight in flights]
     return jsonify(flight_list), 200
@@ -100,3 +97,16 @@ def get_flight_seats_by_id(guid: str) -> Response:
         return jsonify({"error": "Flight Seats not found"}), 404
     except Exception:
         return jsonify({"error": "Internal Server Error"}), 500
+    
+    
+@flight_bp.route("/api/flights/random", methods=["POST"])
+def get_random_flight() -> Response:
+    data = request.json
+    search_dto = FlightSearchDTO.from_dict(data)
+    
+    try:
+        flight = FlightService.get_random_flight(search_dto)
+        return jsonify(flight.to_dto().to_dict()), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+

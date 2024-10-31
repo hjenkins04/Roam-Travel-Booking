@@ -1,71 +1,64 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Popover, PopoverTrigger, PopoverContent, } from "@/components/ui/popover";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import SearchResultsOverviewBox from "@/components/SearchResultsOverviewBox";
 
+import { PassengerFormData, Passenger } from "@/models"
+
 interface SeatBookingFormProps {
-  groupSize: number;
-  namePlaceHolder: string;
-  seatNumber: number;
-  setPassengerName: (name: string) => void; // New prop to update passenger name
-  formRef: React.RefObject<HTMLFormElement>; // Ref for form submission
+  currentPassengerIndex: number;
+  firstPassengerData: Passenger;
+  setPassengerName: (name: string) => void;
+  formData: PassengerFormData;
+  updateFormData: (data: Partial<PassengerFormData>) => void;
+  onSubmit: () => void;
 }
 
 const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
+  currentPassengerIndex,
+  firstPassengerData,
   setPassengerName,
-  formRef,
+  formData,
+  updateFormData,
+  onSubmit
 }) => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    suffix: "",
-    dob: undefined as Date | undefined,
-    passportNumber: "",
-    email: "",
-    phoneNumber: "",
-    streetAddress: "",
-    aptNumber: "",
-    province: "",
-    zipCode: "",
-    emergencyFirstName: "",
-    emergencyLastName: "",
-    emergencyEmail: "",
-    emergencyPhoneNumber: "",
-    knownTravellerNumber: "",
-    sameAsPassenger: false,
-  });
-
-  // Update passengerName in the parent component when form data changes
   useEffect(() => {
-    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+    const fullName = `${formData.name} ${formData.last}`;
     setPassengerName(fullName);
-  }, [formData.firstName, formData.lastName, setPassengerName]);
+  }, [formData.name, formData.last, setPassengerName]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const { name, value } = e.target;
+    updateFormData({ [name]: name === "aptNumber" ? Number(value) : value });
   };
+  
 
-  const handleCheckboxChange = (checked: boolean | "indeterminate") => {
-    setFormData((prev) => ({
-      ...prev,
-      sameAsPassenger: checked === true, // Ensure boolean value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-  };
+  const handleCheckboxChange = (checked: boolean) => {
+    if (checked && currentPassengerIndex > 0) {
+      // Copy data from Passenger 1 if checked 
+      updateFormData({
+        sameAsPassenger: true,
+        emergName: firstPassengerData.emergName || "",
+        emergLast: firstPassengerData.emergLast || "",
+        emergEmail: firstPassengerData.emergEmail || "",
+        emergPhone: firstPassengerData.emergPhone || ""
+      });
+    } else {
+      // Clear fields if checkbox is unchecked
+      updateFormData({
+        sameAsPassenger: false,
+        emergName: "",
+        emergLast: "",
+        emergEmail: "",
+        emergPhone: ""
+      });
+    }
+  };  
 
   return (
     <>
@@ -77,91 +70,82 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             <AvatarFallback>Avatar</AvatarFallback>
           </Avatar>
         </div>
-        <form onSubmit={handleSubmit} ref={formRef} className="space-y-6 w-5/6">
+        <form className="space-y-6 w-5/6" onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>
           {/* Passenger Info */}
           <div className="flex items-start space-x-4">
-            <div>
-              <h2 className="text-xl font-semibold text-slate-500">
-                Passenger 1 (Adult)
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold text-slate-500">
+              Passenger {currentPassengerIndex + 1} (Adult)
+            </h2>
           </div>
 
-          {/* Form Grid */}
           <div className="grid grid-cols-3 gap-4">
             <Input
               placeholder="First name*"
-              name="firstName"
-              value={formData.firstName}
+              name="name"
+              value={formData.name || ""}
               onChange={handleInputChange}
               required
             />
             <Input
-              placeholder="Middle"
-              name="middleName"
-              value={formData.middleName}
+              placeholder="Middle name"
+              name="middle"
+              value={formData.middle || ""}
               onChange={handleInputChange}
             />
             <Input
               placeholder="Last name*"
-              name="lastName"
-              value={formData.lastName}
+              name="last"
+              value={formData.last || ""}
               onChange={handleInputChange}
-              required
             />
             <Input
-              placeholder="Suffix"
-              name="suffix"
-              value={formData.suffix}
+              placeholder="Prefix"
+              name="prefix"
+              value={formData.prefix || ""}
               onChange={handleInputChange}
             />
-
-            {/* Date Picker for Date of Birth */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <div className="relative">
-                  <Input
-                    type="text"
-                    placeholder="Date of birth*"
-                    name="dob"
-                    value={formData.dob ? format(formData.dob, "PPP") : ""}
-                    onChange={() => {}}
-                    required
-                    className="w-full h-full p-3 rounded-md border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    readOnly
-                  />
-                  <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                    <CalendarIcon className="text-gray-500 h-5 w-5" />
-                  </div>
-                </div>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={formData.dob} // selected now expects Date | undefined
-                  onSelect={(date) => setFormData({ ...formData, dob: date })}
-                  disabled={(date) =>
-                    date > new Date() || date < new Date("1900-01-01")
-                  }
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
           </div>
+
+           {/* Date Picker for Date of Birth */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className="relative">
+                <Input
+                  type="text"
+                  placeholder="Date of birth*"
+                  name="dob"
+                  value={formData.dob ? format(new Date(formData.dob), "PPP") : ""}
+                  readOnly
+                  required
+                />
+                <CalendarIcon className="absolute right-3 top-3 text-gray-500 h-5 w-5" />
+              </div>
+            </PopoverTrigger>
+            <PopoverContent>
+              <Calendar
+                mode="single"
+                selected={formData.dob ? new Date(formData.dob) : undefined}
+                onSelect={(date) => {
+                  if (date) {
+                    updateFormData({ dob: date });
+                  }
+                }}
+              />
+            </PopoverContent>
+          </Popover>
 
           {/* Passport and Contact Info */}
           <div className="grid grid-cols-2 gap-4">
             <Input
               placeholder="Passport number*"
               name="passportNumber"
-              value={formData.passportNumber}
+              value={formData.passportNumber || ""}
               onChange={handleInputChange}
-              required
             />
             <Input
               placeholder="Known traveller number*"
               name="knownTravellerNumber"
-              value={formData.knownTravellerNumber}
+              value={formData.knownTravellerNumber || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -171,17 +155,15 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               type="email"
               placeholder="Email address*"
               name="email"
-              value={formData.email}
+              value={formData.email || ""}
               onChange={handleInputChange}
-              required
             />
             <Input
               type="tel"
               placeholder="Phone number*"
-              name="phoneNumber"
-              value={formData.phoneNumber}
+              name="phone"
+              value={formData.phone || ""}
               onChange={handleInputChange}
-              required
             />
           </div>
 
@@ -189,30 +171,27 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
           <Input
             placeholder="Street address*"
             name="streetAddress"
-            value={formData.streetAddress}
+            value={formData.streetAddress || ""}
             onChange={handleInputChange}
-            required
           />
           <div className="grid grid-cols-3 gap-4">
             <Input
               placeholder="Apt Number"
               name="aptNumber"
-              value={formData.aptNumber}
+              value={formData.aptNumber || ""}
               onChange={handleInputChange}
             />
             <Input
               placeholder="Province*"
               name="province"
-              value={formData.province}
+              value={formData.province || ""}
               onChange={handleInputChange}
-              required
             />
             <Input
               placeholder="Zip code*"
               name="zipCode"
-              value={formData.zipCode}
+              value={formData.zipCode || ""}
               onChange={handleInputChange}
-              required
             />
           </div>
 
@@ -224,9 +203,9 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             <div className="flex items-center space-x-2 mt-3">
               <Checkbox
                 id="sameAsPassenger"
-                name="sameAsPassenger"
-                checked={formData.sameAsPassenger}
-                onCheckedChange={handleCheckboxChange}
+                checked={Boolean(formData.sameAsPassenger)}
+                onCheckedChange={(checked) => handleCheckboxChange(checked === true)}
+                disabled={currentPassengerIndex === 0}
               />
               <label htmlFor="sameAsPassenger" className="text-slate-400">
                 Same as Passenger 1
@@ -237,35 +216,31 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <Input
               placeholder="First name*"
-              name="emergencyFirstName"
-              value={formData.emergencyFirstName}
+              name="emergName"
+              value={formData.emergName || ""}
               onChange={handleInputChange}
-              required={!formData.sameAsPassenger}
             />
             <Input
               placeholder="Last name*"
-              name="emergencyLastName"
-              value={formData.emergencyLastName}
+              name="emergLast"
+              value={formData.emergLast || ""}
               onChange={handleInputChange}
-              required={!formData.sameAsPassenger}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <Input
               type="email"
               placeholder="Email address*"
-              name="emergencyEmail"
-              value={formData.emergencyEmail}
+              name="emergEmail"
+              value={formData.emergEmail || ""}
               onChange={handleInputChange}
-              required={!formData.sameAsPassenger}
             />
             <Input
               type="tel"
               placeholder="Phone number*"
-              name="emergencyPhoneNumber"
-              value={formData.emergencyPhoneNumber}
+              name="emergPhone"
+              value={formData.emergPhone || ""}
               onChange={handleInputChange}
-              required={!formData.sameAsPassenger}
             />
           </div>
         </form>

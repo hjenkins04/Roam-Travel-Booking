@@ -1,4 +1,4 @@
-import { Airline, Airport, Layover } from "@/models";
+import { Airline, Airport, Layover, FlightSeatConfiguration } from "@/models";
 
 export interface Flight {
     guid: string;
@@ -13,6 +13,7 @@ export interface Flight {
     price_business: number;
     baggage_allowance: string;
     seat_configuration_id?: string;
+    seat_configuration: FlightSeatConfiguration | undefined;
     layover?: Layover;
 }
 

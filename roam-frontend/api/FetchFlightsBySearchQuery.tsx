@@ -1,9 +1,7 @@
 import React from "react";
 import { FlightSearch, Flight } from "@/models";
 
-export async function fetchFlightsBySearchQuery(
-  searchData: FlightSearch
-): Promise<Flight[]> {
+export async function fetchFlightsBySearchQuery(searchData: FlightSearch): Promise<Flight[]> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/flights/search`,
     {

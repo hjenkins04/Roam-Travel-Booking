@@ -1,44 +1,44 @@
-'use client';
+"use client";
 import React, { useState, useRef } from "react";
 import Airplane from "@/components/SeatSelection/Airplane";
 import BookingForm from "@/components/SeatBookingForm";
+import Header from "@/components/Header";
 import SeatBookingFormFooter from "@/components/SeatBookingFormFooter";
+import { useTripContext, TripProvider } from "@/context/TripContext";
 
-
-export default function SeatBooking() {
-
+export default function SeatBookingPage() {
+  const { setTripData } = useTripContext();
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
-
   const [passengerName, setPassengerName] = useState<string>("");
   const [groupSize] = useState<number>(1);
   const [isRoundTrip] = useState<boolean>(true);
   const [isFirstFlight, setIsFirstFlight] = useState<boolean>(true);
-  const [passengerIndex, setPassengerIndex] = useState<number>(0)
-
-  // Reference to the form element
+  const [passengerIndex, setPassengerIndex] = useState<number>(0);
+  const [formData, setFormData] = useState({ /* initial state */ });
   const formRef = useRef<HTMLFormElement | null>(null);
 
-
   const handleSeatClick = (seatNumber: number) => {
-    if (seatNumber === selectedSeat) {
-      setSelectedSeat(null);
-      return;
-    }
-    setSelectedSeat(seatNumber);
+    setSelectedSeat(seatNumber === selectedSeat ? null : seatNumber);
   };
 
-  // Handle form submission from the footer
+  const updateFormData = (data: any) => {
+    setFormData((prev) => ({ ...prev, ...data }));
+  };
+
   const handleFormSubmit = () => {
-    // First Flight Completed
-    if( passengerIndex == groupSize - 1 && isRoundTrip && isFirstFlight){
-      setPassengerIndex(0)
-      setIsFirstFlight(false)
-      setPassengerName("")
-    }
-    // Passange Completed
-    if ( passengerIndex != groupSize - 1){
-      setPassengerIndex(passengerIndex + 1)
-      setPassengerName("")
+    setTripData((prev) => {
+      const updatedPassengers = [...prev.trip.passengers];
+      updatedPassengers[passengerIndex] = { ...updatedPassengers[passengerIndex], ...formData };
+      return { ...prev, trip: { ...prev.trip, passengers: updatedPassengers } };
+    });
+
+    if (passengerIndex === groupSize - 1 && isRoundTrip && isFirstFlight) {
+      setPassengerIndex(0);
+      setIsFirstFlight(false);
+      setPassengerName("");
+    } else if (passengerIndex < groupSize - 1) {
+      setPassengerIndex(passengerIndex + 1);
+      setPassengerName("");
     }
 
     if (formRef.current) {
@@ -47,35 +47,24 @@ export default function SeatBooking() {
   };
 
   return (
-      <div className="relative flex overflow-hidden z-20 bg-neutral-50" style={{ height: 'calc(100vh - 150px)'}}>
-        {/* Airplane Component */}
-        <div
-          className={`relative transition-all duration-300 ease-in-out overflow-hidden ${
-            selectedSeat ? "w-2/4" : "w-full"
-          }`}
-          style={{ height: "100%", overflow: "hidden" }}
-          data-testid={"airplane-column"}
-        >
-          <div className="relative w-full h-full cursor-grab active:cursor-grabbing" data-testid={"airplane-svg"}>
+    <TripProvider>
+      <div className="relative">
+        <Header headerSize={"small"} backgroundImage logoColour={"black"} displayProfilePicture />
+        <div className="relative flex overflow-hidden z-20 bg-neutral-50" style={{ height: "calc(100vh - 150px)" }}>
+          <div className={`relative ${selectedSeat ? "w-2/4" : "w-full"}`} style={{ height: "100%" }}>
             <Airplane onSeatClick={handleSeatClick} />
           </div>
-        </div>
 
-        {/* Booking Form */}
-        {selectedSeat && (
-          <div className="absolute right-0 w-4/7 h-full bg-white shadow-lg transition-opacity duration-300 ease-in-out opacity-100 flex flex-col justify-between" data-testid={"booking-form-column"}>
-            <div className="p-8 flex-1 overflow-auto" data-testid={"booking-form"}>
-              <BookingForm
-                groupSize={groupSize}
-                namePlaceHolder={passengerName}
-                seatNumber={selectedSeat}
-                setPassengerName={setPassengerName}
-                formRef={formRef}
-              />
-            </div>
-
-            {/* Booking Form Footer */}
-            <div className="bg-gray-200 p-4" data-testid={"booking-form-footer"}>
+          {selectedSeat && (
+            <div className="absolute right-0 w-4/7 h-full bg-white shadow-lg flex flex-col justify-between">
+              <div className="p-8 flex-1 overflow-auto">
+                <BookingForm
+                  currentPassengerIndex={passengerIndex}
+                  setPassengerName={setPassengerName}
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              </div>
               <SeatBookingFormFooter
                 passengerName={passengerName}
                 seatNumber={selectedSeat}
@@ -89,8 +78,9 @@ export default function SeatBooking() {
                 onContinue={handleFormSubmit}
               />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
+    </TripProvider>
   );
 }

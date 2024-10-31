@@ -2,8 +2,8 @@ import React from "react";
 import { Check } from "lucide-react";
 
 // Define seat types
-export type SeatState = "loading" | "taken" | "available" | "selected";
-export type SeatType = "business" | "economy";
+export type PossibleSeatStates = "loading" | "taken" | "available" | "selected" | "reserved";
+export type PossibleSeatTypes = "business" | "economy";
 
 // Interface for seat properties
 export interface SeatProps {
@@ -13,8 +13,8 @@ export interface SeatProps {
   width: number;
   height: number;
   rx: number;
-  seatType: SeatType;
-  seatState: SeatState;
+  seatType: PossibleSeatTypes;
+  seatState: PossibleSeatStates;
   onSeatClick: (id: number) => void;
   areSeatsInitialized: boolean; // Add this as a prop to manage initialization state
 }
@@ -22,12 +22,13 @@ export interface SeatProps {
 // Color determination function
 const getFillColor = (
   seatType: "business" | "economy",
-  seatState: SeatState,
+  seatState: PossibleSeatStates,
   areSeatsInitialized: boolean
 ) => {
   if (seatState === "loading" || !areSeatsInitialized) {
     return "#cccccc"; // Default gray if seats aren't initialized
   }
+  if (seatState === "reserved") return "#007bff";
   if (seatType === "business") {
     return seatState === "available"
       ? "#E15454" // available (red) for business

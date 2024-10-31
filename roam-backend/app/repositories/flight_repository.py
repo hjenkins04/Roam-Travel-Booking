@@ -1,5 +1,6 @@
 from typing import List, Optional
 from app import db
+import uuid
 from app.models.entities.flight_entity import FlightEntity
 from app.models.entities.flight_seats_entity import FlightSeatsEntity
 from app.models.dto.flight_dto import FlightDTO
@@ -68,3 +69,14 @@ class FlightRepository:
     def get_seat_configuration_by_id(seat_configuration_id: str) -> Optional[FlightSeatsEntity]:
         """Retrieve seat configuration by its own ID."""
         return FlightSeatsEntity.query.filter_by(guid=seat_configuration_id).first()
+    
+    @staticmethod
+    def create_random_seat_configuration(flight_id: str) -> FlightSeatsEntity:
+        """
+        Create a random seat configuration for a given flight ID.
+        """
+        seat_config = FlightSeatsEntity(guid=str(uuid.uuid4()), flight_id=flight_id)
+        seat_config.generate_seat_configuration()
+        db.session.add(seat_config)
+        
+        return seat_config

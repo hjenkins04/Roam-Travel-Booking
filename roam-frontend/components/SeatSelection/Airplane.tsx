@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Seat, { SeatState } from "@/components/SeatSelection/Seat";
+import Seat, { PossibleSeatStates } from "@/components/SeatSelection/Seat";
 import RowNumber from "@/components/SeatSelection/RowNumber";
 import Information from "@/components/SeatSelection/Information";
 import Draggable from "react-draggable";
@@ -9,67 +9,13 @@ const TOTAL_SEATS = 188;
 
 const Airplane = ({
   onSeatClick,
+  seatStates,
+  areSeatsInitialized
 }: {
   onSeatClick: (seatNumber: number) => void;
+  seatStates: { [id: number]: PossibleSeatStates };
+  areSeatsInitialized: boolean
 }) => {
-  // Initialize all seat states to "loading" immediately
-  const initialSeatStates = Array.from({ length: TOTAL_SEATS }, (_, i) => ({
-    [i + 1]: "loading" as SeatState,
-  })).reduce((acc, curr) => ({ ...acc, ...curr }), {});
-
-  const [seatStates, setSeatStates] = useState<{ [id: number]: SeatState }>(
-    initialSeatStates
-  );
-  const [areSeatsInitialized, setAreSeatsInitialized] = useState(false);
-
-  // Generate random seats as booked or available
-  const generateSeatStates = () => {
-    const seatStates: { [id: number]: SeatState } = {};
-
-    const bookedPercentage = Math.floor(Math.random() * 60) + 20; // Random between 20% and 80%
-    const totalBookedSeats = Math.floor((bookedPercentage / 100) * TOTAL_SEATS);
-    const seatNumbers = Array.from({ length: TOTAL_SEATS }, (_, i) => i + 1);
-
-    const bookedSeats = new Set<number>();
-    while (bookedSeats.size < totalBookedSeats) {
-      const randomSeat = Math.floor(Math.random() * TOTAL_SEATS) + 1;
-      bookedSeats.add(randomSeat);
-    }
-
-    seatNumbers.forEach((seatNumber) => {
-      seatStates[seatNumber] = bookedSeats.has(seatNumber)
-        ? "taken"
-        : "available";
-    });
-
-    return seatStates;
-  };
-
-  useEffect(() => {
-    setSeatStates(generateSeatStates());
-    setAreSeatsInitialized(true);
-  }, []);
-
-  const toggleSeatState = (id: number) => {
-    setSeatStates((prevState) => {
-      const newSeatStates: { [id: number]: SeatState } = {};
-
-      Object.keys(prevState).forEach((seatId) => {
-        const seatIdNumber = Number(seatId);
-        if (seatIdNumber === id && prevState[seatIdNumber] === "available") {
-          newSeatStates[seatIdNumber] = "selected";
-          onSeatClick(id);
-        } else if (prevState[seatIdNumber] === "selected") {
-          newSeatStates[seatIdNumber] = "available";
-          onSeatClick(id);
-        } else {
-          newSeatStates[seatIdNumber] = prevState[seatIdNumber];
-        }
-      });
-
-      return newSeatStates;
-    });
-  };
 
   return (
     <Draggable defaultPosition={{ x: -960, y: -800 }} axis="y">
@@ -102,7 +48,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[1]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -114,7 +60,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[2]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1210} y={649} rowText="1" />
@@ -127,7 +73,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[3]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -139,7 +85,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[4]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -152,7 +98,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[5]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -164,7 +110,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[6]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1210} y={713} rowText="2" />
@@ -177,7 +123,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[7]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -189,7 +135,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[8]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -202,7 +148,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[9]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -214,7 +160,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[10]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1210} y={778} rowText="3" />
@@ -227,7 +173,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[11]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -239,7 +185,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[12]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -252,7 +198,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[13]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -264,7 +210,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[14]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1210} y={835} rowText="4" />
@@ -277,7 +223,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[15]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -289,7 +235,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[16]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -302,7 +248,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[17]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -314,7 +260,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[18]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1210} y={898} rowText="5" />
@@ -327,7 +273,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[19]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -339,7 +285,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[20]}
             seatType="business"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
         </g>
@@ -366,7 +312,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[21]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -378,7 +324,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[22]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -390,7 +336,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[23]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={997} rowText="6" />
@@ -403,7 +349,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[24]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -415,7 +361,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[25]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -427,7 +373,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[26]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -440,7 +386,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[27]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -452,7 +398,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[28]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -464,7 +410,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[29]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1031} rowText="7" />
@@ -477,7 +423,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[30]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -489,7 +435,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[31]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -501,7 +447,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[32]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -514,7 +460,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[33]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -526,7 +472,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[34]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -538,7 +484,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[35]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1085} rowText="8" />
@@ -551,7 +497,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[36]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -563,7 +509,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[37]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -575,7 +521,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[38]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -588,7 +534,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[39]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -600,7 +546,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[40]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -612,7 +558,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[41]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1129} rowText="9" />
@@ -625,7 +571,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[42]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -637,7 +583,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[43]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -649,7 +595,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[44]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -662,7 +608,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[45]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -674,7 +620,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[46]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -686,7 +632,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[47]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1173} rowText="10" />
@@ -699,7 +645,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[48]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -711,7 +657,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[49]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -723,7 +669,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[50]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -736,7 +682,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[51]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -748,7 +694,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[52]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -760,7 +706,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[53]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1217} rowText="11" />
@@ -773,7 +719,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[54]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -785,7 +731,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[55]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -797,7 +743,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[56]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -810,7 +756,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[57]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -822,7 +768,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[58]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -834,7 +780,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[59]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1261} rowText="12" />
@@ -847,7 +793,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[60]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -859,7 +805,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[61]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -871,7 +817,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[62]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -884,7 +830,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[63]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -896,7 +842,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[64]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -908,7 +854,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[65]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1305} rowText="13" />
@@ -921,7 +867,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[66]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -933,7 +879,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[67]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -945,7 +891,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[68]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -960,7 +906,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[69]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -972,7 +918,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[70]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -984,7 +930,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[71]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1371} rowText="14" />
@@ -997,7 +943,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[72]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1009,7 +955,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[73]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1021,7 +967,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[74]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1034,7 +980,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[75]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1046,7 +992,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[76]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1058,7 +1004,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[77]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1415} rowText="15" />
@@ -1071,7 +1017,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[78]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1083,7 +1029,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[79]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1095,7 +1041,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[80]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1108,7 +1054,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[81]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1120,7 +1066,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[82]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1132,7 +1078,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[83]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1459} rowText="16" />
@@ -1145,7 +1091,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[84]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1157,7 +1103,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[85]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1169,7 +1115,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[86]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1182,7 +1128,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[87]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1194,7 +1140,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[88]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1206,7 +1152,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[89]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1503} rowText="17" />
@@ -1219,7 +1165,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[90]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1231,7 +1177,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[91]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1243,7 +1189,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[92]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1256,7 +1202,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[93]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1268,7 +1214,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[94]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1280,7 +1226,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[95]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1547} rowText="18" />
@@ -1293,7 +1239,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[96]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1305,7 +1251,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[97]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1317,7 +1263,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[98]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1332,7 +1278,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[99]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1344,7 +1290,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[100]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1356,7 +1302,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[101]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1613} rowText="19" />
@@ -1369,7 +1315,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[102]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1381,7 +1327,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[103]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1393,7 +1339,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[104]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1406,7 +1352,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[105]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1418,7 +1364,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[106]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1430,7 +1376,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[107]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1657} rowText="20" />
@@ -1443,7 +1389,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[108]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1455,7 +1401,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[109]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1467,7 +1413,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[110]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1480,7 +1426,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[111]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1492,7 +1438,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[112]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1504,7 +1450,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[113]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1701} rowText="21" />
@@ -1517,7 +1463,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[114]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1529,7 +1475,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[115]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1541,7 +1487,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[116]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1554,7 +1500,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[117]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1566,7 +1512,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[118]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1578,7 +1524,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[119]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1745} rowText="22" />
@@ -1591,7 +1537,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[120]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1603,7 +1549,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[121]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1615,7 +1561,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[122]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1628,7 +1574,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[123]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1640,7 +1586,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[124]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1652,7 +1598,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[125]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1789} rowText="23" />
@@ -1665,7 +1611,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[126]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1677,7 +1623,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[127]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1689,7 +1635,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[128]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1702,7 +1648,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[129]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1714,7 +1660,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[130]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1726,7 +1672,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[131]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1833} rowText="24" />
@@ -1739,7 +1685,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[132]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1751,7 +1697,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[133]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1763,7 +1709,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[134]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1776,7 +1722,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[135]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1788,7 +1734,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[136]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1800,7 +1746,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[137]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1877} rowText="25" />
@@ -1813,7 +1759,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[138]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1825,7 +1771,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[139]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1837,7 +1783,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[140]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1850,7 +1796,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[141]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1862,7 +1808,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[142]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1874,7 +1820,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[143]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1921} rowText="26" />
@@ -1887,7 +1833,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[144]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1899,7 +1845,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[145]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1911,7 +1857,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[146]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1924,7 +1870,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[147]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1936,7 +1882,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[148]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1948,7 +1894,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[149]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={1965} rowText="27" />
@@ -1961,7 +1907,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[150]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1973,7 +1919,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[151]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -1985,7 +1931,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[152]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -1998,7 +1944,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[153]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2010,7 +1956,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[154]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2022,7 +1968,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[155]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={2009} rowText="28" />
@@ -2035,7 +1981,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[156]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2047,7 +1993,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[157]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2059,7 +2005,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[158]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -2074,7 +2020,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[159]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2086,7 +2032,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[160]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2098,7 +2044,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[161]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={2075} rowText="29" />
@@ -2111,7 +2057,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[162]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2123,7 +2069,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[163]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2135,7 +2081,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[164]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -2148,7 +2094,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[165]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2160,7 +2106,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[166]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2172,7 +2118,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[167]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={2119} rowText="30" />
@@ -2185,7 +2131,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[168]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2197,7 +2143,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[169]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2209,7 +2155,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[170]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -2222,7 +2168,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[171]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2234,7 +2180,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[172]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2246,7 +2192,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[173]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={2163} rowText="31" />
@@ -2259,7 +2205,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[174]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2271,7 +2217,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[175]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2283,7 +2229,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[176]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -2296,7 +2242,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[177]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2308,7 +2254,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[178]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2320,7 +2266,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[179]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={2207} rowText="32" />
@@ -2333,7 +2279,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[180]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2345,7 +2291,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[181]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2357,7 +2303,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[182]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
 
@@ -2370,7 +2316,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[183]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2382,7 +2328,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[184]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2394,7 +2340,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[185]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <RowNumber x={1213} y={2251} rowText="33" />
@@ -2407,7 +2353,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[186]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2419,7 +2365,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[187]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
           <Seat
@@ -2431,7 +2377,7 @@ const Airplane = ({
             rx={4}
             seatState={seatStates[188]}
             seatType="economy"
-            onSeatClick={toggleSeatState}
+            onSeatClick={onSeatClick}
             areSeatsInitialized={areSeatsInitialized}
           />
         </g>
