@@ -79,7 +79,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
                     <SearchButton
                         mainText="Search"
                         onClick={applyFilters}
-                        className="bg-[#FF9A2A] border-[#FF9A2A] text-white"
+                        className="bg-[#FF9A2A] border-[#FF9A2A] text-white text-xl"
                     />
                 </FilterButtonGroup>
             </div>
