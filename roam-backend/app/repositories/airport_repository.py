@@ -7,40 +7,23 @@ from app.models.dto.airport_dto import AirportDTO
 class AirportRepository:
     @staticmethod
     def add(airport_dto: "AirportDTO") -> None:
-        """Add an airport to the database, creating and or linking the country, continent, and location as needed."""
-        # Convert DTO to AirportEntity and create or link associated entities if needed
+        print(f"Adding airport: {airport_dto}")  # Debug DTO being added
         airport_entity = AirportEntity.from_dto(airport_dto)
-        
-        db.session.add(airport_entity)
-        db.session.commit()
-        
+        print(f"Airport entity created: {airport_entity}")  # Debug entity content
+        try:
+            db.session.add(airport_entity)
+            db.session.commit()
+            print("Airport added successfully.")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Failed to add airport: {e}")  # Debug error on add
+
     @staticmethod
-    def get_all() -> List[AirportEntity]:
-        """Retrieve all airports from the database."""
-        return AirportEntity.query.all()
+    
 
     @staticmethod
     def get_by_guid(guid: str) -> Optional[AirportEntity]:
-        """Retrieve an airport by its GUID."""
-        return AirportEntity.query.filter_by(guid=guid).first()
-
-    @staticmethod
-    def find_by_iata_code(iata_code: str) -> Optional[AirportEntity]:
-        """Find an airport by its IATA code."""
-        return AirportEntity.query.filter_by(iata_code=iata_code).first()
-
-    @staticmethod
-    def find_by_country_code(country_code: str) -> List[AirportEntity]:
-        """Find all airports in a specific country using the country code."""
-        return AirportEntity.query.join(CountryEntity).filter(CountryEntity.code == country_code).all()
-
-    @staticmethod
-    def delete_airport(guid: str) -> bool:
-        """Delete an airport by its GUID."""
-        airport = AirportRepository.get_by_guid(guid)
-        if airport:
-            db.session.delete(airport)
-            db.session.commit()
-            return True
-        return False
-
+        print(f"Fetching airport by GUID: {guid}")  # Debug GUID
+        airport = AirportEntity.query.filter_by(guid=guid).first()
+        print(f"Fetched airport: {airport}")  # Debug fetched airport
+        return airport
