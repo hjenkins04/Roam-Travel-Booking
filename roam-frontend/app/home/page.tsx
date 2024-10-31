@@ -11,7 +11,9 @@ import { SearchProvider } from "@/context/SearchContext";
 
 import SearchBoxSkeletonLoader from "@/components/SearchBoxSkeletonLoader";
 import { fetchAirports } from "@/api/FetchAirports";
+import { fetchPopDestinations } from "@/api/FetchPopDestinations";
 import { Airport } from "@/models";
+import { PopularDestination } from "@/models/popular_destination";
 
 const TrendingLocationsHomeGrid = dynamic(
   () => import("@/components/TrendingLocationsHomeGrid"),
@@ -20,6 +22,7 @@ const TrendingLocationsHomeGrid = dynamic(
 
 export default function HomePage() {
   const [airports, setAirports] = useState<Airport[]>([]);
+  const [popularDestinations, setPopularDestinations] = useState<PopularDestination[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,7 +36,17 @@ export default function HomePage() {
         console.error("Error fetching airports:", error);
         setLoading(false);
       });
-  }, []);  
+
+    fetchPopDestinations()
+      .then((data: PopularDestination[]) => {
+        setPopularDestinations(data);
+        setLoading(false);
+      })
+      .catch((error: unknown) => {
+        console.error("Error fetching destinations:", error);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div className="relative min-h-screen">
@@ -59,8 +72,8 @@ export default function HomePage() {
 
         {/* Search Box (Center Overlap with Background) */}
         <div className="relative w-full max-w-6xl z-10 -top-14 py-10" style={{ paddingTop: "calc(50vh - 150px)" }} >
-        <SearchProvider>
-            <Suspense fallback={<SearchBoxSkeletonLoader/>}>
+          <SearchProvider>
+            <Suspense fallback={<SearchBoxSkeletonLoader />}>
               {!loading ? (
                 <SearchBox airports={airports} />
               ) : (
@@ -72,7 +85,7 @@ export default function HomePage() {
       </main>
 
       {/* Trending Locations Grid */}
-      <TrendingLocationsHomeGrid />
+      <TrendingLocationsHomeGrid destinations={popularDestinations} />
     </div>
   );
 }
