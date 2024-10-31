@@ -7,13 +7,12 @@ import SearchBox from "@/components/SearchBox";
 import LandingPageBackground from "@/components/Backgrounds/LandingPageBackground";
 import LandingPageText from "@/components/Text/LandingPageText";
 
+import { DestinationsProvider } from "@/context/DestinationContext"; // Import the provider
 import { SearchProvider } from "@/context/SearchContext";
 
 import SearchBoxSkeletonLoader from "@/components/SearchBoxSkeletonLoader";
 import { fetchAirports } from "@/api/FetchAirports";
-import { fetchPopDestinations } from "@/api/FetchPopDestinations";
 import { Airport } from "@/models";
-import { PopularDestination } from "@/models/popular_destination";
 
 const TrendingLocationsHomeGrid = dynamic(
   () => import("@/components/TrendingLocationsHomeGrid"),
@@ -22,7 +21,6 @@ const TrendingLocationsHomeGrid = dynamic(
 
 export default function HomePage() {
   const [airports, setAirports] = useState<Airport[]>([]);
-  const [popularDestinations, setPopularDestinations] = useState<PopularDestination[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,16 +32,6 @@ export default function HomePage() {
       })
       .catch((error: unknown) => {
         console.error("Error fetching airports:", error);
-        setLoading(false);
-      });
-
-    fetchPopDestinations()
-      .then((data: PopularDestination[]) => {
-        setPopularDestinations(data);
-        setLoading(false);
-      })
-      .catch((error: unknown) => {
-        console.error("Error fetching destinations:", error);
         setLoading(false);
       });
   }, []);
@@ -71,7 +59,7 @@ export default function HomePage() {
         </div>
 
         {/* Search Box (Center Overlap with Background) */}
-        <div className="relative w-full max-w-6xl z-10 -top-14 py-10" style={{ paddingTop: "calc(50vh - 150px)" }} >
+        <div className="relative w-full max-w-6xl z-10 -top-14 py-10" style={{ paddingTop: "calc(50vh - 150px)" }}>
           <SearchProvider>
             <Suspense fallback={<SearchBoxSkeletonLoader />}>
               {!loading ? (
@@ -84,8 +72,10 @@ export default function HomePage() {
         </div>
       </main>
 
-      {/* Trending Locations Grid */}
-      <TrendingLocationsHomeGrid destinations={popularDestinations} />
+      {/* Trending Locations Grid wrapped with DestinationsProvider */}
+      <DestinationsProvider>
+        <TrendingLocationsHomeGrid />
+      </DestinationsProvider>
     </div>
   );
 }
