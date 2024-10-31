@@ -6,7 +6,7 @@ from app.controllers.airport_controller import airport_bp
 from app.controllers.flight_controller import flight_bp
 from app.controllers.trip_controller import trip_bp
 from app.controllers.pop_destination_controller import destination_bp
-
+from app.controllers.airline_controller import airline_bp
 def register_blueprints(app: Flask) -> None:
     """Registers all blueprints to the app."""
     
@@ -16,3 +16,4 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(flight_bp)
     app.register_blueprint(trip_bp)
     app.register_blueprint(destination_bp)
+    app.register_blueprint(airline_bp)
