@@ -19,7 +19,11 @@ class AirportRepository:
             print(f"Failed to add airport: {e}")  # Debug error on add
 
     @staticmethod
-    
+    def get_all() -> List[AirportEntity]:
+        print("Fetching all airports...")  # Debug fetch start
+        airports = AirportEntity.query.all()
+        print(f"Fetched airports: {airports}")  # Debug fetched airports
+        return airports
 
     @staticmethod
     def get_by_guid(guid: str) -> Optional[AirportEntity]:
