@@ -7,7 +7,7 @@ class AirlineRepository:
     @staticmethod
     def add(airline_dto: "AirlineDTO") -> None:
         """Add an airport to the database, creating and or linking the country, continent, and location as needed."""
-        # Convert DTO to AirportEntity and create or link associated entities if needed
+        # Convert DTO to AirlineEntity and create or link associated entities if needed
         airline_entity = AirlineEntity.from_dto(airline_dto)
         
         db.session.add(airline_entity)
