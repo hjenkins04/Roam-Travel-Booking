@@ -48,7 +48,7 @@ def get_user_by_id(user_id: uuid.UUID) -> Response:
     except ValueError:
         return jsonify({"error": "User not found"}), 404
     except:
-        return jsonify({"error": "Internal Server Error"}), 500
+        return jsonify({"error": "Internal Server Error"}), 500 
 
 @user_bp.route('/api/users/<uuid:user_id>', methods=['DELETE'])
 def delete_user(user_id: uuid.UUID) -> Response:
