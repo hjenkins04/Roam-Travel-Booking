@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // Import necessary components and UI elements
 import ProfileHeader from "./ProfileHeader";
 import PurchaseItem from "./PurchaseItem";
@@ -17,6 +17,7 @@ import {
 import EditProfile from "./EditProfile";
 import { AuthProvider, useAuthContext } from "@/context/AuthContext";
 import { fetchUpdate } from "@/api/FetchUpdate";
+import { fetchUserInfo } from "@/api/FetchUserInfo";
 
 const ProfilePage: React.FC = () => {
   // State variables for managing profile editing and modals
@@ -28,6 +29,9 @@ const ProfilePage: React.FC = () => {
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const { authData, setAuthData } = useAuthContext();
+  const [firstNameProp, setFirstNameProp] = useState("");
+  const [lastNameProp, setLastNameProp] = useState("");
+  const [emailProp, setEmailProp] = useState("");
 
   // Event handlers for form submission and cancellation
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -39,6 +43,20 @@ const ProfilePage: React.FC = () => {
       console.error("Error updating profile:", error);
     }
   };
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const userInfo = await fetchUserInfo(authData.guid);
+        setFirstNameProp(userInfo.first_name);
+        setLastNameProp(userInfo.last_name);
+        setEmailProp(userInfo.email);
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+    getUserInfo();
+  }, []);
 
   const handleCancel = () => {
     setCancelModalOpen(true);
@@ -121,8 +139,8 @@ const ProfilePage: React.FC = () => {
             <div className="relative mt-[6%] w-[85%] ml-[-3%]">
               {/* Pass setEditProfile as a prop to ProfileHeader */}
               <ProfileHeader
-                name="User Fake"
-                email="user@email.com"
+                name={`${firstName} ${lastName}`}
+                email={email}
                 onEditProfile={() => setEditProfile(true)} // Set editProfile to true on click
               />
             </div>

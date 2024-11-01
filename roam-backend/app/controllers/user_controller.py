@@ -11,6 +11,9 @@ user_bp = Blueprint('user', __name__)
 def add_user() -> Response:
     data = request.json
     try:
+        if 'password' not in data:
+            return jsonify({"error": "Password is required"}), 400
+            
         user_dto = UserDTO.from_dict(data)
         UserService.create_user(user_dto)
         return jsonify({"message": "User created successfully"}), 201
@@ -45,7 +48,7 @@ def get_user_by_id(user_id: uuid.UUID) -> Response:
     except ValueError:
         return jsonify({"error": "User not found"}), 404
     except:
-        return jsonify({"error": "Internal Server Error"}), 500
+        return jsonify({"error": "Internal Server Error"}), 500 
 
 @user_bp.route('/api/users/<uuid:user_id>', methods=['DELETE'])
 def delete_user(user_id: uuid.UUID) -> Response:
