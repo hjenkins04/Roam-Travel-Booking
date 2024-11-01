@@ -42,9 +42,15 @@ class UserRepository:
         return UserEntity.query.filter_by(email=email).first()
     
     @staticmethod
-    def find_by_id(guid: uuid) -> Optional[UserEntity]:
+    def find_by_id(guid: uuid.UUID) -> Optional[UserEntity]:
         """Find a user by their unique ID."""
-        return UserEntity.query.filter_by(guid=guid).first()
+        try:
+            guid = str(guid)
+            user = UserEntity.query.filter_by(guid=guid).first()
+            return user
+        except ValueError as e:
+            print(f"Error converting GUID: {e}")
+            return None
     
     @staticmethod
     def delete_user(guid: uuid) -> bool:
