@@ -3,12 +3,30 @@ from app.models.dto.trip_dto import TripDTO
 from app.repositories.trip_repository import TripRepository
 from app.models.entities.trip_entity import TripEntity
 from app.models.entities.passenger_entity import PassengerEntity
+from app.services.flight_service import FlightService
 
 class TripService:
     @staticmethod
     def create_trip(trip_dto: TripDTO) -> TripEntity:
         """Create a new trip and add it to the database."""
         TripRepository.add(trip_dto)
+        
+        # Reserve Seats
+        for passenger in trip_dto.passengers:
+            if trip_dto.departing_flight:
+                departing_seats = FlightService.get_flight_seats_by_flight_id(trip_dto.departing_flight.guid)
+                if not departing_seats:
+                    departing_seats = FlightService.create_random_seat_configuration(trip_dto.departing_flight.guid)
+                    
+                FlightService.mark_seat_as_booked(departing_seats.guid, passenger.departing_seat_id)
+            
+            if trip_dto.returning_flight:
+                returning_seats = FlightService.get_flight_seats_by_flight_id(trip_dto.returning_flight.guid)
+                if not returning_seats:
+                    returning_seats = FlightService.create_random_seat_configuration(trip_dto.returning_flight.guid)
+                    
+                FlightService.mark_seat_as_booked(returning_seats.guid, passenger.returning_seat_id)   
+        
         return TripRepository.get_by_guid(trip_dto.guid)
 
     @staticmethod

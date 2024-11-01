@@ -1,89 +1,65 @@
-[
-    {
-        "airline": {
-            "guid": "ad316ccc-7633-4d07-8ee9-5507a56f5e58",
-            "icao_code": "ACA",
-            "logo_path": "/images/airline-logos/ACA.png",
-            "name": "Air Canada"
-        },
-        "arrival_airport": {
-            "continent": {
-                "code": "NA",
-                "guid": "4e55960e-88b6-4be0-9651-5d83941d62be",
-                "name": "North America"
-            },
-            "country": {
-                "code": "HI",
-                "guid": "ecb09c9b-17b8-4adf-a696-6d382ddace79",
-                "name": "Hawaii"
-            },
-            "full_name": "Daniel K. Inouye International Airport",
-            "guid": "67697700-f5bf-4b0a-9411-d55bfc1c3bc0",
-            "iata_code": "HNL",
-            "location": {
-                "guid": "40cc00ae-2744-472e-ba9f-eea32babb18f",
-                "latitude": 21.31932,
-                "longitude": -157.9254
-            },
-            "municipality_name": "Honolulu",
-            "short_name": "Daniel K. Inouye"
-        },
-        "departure_airport": {
-            "continent": {
-                "code": "NA",
-                "guid": "4e55960e-88b6-4be0-9651-5d83941d62be",
-                "name": "North America"
-            },
-            "country": {
-                "code": "CA",
-                "guid": "81367191-321a-4bd6-a23e-ff5f401f0bd5",
-                "name": "Canada"
-            },
-            "full_name": "Toronto Pearson International Airport",
-            "guid": "33ebf608-1949-4fc8-9ca0-b0a02ff83157",
-            "iata_code": "YYZ",
-            "location": {
-                "guid": "166f1ad8-438f-406d-96db-e18f6dde8b38",
-                "latitude": 41.67761,
-                "longitude": -79.63341
-            },
-            "municipality_name": "Mississauga",
-            "short_name": "Toronto Pearson"
-        },
-        "flight_time_minutes": 604,
-        "guid": "03ef5054-5b9a-4492-b418-453cfde908d6",
-        "layover": null
+
+{
+    "guid": "3a42a255-0b1a-48c0-92fc-61299fa91685",
+    "airline": {
+        "guid": "ad316ccc-7633-4d07-8ee9-5507a56f5e58",
+        "icao_code": "ACA",
+        "logo_path": "/images/airline-logos/ACA.png",
+        "name": "Air Canada"
     },
-    {
-        "airline": {
-            "guid": "ad316ccc-7633-4d07-8ee9-5507a56f5e58",
-            "icao_code": "ACA",
-            "logo_path": "/images/airline-logos/ACA.png",
-            "name": "Air Canada"
+    "departure_airport": {
+        "continent": {
+            "code": "NA",
+            "guid": "4e55960e-88b6-4be0-9651-5d83941d62be",
+            "name": "North America"
         },
-        "arrival_airport": {
-            "continent": {
-                "code": "NA",
-                "guid": "4e55960e-88b6-4be0-9651-5d83941d62be",
-                "name": "North America"
-            },
-            "country": {
-                "code": "HI",
-                "guid": "ecb09c9b-17b8-4adf-a696-6d382ddace79",
-                "name": "Hawaii"
-            },
-            "full_name": "Daniel K. Inouye International Airport",
-            "guid": "67697700-f5bf-4b0a-9411-d55bfc1c3bc0",
-            "iata_code": "HNL",
-            "location": {
-                "guid": "40cc00ae-2744-472e-ba9f-eea32babb18f",
-                "latitude": 21.31932,
-                "longitude": -157.9254
-            },
-            "municipality_name": "Honolulu",
-            "short_name": "Daniel K. Inouye"
+        "country": {
+            "code": "CA",
+            "guid": "81367191-321a-4bd6-a23e-ff5f401f0bd5",
+            "name": "Canada"
         },
-        "departure_airport": {
+        "full_name": "Toronto Pearson International Airport",
+        "guid": "33ebf608-1949-4fc8-9ca0-b0a02ff83157",
+        "iata_code": "YYZ",
+        "location": {
+            "guid": "166f1ad8-438f-406d-96db-e18f6dde8b38",
+            "latitude": 41.67761,
+            "longitude": -79.63341
+        },
+        "municipality_name": "Mississauga",
+        "short_name": "Toronto Pearson"
+    },
+    "arrival_airport": {
+        "continent": {
+            "code": "NA",
+            "guid": "4e55960e-88b6-4be0-9651-5d83941d62be",
+            "name": "North America"
+        },
+        "country": {
+            "code": "HI",
+            "guid": "ecb09c9b-17b8-4adf-a696-6d382ddace79",
+            "name": "Hawaii"
+        },
+        "full_name": "Daniel K. Inouye International Airport",
+        "guid": "67697700-f5bf-4b0a-9411-d55bfc1c3bc0",
+        "iata_code": "HNL",
+        "location": {
+            "guid": "40cc00ae-2744-472e-ba9f-eea32babb18f",
+            "latitude": 21.31932,
+            "longitude": -157.9254
+        },
+        "municipality_name": "Honolulu",
+        "short_name": "Daniel K. Inouye"
+    },
+    "flight_time_minutes": 840,
+    "departure_time": "10:30AM",
+    "arrival_time": "7:30PM",
+    "num_stops": 1,
+    "price_economy": 400.0,
+    "price_business": 700.0,
+    "baggage_allowance": "1 checked bag",
+    "layover": {
+        "airport": {
             "continent": {
                 "code": "NA",
                 "guid": "4e55960e-88b6-4be0-9651-5d83941d62be",
@@ -94,44 +70,19 @@
                 "guid": "81367191-321a-4bd6-a23e-ff5f401f0bd5",
                 "name": "Canada"
             },
-            "full_name": "Toronto Pearson International Airport",
-            "guid": "33ebf608-1949-4fc8-9ca0-b0a02ff83157",
-            "iata_code": "YYZ",
+            "full_name": "Vancouver International Airport",
+            "guid": "6024270c-e071-43d3-bc05-dad7a9eb7945",
+            "iata_code": "YVR",
             "location": {
-                "guid": "166f1ad8-438f-406d-96db-e18f6dde8b38",
-                "latitude": 41.67761,
-                "longitude": -79.63341
+                "guid": "167e4892-4e0c-4551-a0dd-6469a929d7f5",
+                "latitude": 49.19398,
+                "longitude": -123.174534
             },
-            "municipality_name": "Mississauga",
-            "short_name": "Toronto Pearson"
+            "municipality_name": "Vancouver",
+            "short_name": "Vancouver International"
         },
-        "flight_time_minutes": 840,
-        "guid": "3a42a255-0b1a-48c0-92fc-61299fa91685",
-        "layover": {
-            "airport": {
-                "continent": {
-                    "code": "NA",
-                    "guid": "4e55960e-88b6-4be0-9651-5d83941d62be",
-                    "name": "North America"
-                },
-                "country": {
-                    "code": "CA",
-                    "guid": "81367191-321a-4bd6-a23e-ff5f401f0bd5",
-                    "name": "Canada"
-                },
-                "full_name": "Vancouver International Airport",
-                "guid": "1612716f-56b6-47c2-85eb-96ef991782cf",
-                "iata_code": "YVR",
-                "location": {
-                    "guid": "167e4892-4e0c-4551-a0dd-6469a929d7f5",
-                    "latitude": 49.19398,
-                    "longitude": -123.174534
-                },
-                "municipality_name": "Vancouver",
-                "short_name": "Vancouver International"
-            },
-            "duration_minutes": 120,
-            "guid": "102a1ab9-6489-4959-ac1c-48a787fd82a5"
-        }
-    }
-]
+        "duration_minutes": 120,
+        "guid": "102a1ab9-6489-4959-ac1c-48a787fd82a5"
+    },
+    "seat_configuration_id": "a7c3cc56-3cd2-48a7-ad68-c30231996bb0"
+}

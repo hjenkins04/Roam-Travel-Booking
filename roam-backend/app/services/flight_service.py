@@ -102,7 +102,7 @@ class FlightService:
             
             # Adjust the reverse flight’s attributes to create a new flight
             new_flight_dto = FlightDTO(
-                guid=uuid.uuid4(),
+                guid=str(uuid.uuid4()),
                 departure_time=formatted_departure_time,
                 arrival_time=formatted_arrival_time,
                 num_stops=reverse_flight.num_stops,
@@ -138,6 +138,18 @@ class FlightService:
 
         # If no existing configuration, create a new one
         if not seat_config:
-            seat_config= FlightRepository.create_seat_configuration(flight_id=flight_id)
+            seat_config= FlightRepository.create_random_seat_configuration(flight_id=flight_id)
             return seat_config
+        
+    @staticmethod
+    def mark_seat_as_booked(seat_configuration_id: str, seat_id: int) -> Optional[FlightSeatsEntity]:
+        """
+        Mark a specific seat as booked by its seat configuration ID and seat ID.
+        """
+        seat_config = FlightRepository.mark_seat_id_as_booked_by_seat_configuration_id(seat_configuration_id, seat_id)
+        
+        if seat_config is None:
+           raise ValueError("Seat configuration or seat not found.")
+        
+        return seat_config
 

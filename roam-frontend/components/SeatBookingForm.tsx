@@ -42,20 +42,20 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
     if (checked && currentPassengerIndex > 0) {
       // Copy data from Passenger 1 if checked 
       updateFormData({
-        sameAsPassenger: true,
-        emergName: firstPassengerData.emergName || "",
-        emergLast: firstPassengerData.emergLast || "",
-        emergEmail: firstPassengerData.emergEmail || "",
-        emergPhone: firstPassengerData.emergPhone || ""
+        same_as_passenger: true,
+        emerg_name: firstPassengerData.emerg_name || "",
+        emerg_last: firstPassengerData.emerg_last || "",
+        emerg_email: firstPassengerData.emerg_email || "",
+        emerg_phone: firstPassengerData.emerg_phone || ""
       });
     } else {
       // Clear fields if checkbox is unchecked
       updateFormData({
-        sameAsPassenger: false,
-        emergName: "",
-        emergLast: "",
-        emergEmail: "",
-        emergPhone: ""
+        same_as_passenger: false,
+        emerg_name: "",
+        emerg_last: "",
+        emerg_email: "",
+        emerg_phone: ""
       });
     }
   };  
@@ -139,13 +139,13 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             <Input
               placeholder="Passport number*"
               name="passportNumber"
-              value={formData.passportNumber || ""}
+              value={formData.passport_number || ""}
               onChange={handleInputChange}
             />
             <Input
               placeholder="Known traveller number*"
               name="knownTravellerNumber"
-              value={formData.knownTravellerNumber || ""}
+              value={formData.known_traveller_number || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -171,14 +171,14 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
           <Input
             placeholder="Street address*"
             name="streetAddress"
-            value={formData.streetAddress || ""}
+            value={formData.street_address || ""}
             onChange={handleInputChange}
           />
           <div className="grid grid-cols-3 gap-4">
             <Input
               placeholder="Apt Number"
               name="aptNumber"
-              value={formData.aptNumber || ""}
+              value={formData.apt_number || ""}
               onChange={handleInputChange}
             />
             <Input
@@ -190,7 +190,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             <Input
               placeholder="Zip code*"
               name="zipCode"
-              value={formData.zipCode || ""}
+              value={formData.zip_code || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -203,7 +203,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             <div className="flex items-center space-x-2 mt-3">
               <Checkbox
                 id="sameAsPassenger"
-                checked={Boolean(formData.sameAsPassenger)}
+                checked={Boolean(formData.same_as_passenger)}
                 onCheckedChange={(checked) => handleCheckboxChange(checked === true)}
                 disabled={currentPassengerIndex === 0}
               />
@@ -217,13 +217,13 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             <Input
               placeholder="First name*"
               name="emergName"
-              value={formData.emergName || ""}
+              value={formData.emerg_name || ""}
               onChange={handleInputChange}
             />
             <Input
               placeholder="Last name*"
               name="emergLast"
-              value={formData.emergLast || ""}
+              value={formData.emerg_last || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -232,14 +232,14 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               type="email"
               placeholder="Email address*"
               name="emergEmail"
-              value={formData.emergEmail || ""}
+              value={formData.emerg_email || ""}
               onChange={handleInputChange}
             />
             <Input
               type="tel"
               placeholder="Phone number*"
               name="emergPhone"
-              value={formData.emergPhone || ""}
+              value={formData.emerg_phone || ""}
               onChange={handleInputChange}
             />
           </div>

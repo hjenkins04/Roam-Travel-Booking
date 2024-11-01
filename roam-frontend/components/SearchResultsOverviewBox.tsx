@@ -28,12 +28,12 @@ const SearchResultsOverviewBox = () => {
             }
             headerText="DEPARTURE CITY"
             mainTextLeft={
-              tripData.currentFlight.departure_airport?.iata_code || "Select City"
+              tripData.current_flight.departure_airport?.iata_code || "Select City"
             }
             mainTextRight={
-              tripData.currentFlight.departure_airport?.municipality_name || ""
+              tripData.current_flight.departure_airport?.municipality_name || ""
             }
-            subTextRight={tripData.currentFlight.departure_airport?.short_name || ""}
+            subTextRight={tripData.current_flight.departure_airport?.short_name || ""}
             size="w-[230px]"
             className="-bottom-2.5"
           />
@@ -45,12 +45,12 @@ const SearchResultsOverviewBox = () => {
             }
             headerText="ARRIVAL CITY"
             mainTextLeft={
-              tripData.currentFlight.arrival_airport?.iata_code || "Select City"
+              tripData.current_flight.arrival_airport?.iata_code || "Select City"
             }
             mainTextRight={
-              tripData.currentFlight.arrival_airport?.municipality_name || ""
+              tripData.current_flight.arrival_airport?.municipality_name || ""
             }
-            subTextRight={tripData.currentFlight.arrival_airport?.short_name || ""}
+            subTextRight={tripData.current_flight.arrival_airport?.short_name || ""}
             size="w-[230px]"
           />
 
@@ -63,19 +63,19 @@ const SearchResultsOverviewBox = () => {
                 }
                 headerText="DEPARTURE DATE"
                 mainTextLeft={
-                  tripData.currentFlightDepartureDate
-                    ? format(tripData.currentFlightDepartureDate, "dd")
+                  tripData.current_flight_departure_date
+                    ? format(tripData.current_flight_departure_date, "dd")
                     : "DD"
                 }
                 subTextLeft=""
                 mainTextRight={
-                  tripData.currentFlightDepartureDate
-                    ? format(tripData.currentFlightDepartureDate, "EEE")
+                  tripData.current_flight_departure_date
+                    ? format(tripData.current_flight_departure_date, "EEE")
                     : "Day"
                 }
                 subTextRight={
-                  tripData.currentFlightDepartureDate
-                    ? format(tripData.currentFlightDepartureDate, "MMMM")
+                  tripData.current_flight_departure_date
+                    ? format(tripData.current_flight_departure_date, "MMMM")
                     : "Month"
                 }
                 size="w-[175px]"

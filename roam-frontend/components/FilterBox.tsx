@@ -17,10 +17,10 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
 
     const applyFilters = () => {
         onFilterChange({
-            maxPrice,
+            max_price: maxPrice,
             stops,
-            arrivalTime,
-            departureTime,
+            arrival_time: arrivalTime,
+            departure_time: departureTime,
             airline,
         });
     };

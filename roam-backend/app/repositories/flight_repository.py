@@ -80,3 +80,22 @@ class FlightRepository:
         db.session.add(seat_config)
         
         return seat_config
+    
+    @staticmethod
+    def mark_seat_id_as_booked_by_seat_configuration_id(seat_configuration_id: str, seat_id: int) -> Optional[FlightSeatsEntity]:
+        """Mark a seat as booked by its seat configuration ID and seat ID."""
+        seat_config = FlightSeatsEntity.query.filter_by(guid=seat_configuration_id).first()
+
+        if not seat_config:
+            return None  # Seat configuration not found
+
+        # Find the seat within the seat configuration
+        seat = next((s for s in seat_config.seat_configuration if s.get("seat_id") == seat_id), None)
+
+        if seat:
+            seat["available"] = False  # Set seat as booked
+            db.session.commit()
+            return seat_config
+        else:
+            return None
+

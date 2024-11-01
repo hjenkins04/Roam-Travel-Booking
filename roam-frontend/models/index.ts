@@ -12,5 +12,7 @@ export * from "./login_response";
 export * from "./trip";
 export * from "./passenger";
 export * from "./passenger_form_data";
-export * from "./flight_seat_configuration"
-export * from "./seat"
+export * from "./flight_seat_configuration";
+export * from "./seat";
+export * from "./display_purchase"
+export * from "./helper_functions";

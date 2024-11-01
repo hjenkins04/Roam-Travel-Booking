@@ -59,8 +59,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signIn = (guid: string) => {
     setAuthData((prev) => ({ ...prev, isSignedIn: true, guid: guid }));
-    console.log("Context login", guid);
-    console.log("Is Signed In", authData.isSignedIn);
   };
 
   const signOut = () => {

@@ -29,7 +29,7 @@ export default function SeatBookingPage() {
   };
 
   const [formData, setFormData] = useState<PassengerFormData>({
-    name: tripData.trip.passengers[passengerIndex].name ?? "" ,
+    name: tripData?.trip?.passengers?.[passengerIndex]?.name ?? "",
   });
 
   useEffect(() => {
@@ -44,17 +44,17 @@ export default function SeatBookingPage() {
       middle: passenger.middle || "",
       prefix: passenger.prefix || "",
       dob: passenger.dob || undefined,
-      passportNumber: passenger.passportNumber || "",
-      knownTravellerNumber: passenger.knownTravellerNumber || "",
+      passport_number: passenger.passport_number || "",
+      known_traveller_number: passenger.known_traveller_number || "",
       email: passenger.email || "",
       phone: passenger.phone || "",
-      streetAddress: passenger.streetAddress || "",
-      aptNumber: passenger.aptNumber || "",
-      zipCode: passenger.zipCode || "",
-      emergName: passenger.emergName || "",
-      emergLast: passenger.emergLast || "",
-      emergEmail: passenger.emergEmail || "",
-      emergPhone: passenger.emergPhone || "",
+      street_address: passenger.street_address || "",
+      apt_number: passenger.apt_number || "",
+      zip_code: passenger.zip_code || "",
+      emerg_name: passenger.emerg_name || "",
+      emerg_last: passenger.emerg_last || "",
+      emerg_email: passenger.emerg_email || "",
+      emerg_phone: passenger.emerg_phone || "",
     });
   };
 
@@ -71,15 +71,15 @@ export default function SeatBookingPage() {
     try {
       const flightConfig = await fetchFlightSeats(flight.guid);
       initializeSeatStates(flightConfig.seat_configuration);
-      flight.seat_configuration = flightConfig
+      flight.seat_configuration = flightConfig;
     } catch (error) {
       console.error("Error fetching seat data:", error);
     }
   };
 
   useEffect(() => {
-    loadFlightSeats(tripData.currentFlight);
-  }, [tripData.currentFlight]);
+    loadFlightSeats(tripData.current_flight);
+  }, [tripData.current_flight]);
 
   const toggleSeatState = (id: number) => {
     setSeatStates((prevState) => {
@@ -119,8 +119,8 @@ export default function SeatBookingPage() {
     const passengerData = {
       ...transformToPassenger(formData, existingPassenger),
       ...(isFirstFlight 
-        ? { departingSeatId: selectedSeat ?? 0 }
-        : { returningSeatId: selectedSeat ?? 0 }
+        ? { departing_seat_id: selectedSeat ?? 0 }
+        : { returning_seat_id: selectedSeat ?? 0 }
       ),
     };
 
@@ -148,39 +148,36 @@ export default function SeatBookingPage() {
         setGroupSize(tripData.trip.passengers.length);
       }
       if (passengerIndex < groupSize - 1) {
-        console.log("Next Passenger")
         setPassengerIndex(passengerIndex + 1);
         loadPassengerData(passengerIndex + 1);
         setSelectedSeat(null);
         setLoading(false)
       } else {
-        console.log("Next Flight")
         setPassengerIndex(0);
         setIsFirstFlight(false);
         loadPassengerData(0);
         setSelectedSeat(null);
-        const next_flight = tripData.trip.returningFlight ?? tripData.currentFlight;
+        const next_flight = tripData.trip.returning_flight ?? tripData.current_flight;
         setTripData((prevTrip) => ({
           ...prevTrip,
-          currentFlight: next_flight,
-          currentFlightDepartureDate: tripData.returnDate,
+          current_flight: next_flight,
+          current_flight_departure_date: tripData.return_date,
         }));
         loadFlightSeats(next_flight);
       }
     } 
     else if (passengerIndex < groupSize - 1) {
-      console.log("Next Passenger")
       setPassengerIndex(passengerIndex + 1);
       loadPassengerData(passengerIndex + 1);
       setSelectedSeat(null);
       setLoading(false)
     }
     else {
-      const next_flight = tripData.trip.departingFlight ?? tripData.currentFlight;
+      const next_flight = tripData.trip.departing_flight ?? tripData.current_flight;
         setTripData((prevTrip) => ({
           ...prevTrip,
-          currentFlight: next_flight,
-          currentFlightDepartureDate: tripData.departureDate,
+          current_flight: next_flight,
+          current_flight_departure_date: tripData.departure_date,
         }));
       router.push('/checkout');
     }

@@ -1,7 +1,7 @@
 export type FilterOptions = {
-    maxPrice: string | null;
+    max_price: string | null;
     stops: string | null;
-    arrivalTime: string | null;
-    departureTime: string | null;
+    arrival_time: string | null;
+    departure_time: string | null;
     airline: string | null;
   };

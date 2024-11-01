@@ -81,11 +81,16 @@ class FlightEntity(db.Model):
         # Check for layover and create it if it doesn't exist
         layover = None
         if dto.layover:
-            layover_airport = AirportEntity.query.filter_by(guid=dto.layover.airport.guid).first() or AirportEntity.from_dto(dto.layover.airport)
+            layover_airport = AirportEntity.query.filter_by(guid=dto.layover.airport.guid).first()
+            if not layover_airport:
+                layover_airport = AirportEntity.from_dto(dto.layover.airport)
+                layover_airport.guid = str(uuid.uuid4())
+                db.session.add(layover_airport)
             layover = LayoverEntity.query.filter_by(guid=layover_airport.guid).first()
             if not layover:
-                layover = LayoverEntity(guid=dto.layover.guid, airport=layover_airport, duration_minutes=dto.layover.duration_minutes)
-            db.session.add(layover)
+                layover = LayoverEntity.from_dto(dto.layover)
+                layover.guid = str(uuid.uuid4())
+                db.session.add(layover)
 
         flight = FlightEntity(
             guid=dto.guid,

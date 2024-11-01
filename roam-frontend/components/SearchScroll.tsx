@@ -22,24 +22,24 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
   const filterFlights = () => {
     return flights.filter((flight) => {
       const priceCheck =
-        !filters.maxPrice || getPriceByPassengerType(searchData.seatTypeMapping, flight) <= parseInt(filters.maxPrice.replace("$", ""));
+        !filters.max_price || getPriceByPassengerType(searchData.seatTypeMapping, flight) <= parseInt(filters.max_price.replace("$", ""));
       const stopsCheck =
         !filters.stops || String(flight.num_stops) === filters.stops;
       const arrivalCheck =
-        !filters.arrivalTime ||
-        getTimeCategory(flight.arrival_time) === filters.arrivalTime;
+        !filters.arrival_time ||
+        getTimeCategory(flight.arrival_time) === filters.arrival_time;
       const departureCheck =
-        !filters.departureTime ||
-        getTimeCategory(flight.departure_time) === filters.departureTime;
+        !filters.departure_time ||
+        getTimeCategory(flight.departure_time) === filters.departure_time;
       // const airlineCheck =
-      //   !filters.airline || flight.airline === filters.airline;
+      //   !filters.airline || flight.airline === filters.airline; //TODO
 
       return (
         priceCheck &&
         stopsCheck &&
         arrivalCheck &&
         departureCheck //&&
-        //airlineCheck
+        //airlineCheck //TODO
       );
     });
   };
@@ -63,10 +63,11 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
           ))
         )}
       </div>
-
-      <div className="ml-20 w-[500px] h-full mr-10 mb-20">
-        <SearchResultExpansion flight={selectedFlight} />
-      </div>
+      {selectedFlight &&(
+        <div className="ml-20 w-[500px] h-full mr-10 mb-20">
+          <SearchResultExpansion flight={selectedFlight} />
+        </div>
+      )}
     </div>
   );
 };

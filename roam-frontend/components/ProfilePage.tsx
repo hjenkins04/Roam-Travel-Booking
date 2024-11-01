@@ -45,7 +45,6 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleCancelConfirm = () => {
-    console.log("Flight cancelled!");
     setCancelModalOpen(false);
   };
 

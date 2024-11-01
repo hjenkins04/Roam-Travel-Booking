@@ -13,10 +13,10 @@ def create_destination() -> Response:
     destinations_data = data if isinstance(data, list) else [data]
     
     try:
-        destination_dtos = [PopularDestinationDTO.from_dict(destinations_data) for destination_data in destinations_data ]
+        destination_dtos = [PopularDestinationDTO.from_dict(destination_data) for destination_data in destinations_data ]
         
         for destination_dto in destination_dtos:
-            PopularDestinationService.create_destination(destination_dto)
+            PopularDestinationService.add_destination(destination_dto)
         
         return jsonify({"message": f"{len(destination_dtos)} destination(s) created successfully"}), 201
     

@@ -1,13 +1,17 @@
 import React from "react";
 import Image from "next/image";
 
-const AirlinePhoto: React.FC = () => (
-  <div style={{ position: "relative", width: "40px", height: "40px", overflow: "hidden" }} >
+interface AirlinePhotoProps {
+  imagePath?: string;
+}
+
+const AirlinePhoto: React.FC<AirlinePhotoProps> = ({ imagePath = "/images/default.png" }) => (
+  <div style={{ position: "relative", width: "40px", height: "40px", overflow: "hidden" }}>
     <Image
-      src="/images/AirlinePhoto.png"
+      src={imagePath}
       alt="Airline photo"
       fill
-      style={{ position: "absolute", objectFit: "cover"}}
+      style={{ position: "absolute", objectFit: "cover" }}
     />
   </div>
 );

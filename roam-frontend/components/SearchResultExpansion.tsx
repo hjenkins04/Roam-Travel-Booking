@@ -52,36 +52,38 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({ flight })
             // Create empty passengers for each in `searchData.passengers`
             const passengers: Passenger[] = Array.from({ length: searchData.passengers }).map((_, index) => ({
                 guid: `passenger-${index}`,
-                tripId: "",
+                trip_id: "",
                 name: "",
-                departingSeatId: 0,
-                returningSeatId: undefined,
+                departing_seat_id: 1,
+                returning_seat_id: undefined,
                 middle: undefined,
                 last: undefined,
                 prefix: undefined,
                 dob: undefined,
-                passportNumber: undefined,
-                knownTravellerNumber: undefined,
+                passport_number: undefined,
+                known_traveller_number: undefined,
                 email: undefined,
                 phone: undefined,
-                streetAddress: undefined,
-                aptNumber: undefined,
+                street_address: undefined,
+                apt_number: undefined,
                 province: undefined,
-                zipCode: undefined,
-                emergName: undefined,
-                emergLast: undefined,
-                emergEmail: undefined,
-                emergPhone: undefined,
+                zip_code: undefined,
+                emerg_name: undefined,
+                emerg_last: undefined,
+                emerg_email: undefined,
+                emerg_phone: undefined,
 
             }));
         
             const trip: Trip = {
                 guid: "null",
                 name: tripName,
-                isRoundTrip: searchData.isRoundTrip,
-                departingFlight: flight || null,
-                returningFlight: null,
+                is_round_trip: searchData.isRoundTrip,
+                departing_flight: flight || null,
+                returning_flight: null,
                 passengers,
+                departure_date: searchData.departureDate,
+                return_date: searchData.returnDate
             };
         
             // Fetch a random return flight if it's a round trip
@@ -91,15 +93,16 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({ flight })
                     arival_airport_id: searchData.departureAirport.guid,
                   };
                 const returnFlight = await fetchRandomReturnFlight(searchQuery);
-                trip.returningFlight = returnFlight;
+                trip.returning_flight = returnFlight;
             }
         
             // Set trip data in trip context
             setTripData((prev) => ({...prev, trip: trip,
-                departureDate: searchData.departureDate,
-                returnDate: searchData.returnDate, 
-                currentFlight: flight ? flight : prev.currentFlight,
-                currentFlightDepartureDate: searchData.departureDate}));
+                departure_date: searchData.departureDate,
+                return_date: searchData.returnDate, 
+                current_flight: flight ? flight : prev.current_flight,
+                current_flight_departure_date: searchData.departureDate
+            }));
 
             router.push("/seat-booking");
             await sleep(2000);

@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Trip, Flight } from "@/models"
 
-interface TripData {
+export interface TripData {
   trip: Trip;
-  currentFlight: Flight;
-  currentFlightDepartureDate: Date | null;
-  departureDate: Date | null;
-  returnDate: Date | null;
-  totalCost: Number;
+  current_flight: Flight;
+  current_flight_departure_date: Date | null;
+  departure_date: Date | null;
+  return_date: Date | null;
+  total_cost: Number;
 }
 
 interface TripContextType {
@@ -38,12 +38,12 @@ export const TripProvider: React.FC<TripProviderProps> = ({ children }) => {
       const storedData = localStorage.getItem("tripData");
       return storedData ? JSON.parse(storedData) : {
         trip: null,
-        totalCost: 0
+        total_cost: 0
       };
     }
     return {
         trip: null,
-        totalCost: 0
+        total_cost: 0
     };
   });
 

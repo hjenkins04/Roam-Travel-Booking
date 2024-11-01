@@ -17,10 +17,10 @@ import { fetchFlightsBySearchQuery } from "@/api/FetchFlightsBySearchQuery";
 
 function SearchResultsContent() {
   const [filters, setFilters] = useState<FilterOptions>({
-    maxPrice: null,
+    max_price: null,
     stops: null,
-    arrivalTime: null,
-    departureTime: null,
+    arrival_time: null,
+    departure_time: null,
     airline: null,
   });
 

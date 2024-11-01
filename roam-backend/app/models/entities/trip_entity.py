@@ -3,6 +3,7 @@ import uuid
 from app.models.entities.flight_entity import FlightEntity
 from app.models.entities.passenger_entity import PassengerEntity
 from app.models.dto.trip_dto import TripDTO
+from app.utils import is_valid_uuid4
 
 class TripEntity(db.Model):
     __tablename__ = 'trips'
@@ -32,6 +33,9 @@ class TripEntity(db.Model):
 
     @staticmethod
     def from_dto(dto: TripDTO) -> "TripEntity":
+        if not is_valid_uuid4(dto.guid):
+            dto.guid = str(uuid.uuid4())
+        
         # Check for departing flight and create it if it doesn't exist
         if dto.departing_flight:
             departing_flight = FlightEntity.query.filter_by(guid=dto.departing_flight.guid).first()

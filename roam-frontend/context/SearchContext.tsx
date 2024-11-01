@@ -43,7 +43,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
         departureDate: null,
         returnDate: null,
         passengers: 1,
-        seatTypeMapping: {},
+        seatTypeMapping: { 1: "Business" },
         isRoundTrip: true,
       };
     }
@@ -53,7 +53,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
       departureDate: null,
       returnDate: null,
       passengers: 1,
-      seatTypeMapping: {},
+      seatTypeMapping: { 1: "Business" },
       isRoundTrip: true,
     };
   });
