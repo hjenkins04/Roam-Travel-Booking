@@ -9,6 +9,7 @@ interface SearchData {
   seatTypeMapping: { [index: number]: "Economy" | "Business" };
   passengers: number;
   isRoundTrip: boolean;
+  selectedAirlines: string[];
 }
 
 interface SearchContextType {
@@ -45,6 +46,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
         passengers: 1,
         seatTypeMapping: { 1: "Business" },
         isRoundTrip: true,
+        selectedAirlines: [],
       };
     }
     return {
@@ -55,6 +57,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
       passengers: 1,
       seatTypeMapping: { 1: "Business" },
       isRoundTrip: true,
+      selectedAirlines: [],
     };
   });
 

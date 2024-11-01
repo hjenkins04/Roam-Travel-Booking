@@ -11,7 +11,7 @@ import SearchScrollSkeletonLoader from "@/components/SearchScrollSkeletonLoader"
 import { SearchProvider, useSearchContext } from "@/context/SearchContext";
 import { TripProvider } from "@/context/TripContext";
 
-import { Airport, Flight, FlightSearch, FilterOptions} from "@/models";
+import { Airport, Flight, FlightSearch, FilterOptions } from "@/models";
 import { fetchAirports } from "@/api/FetchAirports";
 import { fetchFlightsBySearchQuery } from "@/api/FetchFlightsBySearchQuery";
 
@@ -28,6 +28,8 @@ function SearchResultsContent() {
   const [resultsLoading, setResultsLoading] = useState(true);
   const [airports, setAirports] = useState<Airport[]>([]);
   const [flights, setFlights] = useState<Flight[]>([]);
+  const [airlines, setAirlines] = useState<string[]>([]);
+
   const { searchData, setSearchData } = useSearchContext();
 
   const handleFilterChange = (newFilters: FilterOptions) => {
@@ -57,30 +59,36 @@ function SearchResultsContent() {
   useEffect(() => {
     const fetchAirportsAndFlights = async () => {
       setLoading(true);
-  
+
       try {
         const [airportsData, flightsData] = await Promise.all([
           fetchAirports(),
           searchData.departureAirport && searchData.arrivalAirport
             ? fetchFlightsBySearchQuery({
-                departure_airport_id: searchData.departureAirport.guid,
-                arival_airport_id: searchData.arrivalAirport.guid,
-              })
+              departure_airport_id: searchData.departureAirport.guid,
+              arival_airport_id: searchData.arrivalAirport.guid,
+            })
             : Promise.resolve([]),
         ]);
 
         setAirports(airportsData);
         setFlights(flightsData);
+
+        const uniqueAirlines = Array.from(
+          new Set(flightsData.map(flight => flight.airline.name)) // assuming `flight.airline.name` is the airline name
+        );
+        setAirlines(uniqueAirlines);
+
       } catch (error) {
         console.error("Error fetching airport and flight data:", error);
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchAirportsAndFlights();
   }, [searchData]);
-  
+
 
   return (
     <SearchProvider>
@@ -95,7 +103,7 @@ function SearchResultsContent() {
 
           <main className="z-10 flex flex-col mt-[-95px] items-start pl-4">
             <div className="relative w-full max-w-screen-xl z-10 py-6" style={{ transform: "scale(0.75)", transformOrigin: "left", paddingTop: "40px" }}>
-              <Suspense fallback={<SearchResultBoxSkeletonLoader/>}>
+              <Suspense fallback={<SearchResultBoxSkeletonLoader />}>
                 {!loading ? (
                   <SearchResultBox airports={airports} UpdatedFlightsSearch={UpdatedFlightsSearch} />
                 ) : (
@@ -104,12 +112,12 @@ function SearchResultsContent() {
               </Suspense>
             </div>
             <div className="relative w-full z-10" style={{ transform: "scale(0.75)", transformOrigin: "left", marginTop: "-50px" }}>
-              <FilterBox onFilterChange={handleFilterChange} />
+              <FilterBox onFilterChange={handleFilterChange} airlines={airlines} />
             </div>
             <div className="relative w-full h-full z-2" style={{ marginTop: "10px" }}>
-              <Suspense fallback={<SearchScrollSkeletonLoader/>}>
+              <Suspense fallback={<SearchScrollSkeletonLoader />}>
                 {!loading || !resultsLoading ? (
-                  <SearchScroll filters={filters} flights={flights}/>
+                  <SearchScroll filters={filters} flights={flights} />
                 ) : (
                   <SearchScrollSkeletonLoader />
                 )}

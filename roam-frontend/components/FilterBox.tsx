@@ -6,9 +6,10 @@ import FilterButtonGroup from "@/components/FilterButtonGroup";
 
 interface FilterBoxProps {
     onFilterChange: (newFilters: FilterOptions) => void;
+    airlines: string[];
 }
 
-const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
+const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange, airlines }) => {
     const [maxPrice, setMaxPrice] = useState<string | null>(null);
     const [stops, setStops] = useState<string | null>(null);
     const [arrivalTime, setArrivalTime] = useState<string | null>(null);
@@ -70,7 +71,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({ onFilterChange }) => {
                     <FilterButton
                         dataTestId="filter-button-5"
                         mainTextRight="Airline"
-                        options={["Airline A", "Airline B", "Airline C"]}
+                        options={airlines}
                         selectedOption={airline}
                         onOptionSelect={setAirline}
                     />
