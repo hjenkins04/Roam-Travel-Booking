@@ -6,8 +6,9 @@ import Header from "@/components/Header";
 import SearchBox from "@/components/SearchBox";
 import LandingPageBackground from "@/components/Backgrounds/LandingPageBackground";
 import LandingPageText from "@/components/Text/LandingPageText";
+import Footer from "@/components/Footer";
 
-import { useDestinationsStore  } from "@/context/DestinationContext";
+import { useDestinationsStore } from "@/context/DestinationContext";
 
 import SearchBoxSkeletonLoader from "@/components/SearchBoxSkeletonLoader";
 import { fetchAirports } from "@/api/FetchAirports";
@@ -62,7 +63,10 @@ export default function HomePage() {
         </div>
 
         {/* Search Box (Center Overlap with Background) */}
-        <div className="relative w-full max-w-6xl z-10 -top-14 py-10" style={{ paddingTop: "calc(50vh - 150px)" }}>
+        <div
+          className="relative w-full max-w-6xl z-10 -top-14 py-10"
+          style={{ paddingTop: "calc(50vh - 150px)" }}
+        >
           <Suspense fallback={<SearchBoxSkeletonLoader />}>
             {!loading ? (
               <SearchBox airports={airports} />
@@ -75,6 +79,9 @@ export default function HomePage() {
 
       {/* Trending Locations Grid wrapped with DestinationsProvider */}
       <TrendingLocationsHomeGrid destinations={popularDestinations} />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
