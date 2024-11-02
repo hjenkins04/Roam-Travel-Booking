@@ -6,10 +6,10 @@ import BookingForm from "@/components/SeatBookingForm";
 import Header from "@/components/Header";
 import LoaderPopup from "@/components/LoaderPopup";
 import SeatBookingFormFooter from "@/components/SeatBookingFormFooter";
-import { TripProvider, useTripContext } from "@/context/TripContext";
+import { useTripStore, TripData } from "@/context/TripContext";
 import { PossibleSeatStates } from "@/components/SeatSelection/Seat";
 import { fetchFlightSeats } from "@/api/FetchFlightSeats";
-import { PassengerFormData, transformToPassenger, Seat, Flight } from "@/models"
+import { PassengerFormData, transformToPassenger, Passenger, Seat, Flight, } from "@/models"
 
 export default function SeatBookingPage() {
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
@@ -17,7 +17,7 @@ export default function SeatBookingPage() {
   const [isRoundTrip] = useState<boolean>(true);
   const [isFirstFlight, setIsFirstFlight] = useState<boolean>(true);
   const [passengerIndex, setPassengerIndex] = useState<number>(0);
-  const { tripData, setTripData } = useTripContext();
+  const { tripData, setTripData } = useTripStore();
   const [loading, setLoading] = useState<boolean>(true)
   const [groupSize, setGroupSize] = useState<number>(tripData?.trip?.passengers?.length || 5);
   const [seatStates, setSeatStates] = useState<{ [id: number]: PossibleSeatStates }>({});
@@ -37,25 +37,27 @@ export default function SeatBookingPage() {
   }, [passengerIndex, tripData]);
 
   const loadPassengerData = (index: number) => {
-    const passenger = tripData.trip.passengers[index] || {};
+    const passenger = (tripData?.trip?.passengers?.[index] ?? {}) as Partial<Passenger>;
     setFormData({
-      name: passenger.name || "",
-      last: passenger.last || "",
-      middle: passenger.middle || "",
-      prefix: passenger.prefix || "",
-      dob: passenger.dob || undefined,
-      passport_number: passenger.passport_number || "",
-      known_traveller_number: passenger.known_traveller_number || "",
-      email: passenger.email || "",
-      phone: passenger.phone || "",
-      street_address: passenger.street_address || "",
-      apt_number: passenger.apt_number || "",
-      zip_code: passenger.zip_code || "",
-      emerg_name: passenger.emerg_name || "",
-      emerg_last: passenger.emerg_last || "",
-      emerg_email: passenger.emerg_email || "",
-      emerg_phone: passenger.emerg_phone || "",
+      name: passenger.name ?? "",
+      last: passenger.last ?? "",
+      middle: passenger.middle ?? "",
+      prefix: passenger.prefix ?? "",
+      dob: passenger.dob ?? undefined,
+      passport_number: passenger.passport_number ?? "",
+      known_traveller_number: passenger.known_traveller_number ?? "",
+      email: passenger.email ?? "",
+      phone: passenger.phone ?? "",
+      street_address: passenger.street_address ?? "",
+      apt_number: passenger.apt_number ?? "",
+      zip_code: passenger.zip_code ?? "",
+      emerg_name: passenger.emerg_name ?? "",
+      emerg_last: passenger.emerg_last ?? "",
+      emerg_email: passenger.emerg_email ?? "",
+      emerg_phone: passenger.emerg_phone ?? ""
     });
+
+
   };
 
   const initializeSeatStates = (seats: Seat[]) => {
@@ -78,8 +80,11 @@ export default function SeatBookingPage() {
   };
 
   useEffect(() => {
-    loadFlightSeats(tripData.current_flight);
+    if (tripData.current_flight) {
+        loadFlightSeats(tripData.current_flight);
+    }
   }, [tripData.current_flight]);
+
 
   const toggleSeatState = (id: number) => {
     setSeatStates((prevState) => {
@@ -103,6 +108,7 @@ export default function SeatBookingPage() {
   };
 
   const handleSeatClick = (seatNumber: number) => {
+    console.log(seatNumber);
     setSelectedSeat(seatNumber === selectedSeat ? null : seatNumber);
   };
 
@@ -114,77 +120,88 @@ export default function SeatBookingPage() {
   };
 
   const handleFormSubmit = async () => {
-    setLoading(true)
-    const existingPassenger = tripData.trip.passengers[passengerIndex];
-    const passengerData = {
+    if (!tripData.trip) return; // Ensure tripData.trip exists
+  
+    setLoading(true);
+  
+    // Retrieve the current passenger data
+    const existingPassenger = tripData.trip.passengers[passengerIndex] ?? {};
+    const passengerData: Passenger = {
       ...transformToPassenger(formData, existingPassenger),
       ...(isFirstFlight 
         ? { departing_seat_id: selectedSeat ?? 0 }
         : { returning_seat_id: selectedSeat ?? 0 }
       ),
     };
-
-    setTripData((prevTrip) => ({
-        ...prevTrip,
-        trip: {
-            ...prevTrip.trip,
-            passengers: [
-                ...prevTrip.trip.passengers.slice(0, passengerIndex),
-                passengerData,
-                ...prevTrip.trip.passengers.slice(passengerIndex + 1),
-            ],
-        },
-    }));
-
+  
+    // Prepare the updated passengers array
+    const updatedPassengers = [
+      ...tripData.trip.passengers.slice(0, passengerIndex),
+      passengerData,
+      ...tripData.trip.passengers.slice(passengerIndex + 1),
+    ];
+  
+    // Prepare the new trip data
+    const updatedTrip: TripData = {
+      ...tripData,
+      trip: {
+        ...tripData.trip,
+        passengers: updatedPassengers,
+      },
+    };
+  
+    // Update Zustand state with the modified trip data
+    setTripData(updatedTrip);
+  
     if (selectedSeat !== null) {
       setSeatStates((prev) => ({
         ...prev,
         [selectedSeat]: "reserved",
       }));
     }
-
+  
+    // Handle next steps based on the current flight stage
     if (isFirstFlight) {
-      if (tripData?.trip?.passengers && tripData.trip.passengers.length < groupSize) {
-        setGroupSize(tripData.trip.passengers.length);
-      }
       if (passengerIndex < groupSize - 1) {
         setPassengerIndex(passengerIndex + 1);
         loadPassengerData(passengerIndex + 1);
         setSelectedSeat(null);
-        setLoading(false)
+        setLoading(false);
       } else {
         setPassengerIndex(0);
         setIsFirstFlight(false);
         loadPassengerData(0);
         setSelectedSeat(null);
-        const next_flight = tripData.trip.returning_flight ?? tripData.current_flight;
-        setTripData((prevTrip) => ({
-          ...prevTrip,
-          current_flight: next_flight,
+  
+        // Prepare next flight information if round trip
+        const nextFlight = tripData.trip.returning_flight ?? tripData.current_flight;
+        setTripData({
+          ...updatedTrip,
+          current_flight: nextFlight,
           current_flight_departure_date: tripData.return_date,
-        }));
-        loadFlightSeats(next_flight);
+        });
+  
+        if (nextFlight) loadFlightSeats(nextFlight);
       }
-    } 
-    else if (passengerIndex < groupSize - 1) {
+    } else if (passengerIndex < groupSize - 1) {
       setPassengerIndex(passengerIndex + 1);
       loadPassengerData(passengerIndex + 1);
       setSelectedSeat(null);
-      setLoading(false)
-    }
-    else {
-      const next_flight = tripData.trip.departing_flight ?? tripData.current_flight;
-        setTripData((prevTrip) => ({
-          ...prevTrip,
-          current_flight: next_flight,
-          current_flight_departure_date: tripData.departure_date,
-        }));
+      setLoading(false);
+    } else {
+      const nextFlight = tripData.trip.departing_flight ?? tripData.current_flight;
+      setTripData({
+        ...updatedTrip,
+        current_flight: nextFlight,
+        current_flight_departure_date: tripData.departure_date,
+      });
       router.push('/checkout');
     }
   };
+  
 
   return (
-    <TripProvider>
+    <>
       <LoaderPopup isOpen={loading} />
       <div className="relative">
         <Header headerSize="small" backgroundImage logoColour="black" displayProfilePicture />
@@ -197,6 +214,7 @@ export default function SeatBookingPage() {
           {selectedSeat && (
             <div className="absolute right-0 w-4/7 h-full bg-white shadow-lg transition-opacity duration-300 ease-in-out opacity-100 flex flex-col justify-between">
               <div className="p-8 flex-1 overflow-auto">
+              {tripData.trip && (
                 <BookingForm
                   currentPassengerIndex={passengerIndex}
                   firstPassengerData={tripData.trip.passengers[0]}
@@ -205,6 +223,7 @@ export default function SeatBookingPage() {
                   updateFormData={updateFormData}
                   onSubmit={handleFormSubmit}
                 />
+              )}
               </div>
               <div className="bg-gray-200 p-4">
                 <SeatBookingFormFooter
@@ -224,6 +243,6 @@ export default function SeatBookingPage() {
           )}
         </div>
       </div>
-    </TripProvider>
+      </>
   );
 }

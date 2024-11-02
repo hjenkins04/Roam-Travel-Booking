@@ -10,10 +10,10 @@ import { DisplayPurchase, mapTripToPurchase } from "@/models";
 import { FetchBookingCheckout } from "@/api/FetchBookingCheckout";
 
 
-import { useTripContext } from "@/context/TripContext";
+import { useTripStore } from "@/context/TripContext";
 
 const Checkout: React.FC = () => {
-  const { tripData } = useTripContext();
+  const { tripData } = useTripStore();
   const [purchase, setPurchase] = useState<DisplayPurchase | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -45,6 +45,9 @@ const Checkout: React.FC = () => {
     setSuccessLoaderState("loading");
   
     try {
+      if (!tripData.trip) {
+        return
+      }
       await FetchBookingCheckout(tripData.trip);
       setSuccessLoaderShowButton(true);
       setSuccessLoaderState("success");

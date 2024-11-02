@@ -4,16 +4,10 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import HeaderBackground from "./Backgrounds/HeaderBackground";
 import TallHeaderBackground from "./Backgrounds/TallHeaderBackground";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { AuthProvider, useAuthContext } from "@/context/AuthContext";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 const LoginSignupPopout = dynamic(
   () => import("@/components/LoginSignupPopout"),
@@ -35,11 +29,11 @@ const Header: React.FC<HeaderProps> = ({
   displayProfilePicture = false,
   isPasswordReset = false,
 }) => {
-  const { signOut } = useAuth();
+  const { signOut } = useAuthStore(); 
   const router = useRouter();
   const [isPopoutOpen, setIsPopoutOpen] = useState(false);
   const [popoutMode, setPopoutMode] = useState<"login" | "signup">("login");
-  const { authData, setAuthData } = useAuthContext();
+  const { authData, setAuthData } = useAuthStore();
 
   const openLoginDrawer = () => {
     setIsPopoutOpen(true);
@@ -64,7 +58,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <AuthProvider>
+    <>
       {/* Conditionally render the background based on headerSize */}
       <div className="absolute inset-0" data-testid="header-container">
         {backgroundImage &&
@@ -157,7 +151,7 @@ const Header: React.FC<HeaderProps> = ({
           setPopoutMode={setPopoutMode}
         />
       )}
-    </AuthProvider>
+    </>
   );
 };
 

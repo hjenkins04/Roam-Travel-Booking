@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { Airport } from "@/models"
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { Airport } from "@/models";
 
 interface SearchData {
   departureAirport: Airport | null;
@@ -12,33 +13,16 @@ interface SearchData {
   selectedAirlines: string[];
 }
 
-interface SearchContextType {
+interface SearchStore {
   searchData: SearchData;
-  setSearchData: React.Dispatch<React.SetStateAction<SearchData>>;
+  setSearchData: (data: Partial<SearchData>) => void;
 }
 
-// Create context
-const SearchContext = createContext<SearchContextType | undefined>(undefined);
-
-export const useSearchContext = () => {
-  const context = useContext(SearchContext);
-  if (!context) {
-    throw new Error("useSearchContext must be used within a SearchProvider");
-  }
-  return context;
-};
-
-// Provider component
-interface SearchProviderProps {
-  children: ReactNode;
-}
-
-export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
-  // Initialize with defaults or load from localStorage if in the browser
-  const [searchData, setSearchData] = useState<SearchData>(() => {
-    if (typeof window !== "undefined") {
-      const storedData = localStorage.getItem("searchData");
-      return storedData ? JSON.parse(storedData) : {
+// Zustand store creation
+export const useSearchStore = create<SearchStore>()(
+  persist(
+    (set) => ({
+      searchData: {
         departureAirport: null,
         arrivalAirport: null,
         departureDate: null,
@@ -47,29 +31,15 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
         seatTypeMapping: { 1: "Business" },
         isRoundTrip: true,
         selectedAirlines: [],
-      };
+      },
+      setSearchData: (data: Partial<SearchData>) =>
+        set((state) => ({
+          searchData: { ...state.searchData, ...data },
+        })),
+    }),
+    {
+      name: "searchData-storage", // Key for local storage
+      partialize: (state) => ({ searchData: state.searchData }), // Persist searchData
     }
-    return {
-      departureAirport: null,
-      arrivalAirport: null,
-      departureDate: null,
-      returnDate: null,
-      passengers: 1,
-      seatTypeMapping: { 1: "Business" },
-      isRoundTrip: true,
-      selectedAirlines: [],
-    };
-  });
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("searchData", JSON.stringify(searchData));
-    }
-  }, [searchData]);
-
-  return (
-    <SearchContext.Provider value={{ searchData, setSearchData }}>
-      {children}
-    </SearchContext.Provider>
-  );
-};
+  )
+);

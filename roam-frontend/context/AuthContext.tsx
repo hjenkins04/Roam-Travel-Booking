@@ -1,81 +1,48 @@
-"use client";
-
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface AuthData {
   guid: string;
   isSignedIn: boolean;
 }
 
-interface AuthContextType {
+interface AuthStore {
+  authData: AuthData;
   signIn: (guid: string) => void;
   signOut: () => void;
-  authData: AuthData;
   setAuthData: (data: AuthData) => void;
 }
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
+// Zustand store creation
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set) => ({
+      authData: {
+        guid: "",
+        isSignedIn: false,
+      },
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+      // Function to sign in and set guid
+      signIn: (guid: string) =>
+        set((state) => ({
+          authData: { ...state.authData, isSignedIn: true, guid },
+        })),
 
-export const useAuthContext = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuthContext must be used within an AuthProvider");
-  }
-  return context;
-};
+      // Function to sign out and clear guid
+      signOut: () =>
+        set((state) => ({
+          authData: { ...state.authData, isSignedIn: false, guid: "" },
+        })),
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [authData, setAuthData] = useState<AuthData>(() => {
-    if (typeof window !== "undefined") {
-      const storedData = localStorage.getItem("authData");
-      return storedData
-        ? JSON.parse(storedData)
-        : {
-            token: null,
-            guid: null,
-          };
+      // Function to set auth data directly
+      setAuthData: (data: AuthData) =>
+        set(() => ({
+          authData: data,
+        })),
+    }),
+    {
+      name: "authData-storage", // Local storage key
+      partialize: (state) => ({ authData: state.authData }), // Persist authData
     }
-    return {
-      token: null,
-      guid: null,
-    };
-  });
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("authData", JSON.stringify(authData));
-    }
-  }, [authData]);
-
-  const signIn = (guid: string) => {
-    setAuthData((prev) => ({ ...prev, isSignedIn: true, guid: guid }));
-  };
-
-  const signOut = () => {
-    setAuthData((prev) => ({ ...prev, isSignedIn: false, guid: "" }));
-  };
-
-  return (
-    <AuthContext.Provider value={{ signIn, signOut, authData, setAuthData }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
+  )
+);

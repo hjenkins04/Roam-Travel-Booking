@@ -3,11 +3,9 @@ import SearchItem from "@/components/SearchItem";
 import SearchResultExpansion from "@/components/SearchResultExpansion";
 import { getTimeCategory } from "@/components/HelperFunctions/TimeFilter";
 import { getNumStops } from "@/components/HelperFunctions/NumStopsFilter";
-
-import { SearchProvider, useSearchContext } from "@/context/SearchContext";
-
+import { useSearchStore } from "@/context/SearchContext";
 import { Flight, FilterOptions, getPriceByPassengerType } from "@/models"
-import flightData from "@/public/data/flightData";
+
 
 
 interface SearchScrollProps {
@@ -17,7 +15,7 @@ interface SearchScrollProps {
 
 const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
   const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
-  const { searchData, setSearchData } = useSearchContext();
+  const { searchData, setSearchData } = useSearchStore();
 
   const filterFlights = () => {
     return flights.filter((flight) => {

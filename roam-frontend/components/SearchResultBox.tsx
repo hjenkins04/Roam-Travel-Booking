@@ -10,7 +10,7 @@ import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
 import { useRouter } from "next/navigation";
 
-import { useSearchContext } from "@/context/SearchContext";
+import { useSearchStore  } from "@/context/SearchContext";
 import { Airport } from "@/models";
 
 interface SearchResultBoxProps {
@@ -19,78 +19,66 @@ interface SearchResultBoxProps {
 }
 
 const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlightsSearch }) => {
-  const { searchData, setSearchData } = useSearchContext();
+  const { searchData, setSearchData } = useSearchStore();
   const router = useRouter();
 
   const handleDepartureChange = (value: Airport) => {
-    setSearchData((prev) => ({
-      ...prev,
+    setSearchData({
+      ...searchData,
       departureAirport: value,
       arrivalAirport:
-        prev.arrivalAirport?.iata_code === value.iata_code
+        searchData.arrivalAirport?.iata_code === value.iata_code
           ? null
-          : prev.arrivalAirport, // Reset arrival if same
-    }));
-    // Call UpdatedFlightsSearch to updated the displayed results
-    if (value.guid && searchData.arrivalAirport?.guid) {
-      UpdatedFlightsSearch(value.guid, searchData.arrivalAirport.guid);
-    }
-  };
-
-  const handleArrivalChange = (value: Airport) => {
-    setSearchData((prev) => ({
-      ...prev,
-      arrivalAirport: value,
-      departureAirport:
-        prev.departureAirport?.iata_code === value.iata_code
-          ? null
-          : prev.departureAirport, // Reset departure if same
-    }));
-    // Call UpdatedFlightsSearch to updated the displayed results
-    if (searchData.departureAirport?.guid && value.guid) {
-      UpdatedFlightsSearch(searchData.departureAirport.guid, value.guid);
-    }
-  };
-
-  const swapAirports = () => {
-    setSearchData((prev) => ({
-      ...prev,
-      departureAirport: prev.arrivalAirport,
-      arrivalAirport: prev.departureAirport,
-    }));
-  };
-
-  const addPassenger = () => {
-    setSearchData((prev) => ({
-      ...prev,
-      passengers: prev.passengers + 1,
-      seatTypeMapping: {
-        ...prev.seatTypeMapping,
-        [prev.passengers]: "Economy",
-      },
-    }));
-  };
-
-  const removePassenger = () => {
-    setSearchData((prev) => {
-      const updatedSeatTypeMapping = { ...prev.seatTypeMapping };
-      delete updatedSeatTypeMapping[prev.passengers - 1];
-      return {
-        ...prev,
-        passengers: prev.passengers > 1 ? prev.passengers - 1 : 1,
-        seatTypeMapping: updatedSeatTypeMapping,
-      };
+          : searchData.arrivalAirport,
     });
   };
 
-  const updatePassengerClass = (
-    index: number,
-    newClass: "Business" | "Economy"
-  ) => {
-    setSearchData((prev) => ({
-      ...prev,
-      seatTypeMapping: { ...prev.seatTypeMapping, [index]: newClass },
-    }));
+  const handleArrivalChange = (value: Airport) => {
+    setSearchData({
+      ...searchData,
+      arrivalAirport: value,
+      departureAirport:
+        searchData.departureAirport?.iata_code === value.iata_code
+          ? null
+          : searchData.departureAirport,
+    });
+  };
+  
+  const swapAirports = () => {
+    setSearchData({
+      ...searchData,
+      departureAirport: searchData.arrivalAirport,
+      arrivalAirport: searchData.departureAirport,
+    });
+  };
+  
+  const addPassenger = () => {
+    setSearchData({
+      ...searchData,
+      passengers: searchData.passengers + 1,
+      seatTypeMapping: {
+        ...searchData.seatTypeMapping,
+        [searchData.passengers]: "Economy",
+      },
+    });
+  };
+  
+  const removePassenger = () => {
+    const updatedSeatTypeMapping = { ...searchData.seatTypeMapping };
+    delete updatedSeatTypeMapping[searchData.passengers - 1];
+  
+    setSearchData({
+      ...searchData,
+      passengers: searchData.passengers > 1 ? searchData.passengers - 1 : 1,
+      seatTypeMapping: updatedSeatTypeMapping,
+    });
+  };
+  
+  const updatePassengerClass = (index: number, newClass: "Business" | "Economy") => {
+    setSearchData({
+      ...searchData,
+      seatTypeMapping: { ...searchData.seatTypeMapping, [index]: newClass },
+    });
   };
 
   const getPassengerTypeSummary = () => {
@@ -115,10 +103,10 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
             secondaryText="One Way"
             isPrimaryActive={searchData.isRoundTrip}
             onPrimaryClick={() =>
-              setSearchData((prev) => ({ ...prev, isRoundTrip: true }))
+              setSearchData({ ...searchData, isRoundTrip: true })
             }
             onSecondaryClick={() =>
-              setSearchData((prev) => ({ ...prev, isRoundTrip: false }))
+              setSearchData({ ...searchData, isRoundTrip: false })
             }
           />
         </div>
@@ -266,15 +254,15 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                      mode="single"
-                      selected={searchData.departureDate || undefined}
-                      onSelect={(date) =>
-                        setSearchData((prev) => ({
-                          ...prev,
-                          departureDate: date || null,
-                        }))
-                      }
-                    />
+                    mode="single"
+                    selected={searchData.departureDate || undefined}
+                    onSelect={(date) =>
+                      setSearchData({
+                        ...searchData,
+                        departureDate: date || null,
+                      })
+                    }
+                  />
                   </PopoverContent>
                 </Popover>
 
@@ -313,15 +301,15 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                      mode="single"
-                      selected={searchData.returnDate || undefined}
-                      onSelect={(date) =>
-                        setSearchData((prev) => ({
-                          ...prev,
-                          returnDate: date || null,
-                        }))
-                      }
-                    />
+                    mode="single"
+                    selected={searchData.returnDate || undefined}
+                    onSelect={(date) =>
+                      setSearchData({
+                        ...searchData,
+                        returnDate: date || null,
+                      })
+                    }
+                  />
                   </PopoverContent>
                 </Popover>
               </>
@@ -366,10 +354,10 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
                     mode="single"
                     selected={searchData.departureDate || undefined}
                     onSelect={(date) =>
-                      setSearchData((prev) => ({
-                        ...prev,
+                      setSearchData({
+                        ...searchData,
                         departureDate: date || null,
-                      }))
+                      })
                     }
                   />
                 </PopoverContent>

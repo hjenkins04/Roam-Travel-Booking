@@ -8,14 +8,13 @@ import SearchScroll from "@/components/SearchScroll";
 import SearchResultBoxSkeletonLoader from "@/components/SearchResultBoxSkeletonLoader";
 import SearchScrollSkeletonLoader from "@/components/SearchScrollSkeletonLoader";
 
-import { SearchProvider, useSearchContext } from "@/context/SearchContext";
-import { TripProvider } from "@/context/TripContext";
+import { useSearchStore  } from "@/context/SearchContext";
 
 import { Airport, Flight, FlightSearch, FilterOptions } from "@/models";
 import { fetchAirports } from "@/api/FetchAirports";
 import { fetchFlightsBySearchQuery } from "@/api/FetchFlightsBySearchQuery";
 
-function SearchResultsContent() {
+export default function SearchResultsPage() {
   const [filters, setFilters] = useState<FilterOptions>({
     max_price: null,
     stops: null,
@@ -30,7 +29,7 @@ function SearchResultsContent() {
   const [flights, setFlights] = useState<Flight[]>([]);
   const [airlines, setAirlines] = useState<string[]>([]);
 
-  const { searchData, setSearchData } = useSearchContext();
+  const { searchData, setSearchData } = useSearchStore();
 
   const handleFilterChange = (newFilters: FilterOptions) => {
     setFilters(newFilters);
@@ -75,7 +74,7 @@ function SearchResultsContent() {
         setFlights(flightsData);
 
         const uniqueAirlines = Array.from(
-          new Set(flightsData.map(flight => flight.airline.name)) // assuming `flight.airline.name` is the airline name
+          new Set(flightsData.map(flight => flight.airline.name))
         );
         setAirlines(uniqueAirlines);
 
@@ -91,49 +90,37 @@ function SearchResultsContent() {
 
 
   return (
-    <SearchProvider>
-      <TripProvider>
-        <div className="relative min-h-screen items-start">
-          <Header
-            headerSize={"small"}
-            backgroundImage={true}
-            logoColour={"black"}
-            displayProfilePicture={false}
-          />
+    <div className="relative min-h-screen items-start">
+      <Header
+        headerSize={"small"}
+        backgroundImage={true}
+        logoColour={"black"}
+        displayProfilePicture={false}
+      />
 
-          <main className="z-10 flex flex-col mt-[-95px] items-start pl-4">
-            <div className="relative w-full max-w-screen-xl z-10 py-6" style={{ transform: "scale(0.75)", transformOrigin: "left", paddingTop: "40px" }}>
-              <Suspense fallback={<SearchResultBoxSkeletonLoader />}>
-                {!loading ? (
-                  <SearchResultBox airports={airports} UpdatedFlightsSearch={UpdatedFlightsSearch} />
-                ) : (
-                  <SearchResultBoxSkeletonLoader />
-                )}
-              </Suspense>
-            </div>
-            <div className="relative w-full z-10" style={{ transform: "scale(0.75)", transformOrigin: "left", marginTop: "-50px" }}>
-              <FilterBox onFilterChange={handleFilterChange} airlines={airlines} />
-            </div>
-            <div className="relative w-full h-full z-2" style={{ marginTop: "10px" }}>
-              <Suspense fallback={<SearchScrollSkeletonLoader />}>
-                {!loading || !resultsLoading ? (
-                  <SearchScroll filters={filters} flights={flights} />
-                ) : (
-                  <SearchScrollSkeletonLoader />
-                )}
-              </Suspense>
-            </div>
-          </main>
+      <main className="z-10 flex flex-col mt-[-95px] items-start pl-4">
+        <div className="relative w-full max-w-screen-xl z-10 py-6" style={{ transform: "scale(0.75)", transformOrigin: "left", paddingTop: "40px" }}>
+          <Suspense fallback={<SearchResultBoxSkeletonLoader />}>
+            {!loading ? (
+              <SearchResultBox airports={airports} UpdatedFlightsSearch={UpdatedFlightsSearch} />
+            ) : (
+              <SearchResultBoxSkeletonLoader />
+            )}
+          </Suspense>
         </div>
-      </TripProvider>
-    </SearchProvider>
-  );
-}
-
-export default function SearchResultsPage() {
-  return (
-    <SearchProvider>
-      <SearchResultsContent />
-    </SearchProvider>
+        <div className="relative w-full z-10" style={{ transform: "scale(0.75)", transformOrigin: "left", marginTop: "-50px" }}>
+          <FilterBox onFilterChange={handleFilterChange} airlines={airlines} />
+        </div>
+        <div className="relative w-full h-full z-2" style={{ marginTop: "10px" }}>
+          <Suspense fallback={<SearchScrollSkeletonLoader />}>
+            {!loading || !resultsLoading ? (
+              <SearchScroll filters={filters} flights={flights} />
+            ) : (
+              <SearchScrollSkeletonLoader />
+            )}
+          </Suspense>
+        </div>
+      </main>
+    </div>
   );
 }

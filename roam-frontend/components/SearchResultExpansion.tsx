@@ -4,8 +4,8 @@ import BookFlightButton from "@/components/SearchButton";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { Trip, Passenger, FlightSearch, Flight, formatTimeMinutes, getPriceByPassengerType } from "@/models";
-import { SearchProvider, useSearchContext } from "@/context/SearchContext";
-import { useTripContext } from "@/context/TripContext";
+import { useSearchStore } from "@/context/SearchContext";
+import { useTripStore} from "@/context/TripContext";
 import LoaderPopup from "@/components/LoaderPopup";
 import { fetchRandomReturnFlight } from "@/api/FetchRandomReturnFlight";
 
@@ -14,8 +14,8 @@ interface SearchResultExpansionProps {
   }
 
 const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({ flight }) => {
-    const { searchData, setSearchData } = useSearchContext();
-    const { tripData, setTripData } = useTripContext();
+    const { searchData, setSearchData } = useSearchStore();
+    const { tripData, setTripData } = useTripStore();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
@@ -55,23 +55,23 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({ flight })
                 trip_id: "",
                 name: "",
                 departing_seat_id: 1,
-                returning_seat_id: undefined,
-                middle: undefined,
-                last: undefined,
-                prefix: undefined,
-                dob: undefined,
-                passport_number: undefined,
-                known_traveller_number: undefined,
-                email: undefined,
-                phone: undefined,
-                street_address: undefined,
-                apt_number: undefined,
-                province: undefined,
-                zip_code: undefined,
-                emerg_name: undefined,
-                emerg_last: undefined,
-                emerg_email: undefined,
-                emerg_phone: undefined,
+                returning_seat_id: -1,
+                middle: "",
+                last: "",
+                prefix: "",
+                dob: new Date(),
+                passport_number: "",
+                known_traveller_number: "",
+                email: "",
+                phone: "",
+                street_address: "",
+                apt_number: "",
+                province: "",
+                zip_code: "",
+                emerg_name: "",
+                emerg_last: "",
+                emerg_email: "",
+                emerg_phone: "",
 
             }));
         
@@ -97,12 +97,14 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({ flight })
             }
         
             // Set trip data in trip context
-            setTripData((prev) => ({...prev, trip: trip,
+            setTripData({
+                ...tripData,
+                trip: trip,
                 departure_date: searchData.departureDate,
-                return_date: searchData.returnDate, 
-                current_flight: flight ? flight : prev.current_flight,
-                current_flight_departure_date: searchData.departureDate
-            }));
+                return_date: searchData.returnDate,
+                current_flight: flight || tripData.current_flight,
+                current_flight_departure_date: searchData.departureDate,
+              });
 
             router.push("/seat-booking");
             await sleep(2000);

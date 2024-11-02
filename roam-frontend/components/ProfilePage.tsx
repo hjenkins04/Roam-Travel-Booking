@@ -15,7 +15,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import EditProfile from "./EditProfile";
-import { AuthProvider, useAuthContext } from "@/context/AuthContext";
+import { useAuthStore } from "@/context/AuthContext";
 import { fetchUpdate } from "@/api/FetchUpdate";
 import { fetchUserInfo } from "@/api/FetchUserInfo";
 
@@ -28,7 +28,7 @@ const ProfilePage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const { authData, setAuthData } = useAuthContext();
+  const { authData, setAuthData } = useAuthStore();
   const [firstNameProp, setFirstNameProp] = useState("");
   const [lastNameProp, setLastNameProp] = useState("");
   const [emailProp, setEmailProp] = useState("");
@@ -121,7 +121,7 @@ const ProfilePage: React.FC = () => {
   ];
 
   return (
-    <AuthProvider>
+    <>
       <div className="relative min-h-screen">
         {/* Header component */}
         <Header
@@ -177,6 +177,7 @@ const ProfilePage: React.FC = () => {
                         <PurchaseItem
                           key={index}
                           {...purchase}
+                          purchasePassenger={purchase.passengers[index]} //TODO fix
                           onCancelClick={handleCancel}
                         />
                       </>
@@ -253,7 +254,7 @@ const ProfilePage: React.FC = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </AuthProvider>
+    </>
   );
 };
 

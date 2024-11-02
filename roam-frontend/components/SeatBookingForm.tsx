@@ -138,13 +138,13 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <Input
               placeholder="Passport number*"
-              name="passportNumber"
+              name="passport_number"
               value={formData.passport_number || ""}
               onChange={handleInputChange}
             />
             <Input
               placeholder="Known traveller number*"
-              name="knownTravellerNumber"
+              name="known_traveller_number"
               value={formData.known_traveller_number || ""}
               onChange={handleInputChange}
             />
@@ -170,14 +170,14 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
           {/* Address Info */}
           <Input
             placeholder="Street address*"
-            name="streetAddress"
+            name="street_address"
             value={formData.street_address || ""}
             onChange={handleInputChange}
           />
           <div className="grid grid-cols-3 gap-4">
             <Input
               placeholder="Apt Number"
-              name="aptNumber"
+              name="apt_number"
               value={formData.apt_number || ""}
               onChange={handleInputChange}
             />
@@ -189,7 +189,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             />
             <Input
               placeholder="Zip code*"
-              name="zipCode"
+              name="zip_code"
               value={formData.zip_code || ""}
               onChange={handleInputChange}
             />
@@ -202,12 +202,12 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             </h3>
             <div className="flex items-center space-x-2 mt-3">
               <Checkbox
-                id="sameAsPassenger"
+                id="same_as_passenger"
                 checked={Boolean(formData.same_as_passenger)}
                 onCheckedChange={(checked) => handleCheckboxChange(checked === true)}
                 disabled={currentPassengerIndex === 0}
               />
-              <label htmlFor="sameAsPassenger" className="text-slate-400">
+              <label htmlFor="same_as_passenger" className="text-slate-400">
                 Same as Passenger 1
               </label>
             </div>
@@ -216,13 +216,13 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <Input
               placeholder="First name*"
-              name="emergName"
+              name="emerg_name"
               value={formData.emerg_name || ""}
               onChange={handleInputChange}
             />
             <Input
               placeholder="Last name*"
-              name="emergLast"
+              name="emerg_last"
               value={formData.emerg_last || ""}
               onChange={handleInputChange}
             />
@@ -231,14 +231,14 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             <Input
               type="email"
               placeholder="Email address*"
-              name="emergEmail"
+              name="emerg_email"
               value={formData.emerg_email || ""}
               onChange={handleInputChange}
             />
             <Input
               type="tel"
               placeholder="Phone number*"
-              name="emergPhone"
+              name="emerg_phone"
               value={formData.emerg_phone || ""}
               onChange={handleInputChange}
             />

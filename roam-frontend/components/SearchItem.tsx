@@ -3,7 +3,7 @@
 import React, { FC } from "react";
 import Image from "next/image";
 import { Flight, formatTimeMinutes, getLayoverSummary, getStopSummary, getPriceByPassengerType, getSeatTypeByPassengerType } from "@/models"
-import { SearchProvider, useSearchContext } from "@/context/SearchContext";
+import { useSearchStore } from "@/context/SearchContext";
 
 interface SearchItemProps {
   flight: Flight;
@@ -11,7 +11,7 @@ interface SearchItemProps {
 }
 
 const SearchItem: FC<SearchItemProps> = ({ flight, onClick }) => {
-  const { searchData, setSearchData } = useSearchContext();
+  const { searchData, setSearchData } = useSearchStore();
 
   return (
     <button

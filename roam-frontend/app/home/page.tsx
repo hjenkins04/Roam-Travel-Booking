@@ -7,8 +7,7 @@ import SearchBox from "@/components/SearchBox";
 import LandingPageBackground from "@/components/Backgrounds/LandingPageBackground";
 import LandingPageText from "@/components/Text/LandingPageText";
 
-import { DestinationsProvider } from "@/context/DestinationContext"; // Import the provider
-import { SearchProvider } from "@/context/SearchContext";
+import { useDestinationsStore  } from "@/context/DestinationContext";
 
 import SearchBoxSkeletonLoader from "@/components/SearchBoxSkeletonLoader";
 import { fetchAirports } from "@/api/FetchAirports";
@@ -23,6 +22,8 @@ export default function HomePage() {
   const [airports, setAirports] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const { popularDestinations, refreshDestinations } = useDestinationsStore();
+
   useEffect(() => {
     // Fetch airports on load
     fetchAirports()
@@ -34,7 +35,9 @@ export default function HomePage() {
         console.error("Error fetching airports:", error);
         setLoading(false);
       });
-  }, []);
+
+    refreshDestinations();
+  }, [refreshDestinations]);
 
   return (
     <div className="relative min-h-screen">
@@ -60,22 +63,18 @@ export default function HomePage() {
 
         {/* Search Box (Center Overlap with Background) */}
         <div className="relative w-full max-w-6xl z-10 -top-14 py-10" style={{ paddingTop: "calc(50vh - 150px)" }}>
-          <SearchProvider>
-            <Suspense fallback={<SearchBoxSkeletonLoader />}>
-              {!loading ? (
-                <SearchBox airports={airports} />
-              ) : (
-                <SearchBoxSkeletonLoader />
-              )}
-            </Suspense>
-          </SearchProvider>
+          <Suspense fallback={<SearchBoxSkeletonLoader />}>
+            {!loading ? (
+              <SearchBox airports={airports} />
+            ) : (
+              <SearchBoxSkeletonLoader />
+            )}
+          </Suspense>
         </div>
       </main>
 
       {/* Trending Locations Grid wrapped with DestinationsProvider */}
-      <DestinationsProvider>
-        <TrendingLocationsHomeGrid />
-      </DestinationsProvider>
+      <TrendingLocationsHomeGrid destinations={popularDestinations} />
     </div>
   );
 }

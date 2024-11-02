@@ -2,10 +2,12 @@
 
 import Image from 'next/image';
 import { PopularDestination } from "@/models/popular_destination";
-import { useDestinationsContext } from "@/context/DestinationContext"; // Import the context
 
-const TrendingLocationsHomeGrid: React.FC = () => {
-  const { popularDestinations } = useDestinationsContext(); // Access destinations from context
+interface TrendingLocationsHomeGridProps {
+  destinations: PopularDestination[];
+}
+
+const TrendingLocationsHomeGrid: React.FC<TrendingLocationsHomeGridProps> = ({ destinations }) => {
 
   return (
     <section>
@@ -14,7 +16,7 @@ const TrendingLocationsHomeGrid: React.FC = () => {
 
       <div className="px-4 md:px-8 lg:px-16 max-w-[1440px] mx-auto">
         <ul className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 list-none">
-          {popularDestinations.map((destination, index) => (
+          {destinations.map((destination, index) => (
             <li key={destination.guid} className={`flex flex-col items-center ${index === 4 ? 'hidden lg:flex' : ''}`}>
               <figure className="relative rounded-2xl overflow-hidden group w-full sm:max-w-[250px] md:max-w-[300px] lg:max-w-[1200px] lg:min-w-[200px] aspect-[3/2]">
                 <Image
