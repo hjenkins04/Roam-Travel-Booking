@@ -34,7 +34,7 @@ const PurchaseItem: React.FC<PurchaseItemProps> = ({
         <DepartureFlightDetails purchasePassenger={purchasePassenger} />
         
         {/* Only show return flight if returningFlight is not null */}
-        {purchasePassenger.returning_flight && (
+        {purchasePassenger?.returning_flight && (
           <ReturnFlightDetails purchasePassenger={purchasePassenger} />
         )}
       </div>
@@ -43,8 +43,12 @@ const PurchaseItem: React.FC<PurchaseItemProps> = ({
 };
 
 // Component for displaying departure flight details
-const DepartureFlightDetails: React.FC<{ purchasePassenger: DisplayPurchasePassenger }> = ({ purchasePassenger }) => {
-  const { departing_flight: departingFlight, departure_date: departureDate, departure_seat: departureSeat } = purchasePassenger;
+const DepartureFlightDetails: React.FC<{ purchasePassenger?: DisplayPurchasePassenger }> = ({ purchasePassenger }) => {
+  const { 
+    departing_flight: departingFlight = null, 
+    departure_date: departureDate = null, 
+    departure_seat: departureSeat = "No seat assigned" 
+  } = purchasePassenger || {};
   const formattedDepartureDate = departureDate ? format(new Date(departureDate), "MMMM do, yyyy") : "Date not available";
   
   if (!departingFlight) return null;
@@ -84,8 +88,12 @@ const DepartureFlightDetails: React.FC<{ purchasePassenger: DisplayPurchasePasse
 };
 
 // Component for displaying return flight details
-const ReturnFlightDetails: React.FC<{ purchasePassenger: DisplayPurchasePassenger }> = ({ purchasePassenger }) => {
-  const { returning_flight: returningFlight, return_date: returnDate, return_seat: returnSeat } = purchasePassenger;
+const ReturnFlightDetails: React.FC<{ purchasePassenger?: DisplayPurchasePassenger }> = ({ purchasePassenger }) => {
+  const { 
+    returning_flight: returningFlight = null, 
+    return_date: returnDate = null, 
+    return_seat: returnSeat = "No seat assigned" 
+  } = purchasePassenger || {};
   const formattedReturnDate = returnDate ? format(new Date(returnDate), "MMMM do, yyyy") : "Date not available";
 
   if (!returningFlight) return null;

@@ -9,7 +9,7 @@ class ContinentEntity(db.Model):
     code: str = db.Column(db.String(2), unique=True, nullable=False)
     name: str = db.Column(db.String(50), unique=True, nullable=False)
 
-    airports = db.relationship("AirportEntity", back_populates="continent")
+    countries = db.relationship("CountryEntity", back_populates="continent", cascade="all, delete-orphan")
     
     def to_dto(self) -> ContinentDTO:
         return ContinentDTO(

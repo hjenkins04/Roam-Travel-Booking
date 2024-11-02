@@ -100,6 +100,7 @@ export function mapTripToPurchase(trip: Trip): DisplayPurchase {
     const total = Math.round((subtotal + tax) * 100) / 100; // Round to 2 decimals
 
     return {
+        guid: trip.guid ?? "",
         title: trip.name,
         passengers,
         subtotal,

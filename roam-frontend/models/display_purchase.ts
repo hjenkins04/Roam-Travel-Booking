@@ -11,6 +11,7 @@ export interface DisplayPurchasePassenger {
 }
 
 export interface DisplayPurchase {
+    guid: string;
     title: string;
     passengers: DisplayPurchasePassenger[];
     subtotal: number;

@@ -25,10 +25,14 @@ class FlightEntity(db.Model):
 
     # Relationships
     airline = db.relationship("AirlineEntity", back_populates="flights")
-    departure_airport = db.relationship("AirportEntity", foreign_keys=[departure_airport_id])
-    arrival_airport = db.relationship("AirportEntity", foreign_keys=[arrival_airport_id])
-    seat_configuration = db.relationship("FlightSeatsEntity", back_populates="flight", uselist=False, single_parent=True, cascade="all, delete")
+    departure_airport = db.relationship("AirportEntity", foreign_keys=[departure_airport_id], back_populates="departure_flights")
+    arrival_airport = db.relationship("AirportEntity", foreign_keys=[arrival_airport_id], back_populates="arrival_flights")
+    seat_configuration = db.relationship("FlightSeatsEntity", back_populates="flight", uselist=False, single_parent=True, cascade="all, delete-orphan")
+    
     layover = db.relationship("LayoverEntity", back_populates="flight", uselist=False, single_parent=True, cascade="all, delete-orphan")
+
+    departing_trips = db.relationship("TripEntity", foreign_keys="[TripEntity.departing_flight_id]", back_populates="departing_flight", passive_deletes=True)
+    returning_trips = db.relationship("TripEntity", foreign_keys="[TripEntity.returning_flight_id]", back_populates="returning_flight", passive_deletes=True)
     
 
     def to_dto(self) -> FlightDTO:
@@ -81,15 +85,15 @@ class FlightEntity(db.Model):
         # Check for layover and create it if it doesn't exist
         layover = None
         if dto.layover:
-            layover_airport = AirportEntity.query.filter_by(guid=dto.layover.airport.guid).first()
-            if not layover_airport:
-                layover_airport = AirportEntity.from_dto(dto.layover.airport)
-                layover_airport.guid = str(uuid.uuid4())
-                db.session.add(layover_airport)
-            layover = LayoverEntity.query.filter_by(guid=layover_airport.guid).first()
+            #layover_airport = AirportEntity.query.filter_by(guid=dto.layover.airport.guid).first()
+            # if not layover_airport:
+            #     layover_airport = AirportEntity.from_dto(dto.layover.airport)
+            #     layover_airport.guid = str(uuid.uuid4())
+            #     db.session.add(layover_airport)
+            layover = LayoverEntity.query.filter_by(guid=dto.layover.guid).first()
             if not layover:
                 layover = LayoverEntity.from_dto(dto.layover)
-                layover.guid = str(uuid.uuid4())
+                #layover.guid = str(uuid.uuid4())
                 db.session.add(layover)
 
         flight = FlightEntity(

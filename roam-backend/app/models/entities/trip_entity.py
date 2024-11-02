@@ -10,14 +10,16 @@ class TripEntity(db.Model):
     guid = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     name = db.Column(db.String(100), nullable=False)
     is_round_trip = db.Column(db.Boolean, nullable=False)
+    departure_date = db.Column(db.Date, nullable=False)
+    return_date = db.Column(db.Date, nullable=True)  # Null if one-way trip
     
     # Foreign keys
-    departing_flight_id = db.Column(db.String(36), db.ForeignKey('flights.guid'), nullable=False)
-    returning_flight_id = db.Column(db.String(36), db.ForeignKey('flights.guid'), nullable=True)
+    departing_flight_id = db.Column(db.String(36), db.ForeignKey('flights.guid', ondelete="CASCADE"), nullable=False)
+    returning_flight_id = db.Column(db.String(36), db.ForeignKey('flights.guid', ondelete="CASCADE"), nullable=True)
 
     # Relationships
-    departing_flight = db.relationship("FlightEntity", foreign_keys=[departing_flight_id])
-    returning_flight = db.relationship("FlightEntity", foreign_keys=[returning_flight_id])
+    departing_flight = db.relationship("FlightEntity", foreign_keys=[departing_flight_id], back_populates="departing_trips", passive_deletes=True)
+    returning_flight = db.relationship("FlightEntity", foreign_keys=[returning_flight_id], back_populates="returning_trips", passive_deletes=True)
     passengers = db.relationship("PassengerEntity", back_populates="trip", cascade="all, delete-orphan")
 
 
@@ -26,6 +28,8 @@ class TripEntity(db.Model):
             guid=self.guid,
             name=self.name,
             is_round_trip=self.is_round_trip,
+            departure_date = self.departure_date,
+            return_date = self.return_date,
             departing_flight=self.departing_flight.to_dto() if self.departing_flight else None,
             returning_flight=self.returning_flight.to_dto() if self.returning_flight else None,
             passengers=[passenger.to_dto() for passenger in self.passengers]
@@ -55,6 +59,8 @@ class TripEntity(db.Model):
             guid=dto.guid,
             name=dto.name,
             is_round_trip=dto.is_round_trip,
+            departure_date=dto.departure_date,
+            return_date=dto.return_date,
             departing_flight=departing_flight,
             returning_flight=returning_flight,
         )

@@ -10,3 +10,11 @@ export interface Trip {
     departure_date: Date | null;
     return_date: Date | null;
 }
+
+export function parseTrip(data: any): Trip {
+    return {
+        ...data,
+        departure_date: data.departure_date ? new Date(data.departure_date) : null,
+        return_date: data.return_date ? new Date(data.return_date) : null,
+    };
+}

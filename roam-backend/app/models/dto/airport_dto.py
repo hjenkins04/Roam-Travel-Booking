@@ -6,8 +6,7 @@ from app.models.dto.continent_dto import ContinentDTO
 class AirportDTO:
     def __init__(self, guid: str, full_name: str, short_name: str, municipality_name: str, iata_code: Optional[str],
                  location: Optional[Union[Dict, LocationDTO]],
-                 country: Optional[Union[Dict, CountryDTO]],
-                 continent: Optional[Union[Dict, ContinentDTO]]) -> None:
+                 country: Optional[Union[Dict, CountryDTO]]) -> None:
         self.guid = guid
         self.full_name = full_name
         self.short_name = short_name
@@ -15,7 +14,6 @@ class AirportDTO:
         self.iata_code = iata_code
         self.location = self.create_location_dto(location)
         self.country = self.create_country_dto(country)
-        self.continent = self.create_continent_dto(continent)
 
     def to_dict(self) -> Dict[str, Optional[Dict]]:
         return {
@@ -25,8 +23,7 @@ class AirportDTO:
             "municipality_name": self.municipality_name,
             "iata_code": self.iata_code,
             "location": self.location.to_dict() if self.location else None,
-            "country": self.country.to_dict() if self.country else None,
-            "continent": self.continent.to_dict() if self.continent else None,
+            "country": self.country.to_dict() if self.country else None
         }
         
     @staticmethod
@@ -38,8 +35,7 @@ class AirportDTO:
             municipality_name=data["municipality_name"],
             iata_code=data.get("iata_code"),
             location=LocationDTO.from_dict(data["location"]) if data.get("location") else None,
-            country=CountryDTO.from_dict(data["country"]) if data.get("country") else None,
-            continent=ContinentDTO.from_dict(data["continent"]) if data.get("continent") else None
+            country=CountryDTO.from_dict(data["country"]) if data.get("country") else None
         )
 
     def create_location_dto(self, location: Optional[Union[Dict, LocationDTO]]) -> Optional[LocationDTO]:
@@ -62,15 +58,4 @@ class AirportDTO:
             )
         elif isinstance(country, CountryDTO):
             return country
-        return None
-
-    def create_continent_dto(self, continent: Optional[Union[Dict, ContinentDTO]]) -> Optional[ContinentDTO]:
-        if isinstance(continent, dict):
-            return ContinentDTO(
-                guid=continent.get("guid"),
-                code=continent.get("code"),
-                name=continent.get("name")
-            )
-        elif isinstance(continent, ContinentDTO):
-            return continent
         return None
