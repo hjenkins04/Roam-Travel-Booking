@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import SearchBox from "@/components/SearchBox";
 import LandingPageBackground from "@/components/Backgrounds/LandingPageBackground";
 import LandingPageText from "@/components/Text/LandingPageText";
+import Footer from "@/components/Footer";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogFooter, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
@@ -84,65 +85,68 @@ export default function HomePage() {
           <div className="relative w-full max-w-6xl z-10 -top-14 py-10" style={{ paddingTop: "calc(50vh - 150px)" }}>
             <Suspense fallback={<SearchBoxSkeletonLoader />}>
               {!loading ? (
-                <SearchBox airports={airports} showRequiredFieldPopup={showRequiredFieldPopup} />
+                <SearchBox airports={airports} showRequiredFieldPopup={showRequiredFieldPopup}/>
               ) : (
                 <SearchBoxSkeletonLoader />
               )}
             </Suspense>
           </div>
         </main>
-
+        
         {/* Trending Locations Grid wrapped with DestinationsProvider */}
         <TrendingLocationsHomeGrid destinations={popularDestinations} />
       </div>
 
-      {/* Login or Signup Popup */}
-      <Dialog open={authData.showPleaseSignInPopup} onOpenChange={closeSignInPopup}>
-      <DialogContent>
-        <div className="flex justify-center mb-4">
-          <AlertTriangle size={48} className="text-orange-500" />
-        </div>
-        <DialogTitle>Please Login or Signup</DialogTitle>
-        <DialogDescription>You need to log in or sign up to access this feature.</DialogDescription>
-        <DialogFooter>
-          <Button onClick={closeSignInPopup} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
-            OK
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    {/* Footer */}
+    <Footer />
 
-    {/* Field Required Popup */}
-    <Dialog open={fieldPopupOpen} onOpenChange={setFieldPopupOpen}>
-      <DialogContent>
-        <div className="flex justify-center mb-4">
-          <AlertTriangle size={48} className="text-orange-500" />
-        </div>
-        <DialogTitle>Complete Required Field</DialogTitle>
-        <DialogDescription>Please complete the "{fieldName}" field before continuing.</DialogDescription>
-        <DialogFooter>
-          <Button onClick={() => setFieldPopupOpen(false)} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
-            OK
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+     {/* Login or Signup Popup */}
+     <Dialog open={authData.showPleaseSignInPopup} onOpenChange={closeSignInPopup}>
+     <DialogContent>
+       <div className="flex justify-center mb-4">
+         <AlertTriangle size={48} className="text-orange-500" />
+       </div>
+       <DialogTitle>Please Login or Signup</DialogTitle>
+       <DialogDescription>You need to log in or sign up to access this feature.</DialogDescription>
+       <DialogFooter>
+         <Button onClick={closeSignInPopup} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
+           OK
+         </Button>
+       </DialogFooter>
+     </DialogContent>
+   </Dialog>
 
-    {/* Unable to Access Popup */}
-    <Dialog open={authData.showBadAccessPopup} onOpenChange={() => setBadAccessPopup(false)}>
-        <DialogContent>
-          <div className="flex justify-center mb-4">
-            <AlertTriangle size={48} className="text-orange-500" />
-          </div>
-          <DialogTitle>Unable to Access</DialogTitle>
-          <DialogDescription>Unable to access this feature right now...</DialogDescription>
-          <DialogFooter>
-            <Button onClick={() => setBadAccessPopup(false)} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
-              OK
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+   {/* Field Required Popup */}
+   <Dialog open={fieldPopupOpen} onOpenChange={setFieldPopupOpen}>
+     <DialogContent>
+       <div className="flex justify-center mb-4">
+         <AlertTriangle size={48} className="text-orange-500" />
+       </div>
+       <DialogTitle>Complete Required Field</DialogTitle>
+       <DialogDescription>Please complete the "{fieldName}" field before continuing.</DialogDescription>
+       <DialogFooter>
+         <Button onClick={() => setFieldPopupOpen(false)} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
+           OK
+         </Button>
+       </DialogFooter>
+     </DialogContent>
+   </Dialog>
+
+   {/* Unable to Access Popup */}
+   <Dialog open={authData.showBadAccessPopup} onOpenChange={() => setBadAccessPopup(false)}>
+       <DialogContent>
+         <div className="flex justify-center mb-4">
+           <AlertTriangle size={48} className="text-orange-500" />
+         </div>
+         <DialogTitle>Unable to Access</DialogTitle>
+         <DialogDescription>Unable to access this feature right now...</DialogDescription>
+         <DialogFooter>
+           <Button onClick={() => setBadAccessPopup(false)} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
+             OK
+           </Button>
+         </DialogFooter>
+       </DialogContent>
+     </Dialog>
   </>
   );
 }
