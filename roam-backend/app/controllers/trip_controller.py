@@ -70,6 +70,17 @@ def delete_trip(guid: str) -> Response:
     except Exception:
         return jsonify({"error": "Internal Server Error"}), 500
     
+@trip_bp.route("/api/trips/<string:trip_guid>/<string:passenger_guid>", methods=["DELETE"])
+def delete_trip_ticket(trip_guid: str, passenger_guid: str) -> Response:
+    try:
+        TripService.delete_trip_ticket(trip_guid, passenger_guid)
+        return jsonify({"message": "Trip ticket deleted successfully"}), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception:
+        return jsonify({"error": "Internal Server Error"}), 500
+    
+    
 
 @trip_bp.route("/api/passengers", methods=["GET"])
 def get_all_passengers() -> Response:

@@ -44,11 +44,6 @@ const ProfilePreviousPurchases: FC<ProfilePreviousPurchasesProps> = ({ purchases
                                 </div>
                             ))}
                         </div>
-                    
-                        {/* Add a divider if this is not the last trip */}
-                        {index < purchases.length - 1 && (
-                            <div className="border-t border-gray-300 mt-4"></div>
-                        )}
                     </div>                
                 ))}
             </div>

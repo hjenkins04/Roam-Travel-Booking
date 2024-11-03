@@ -49,7 +49,33 @@ class TripRepository:
             return True
         return False
     
-    
+    @staticmethod
+    def delete_ticket(trip_guid: str, passenger_guid: str) -> bool:
+        """Delete a specific passenger (ticket) by trip GUID and passenger GUID.
+        If the last passenger is deleted, delete the entire trip.
+        """
+        trip = TripRepository.get_by_guid(trip_guid)
+        
+        if trip:
+            # Find passenger to delete
+            passenger_to_delete = next((p for p in trip.passengers if p.guid == passenger_guid), None)
+            
+            if passenger_to_delete:
+                # Delete passenger
+                db.session.delete(passenger_to_delete)
+                db.session.commit()
+
+                # If no more passengers delete the trip
+                if len(trip.passengers) == 0:
+                    db.session.delete(trip)
+                    db.session.commit()
+                
+                return True
+        
+        return False
+
+
+
     @staticmethod
     def get_all_passengers() -> List[PassengerEntity]:
         """Retrieve all passengers from the database."""

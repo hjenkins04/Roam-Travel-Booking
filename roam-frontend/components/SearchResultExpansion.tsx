@@ -6,8 +6,13 @@ import { format } from "date-fns";
 import { Trip, Passenger, FlightSearch, Flight, formatTimeMinutes, getPriceByPassengerType } from "@/models";
 import { useSearchStore } from "@/context/SearchContext";
 import { useTripStore} from "@/context/TripContext";
+import { useLoaderStore } from "@/context/LoaderContext";
+import { useAuthStore } from "@/context/AuthContext";
 import LoaderPopup from "@/components/LoaderPopup";
 import { fetchRandomReturnFlight } from "@/api/FetchRandomReturnFlight";
+import { AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogFooter, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 
 interface SearchResultExpansionProps {
     flight?: Flight;
@@ -16,7 +21,10 @@ interface SearchResultExpansionProps {
 const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({ flight }) => {
     const { searchData, setSearchData } = useSearchStore();
     const { tripData, setTripData } = useTripStore();
-    const [loading, setLoading] = useState(false);
+    const { showLoader, hideLoader } = useLoaderStore();
+    const [fieldPopupOpen, setFieldPopupOpen] = useState(false);
+    const [fieldName, setFieldName] = useState("Field Name");
+    const { authData, setAuthData, setShowPleaseSignInPopup } = useAuthStore();
     const router = useRouter();
 
     const sleep = (milliseconds: any) => new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -40,9 +48,52 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({ flight })
         );
     }
 
+    const showRequiredFieldPopup = (name: string) => {
+        setFieldName(name);
+        setFieldPopupOpen(true);
+      };
+
+    const EnsureAllSearchFields = (): boolean => {
+    // Check if all required fields are selected
+    if (!searchData.departureAirport) {
+        showRequiredFieldPopup("Departure City");
+        hideLoader();
+        return false;
+    } else if (!searchData.arrivalAirport) {
+        showRequiredFieldPopup("Arrival City");
+        hideLoader();
+        return false;
+    } else if (!searchData.departureDate) {
+        showRequiredFieldPopup("Departure Date");
+        hideLoader();
+        return false;
+    } else if (searchData.isRoundTrip && !searchData.returnDate) {
+        showRequiredFieldPopup("Return Date");
+        hideLoader();
+        return false;
+    } else if (!searchData.passengers || searchData.passengers < 1) {
+        showRequiredFieldPopup("Passengers");
+        hideLoader();
+        return false;
+    }
+    return true;
+    };
+
     async function setTripContextData() {
-        setLoading(true);
+        showLoader();
         try {
+
+            if (authData.isSignedIn === false) {
+                setShowPleaseSignInPopup(true);
+                router.replace("/home");
+                return;
+            }
+
+            if (!EnsureAllSearchFields()) {
+                hideLoader();
+                return;
+            }
+
             // Set trip data
             const tripName = `${searchData.isRoundTrip ? "Round Trip" : "One Way"} - ${flight?.departure_airport.municipality_name} to ${flight?.arrival_airport.municipality_name} ${format(
                 searchData.departureDate || new Date(),
@@ -104,10 +155,10 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({ flight })
                 return_date: searchData.returnDate,
                 current_flight: flight || tripData.current_flight,
                 current_flight_departure_date: searchData.departureDate,
+                trip_booking_active: true,
+                trip_purchased: false
               });
-
             router.push("/seat-booking");
-            await sleep(2000);
         } catch (error) {
             console.error("Error creating trip data", error);
         }
@@ -117,67 +168,82 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({ flight })
     if (!flight) return null; // Render nothing if no flight is selected
 
     return (
-        <div className="bg-gray-100 p-4 rounded-2xl w-full h-full shadow-md flex flex-col justify-between border-2 border-[#FF9A2A]">
-            {/* Loader Popup */}
-            <LoaderPopup isOpen={loading} />
-            
-            {/* Outgoing airport and incoming airport */}
-            <div>
-                <div className="flex justify-between items-center">
-                    <div className="text-5xl  text-gray-600  font-bold">
-                        {flight.departure_airport.iata_code}
+        <>
+            <div className="bg-gray-100 p-4 rounded-2xl w-full h-full shadow-md flex flex-col justify-between border-2 border-[#FF9A2A]">      
+                {/* Outgoing airport and incoming airport */}
+                <div>
+                    <div className="flex justify-between items-center">
+                        <div className="text-5xl  text-gray-600  font-bold">
+                            {flight.departure_airport.iata_code}
+                        </div>
+                        <ArrowRight className="mx-2" size={40} />
+                        <div className="text-5xl  text-gray-600 font-bold text-right">
+                            {flight.arrival_airport.iata_code}
+                        </div>
                     </div>
-                    <ArrowRight className="mx-2" size={40} />
-                    <div className="text-5xl  text-gray-600 font-bold text-right">
-                        {flight.arrival_airport.iata_code}
+                    <div className="flex justify-between text-sm text-gray-600 mt-2">
+                        <span>{splitName(flight.departure_airport.full_name)}</span>
+                        <span>{splitName(flight.arrival_airport.full_name)}</span>
                     </div>
-                </div>
-                <div className="flex justify-between text-sm text-gray-600 mt-2">
-                    <span>{splitName(flight.departure_airport.full_name)}</span>
-                    <span>{splitName(flight.arrival_airport.full_name)}</span>
-                </div>
 
-                {/* Flight length and price */}
-                <div className="flex justify-between text-base mt-2">
-                    <span className="text-gray-600">
-                        Duration: {formatTimeMinutes(flight.flight_time_minutes)}
-                    </span>
-                    <span className="font-semibold text-gray-700">
-                        Price: ${getPriceByPassengerType(searchData.seatTypeMapping, flight)}
-                    </span>
-                </div>
-                <hr className="my-4 border-t-2 border-gray-500" />
+                    {/* Flight length and price */}
+                    <div className="flex justify-between text-base mt-2">
+                        <span className="text-gray-600">
+                            Duration: {formatTimeMinutes(flight.flight_time_minutes)}
+                        </span>
+                        <span className="font-semibold text-gray-700">
+                            Price: ${getPriceByPassengerType(searchData.seatTypeMapping, flight)}
+                        </span>
+                    </div>
+                    <hr className="my-4 border-t-2 border-gray-500" />
 
-                {/* Bullet points with icons */}
-                <ul className="list-none p-0  text-gray-500">
-                    <li className="flex items-center my-6"> 
-                        <Plane className="mr-2" /> {flight.airline.name}
-                    </li>
-                    <li className="flex items-center my-6">
-                        <Calendar className="mr-2" />
-                        {searchData.departureDate ? formatDate(searchData.departureDate) : "No date selected"}
-                        <br />
-                        {formatTimeMinutes(flight.flight_time_minutes)}
-                    </li>
-                    {flight.baggage_allowance && (
-                        <li className="flex items-center my-6">
-                            <Briefcase className="mr-2" />
-                            <span>Baggage: {flight.baggage_allowance}</span>
+                    {/* Bullet points with icons */}
+                    <ul className="list-none p-0  text-gray-500">
+                        <li className="flex items-center my-6"> 
+                            <Plane className="mr-2" /> {flight.airline.name}
                         </li>
-                    )}
-                </ul>
+                        <li className="flex items-center my-6">
+                            <Calendar className="mr-2" />
+                            {searchData.departureDate ? formatDate(searchData.departureDate) : "No date selected"}
+                            <br />
+                            {formatTimeMinutes(flight.flight_time_minutes)}
+                        </li>
+                        {flight.baggage_allowance && (
+                            <li className="flex items-center my-6">
+                                <Briefcase className="mr-2" />
+                                <span>Baggage: {flight.baggage_allowance}</span>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+                
+                {/* Right-aligned button at the bottom */}
+                <div className="flex justify-end mt-4">
+                    <BookFlightButton
+                        mainText="Book My Ticket Now"
+                        onClick={setTripContextData}
+                        className="bg-[#FF9A2A] border-[#FF9A2A]"
+                        customTextColour="text-white"
+                    />
+                </div>
             </div>
-            
-            {/* Right-aligned button at the bottom */}
-            <div className="flex justify-end mt-4">
-                <BookFlightButton
-                    mainText="Book My Ticket Now"
-                    onClick={setTripContextData}
-                    className="bg-[#FF9A2A] border-[#FF9A2A]"
-                    customTextColour="text-white"
-                />
+
+            {/* Field Required Popup */}
+            <Dialog open={fieldPopupOpen} onOpenChange={setFieldPopupOpen}>
+            <DialogContent>
+            <div className="flex justify-center mb-4">
+                <AlertTriangle size={48} className="text-orange-500" />
             </div>
-        </div>
+            <DialogTitle>Complete Required Field</DialogTitle>
+            <DialogDescription>Please complete the "{fieldName}" field before continuing.</DialogDescription>
+            <DialogFooter>
+                <Button onClick={() => setFieldPopupOpen(false)} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
+                OK
+                </Button>
+            </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    </>
 
     );
 };

@@ -59,6 +59,11 @@ class TripService:
         """Delete a trip by its GUID."""
         return TripRepository.delete(guid)
     
+    @staticmethod
+    def delete_trip_ticket(trip_guid: str, passenger_guid: str) -> bool:
+        """Delete a trip ticket by its trip GUID and passenger GUID."""
+        return TripRepository.delete_ticket(trip_guid, passenger_guid)
+    
     
     @staticmethod
     def get_all_passengers() -> List[PassengerEntity]:

@@ -9,7 +9,6 @@ import SearchResultBoxSkeletonLoader from "@/components/SearchResultBoxSkeletonL
 import SearchScrollSkeletonLoader from "@/components/SearchScrollSkeletonLoader";
 
 import { useSearchStore  } from "@/context/SearchContext";
-
 import { Airport, Flight, FlightSearch, FilterOptions } from "@/models";
 import { fetchAirports } from "@/api/FetchAirports";
 import { fetchFlightsBySearchQuery } from "@/api/FetchFlightsBySearchQuery";

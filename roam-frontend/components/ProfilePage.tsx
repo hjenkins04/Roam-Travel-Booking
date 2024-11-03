@@ -49,10 +49,6 @@ const ProfilePage: React.FC = () => {
   const [purchases, setPurchases] = useState<DisplayPurchase[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // if(authData.isSignedIn === false){
-  //   router.push("/home");
-  // }
-
   // Event handlers for form submission and cancellation
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

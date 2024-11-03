@@ -15,9 +15,10 @@ import { Airport } from "@/models";
 
 interface SearchBoxProps {
   airports: Airport[];
+  showRequiredFieldPopup: (name: string) => void;
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
+const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup }) => {
   const { searchData, setSearchData } = useSearchStore();
   const router = useRouter();
 
@@ -91,7 +92,20 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports }) => {
   };
 
   const handleButtonClick = () => {
-    router.push("/search-results");
+    // Check if all required fields are selected
+    if (!searchData.departureAirport) {
+      showRequiredFieldPopup("Departure City");
+    } else if (!searchData.arrivalAirport) {
+      showRequiredFieldPopup("Arrival City");
+    } else if (!searchData.departureDate) {
+      showRequiredFieldPopup("Departure Date");
+    } else if (searchData.isRoundTrip && !searchData.returnDate) {
+      showRequiredFieldPopup("Return Date");
+    } else if (!searchData.passengers || searchData.passengers < 1) {
+      showRequiredFieldPopup("Passengers");
+    } else {
+      router.push("/search-results");
+    }
   };
 
   return (

@@ -4,6 +4,8 @@ import { persist } from "zustand/middleware";
 interface AuthData {
   guid: string;
   isSignedIn: boolean;
+  showPleaseSignInPopup: boolean;
+  showBadAccessPopup: boolean;
 }
 
 interface AuthStore {
@@ -11,6 +13,8 @@ interface AuthStore {
   signIn: (guid: string) => void;
   signOut: () => void;
   setAuthData: (data: AuthData) => void;
+  setShowPleaseSignInPopup: (show: boolean) => void;
+  setBadAccessPopup: (show: boolean) => void;
 }
 
 // Zustand store creation
@@ -20,6 +24,8 @@ export const useAuthStore = create<AuthStore>()(
       authData: {
         guid: "",
         isSignedIn: false,
+        showPleaseSignInPopup: false,
+        showBadAccessPopup: false,
       },
 
       // Function to sign in and set guid
@@ -39,10 +45,27 @@ export const useAuthStore = create<AuthStore>()(
         set(() => ({
           authData: data,
         })),
+
+      // Function to toggle showPleaseSignInPopup
+      setShowPleaseSignInPopup: (show: boolean) =>
+        set((state) => ({
+          authData: {
+            ...state.authData,
+            showPleaseSignInPopup: show,
+          },
+        })),
+
+      setBadAccessPopup: (show: boolean) =>
+        set((state) => ({
+          authData: {
+            ...state.authData,
+            showBadAccessPopup: show,
+          },
+        })),
     }),
     {
       name: "authData-storage", // Local storage key
-      partialize: (state) => ({ authData: state.authData }), // Persist authData
+      partialize: (state) => ({ authData: state.authData }), // Persist only authData
     }
   )
 );

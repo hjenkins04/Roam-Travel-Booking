@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState, useRef } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import PurchaseItem from "@/components/PurchaseItem";
 import PaymentForm from "@/components/PaymentForm";
 import PaymentSummaryCard from "@/components/PaymentSummaryCard";
@@ -8,23 +8,19 @@ import LoaderPopup from "@/components/LoaderPopup";
 import LoaderSuccessFailPopup from "@/components/LoaderSuccessFailPopup";
 import { DisplayPurchase, mapTripToPurchase } from "@/models";
 import { FetchBookingCheckout } from "@/api/FetchBookingCheckout";
-
-
 import { useTripStore } from "@/context/TripContext";
 
 const Checkout: React.FC = () => {
-  const { tripData } = useTripStore();
+  const { tripData, setTripData } = useTripStore();
   const [purchase, setPurchase] = useState<DisplayPurchase | null>(null);
   const [loading, setLoading] = useState(true);
-
 
   const [successLoader, setSuccessLoading] = useState(false);
   const [successLoaderState, setSuccessLoaderState] = useState<"loading" | "success" | "fail">("loading");
   const [successLoaderShowButton, setSuccessLoaderShowButton] = useState(false);
-  const [successLoaderButtonLabel, setSuccessLoaderButtonLabel] = useState("Home");
+  const [successLoaderButtonLabel, setSuccessLoaderButtonLabel] = useState("View Purchases");
 
   const router = useRouter();
-
 
   useEffect(() => {
     if (tripData.trip) {
@@ -35,8 +31,24 @@ const Checkout: React.FC = () => {
   }, [tripData.trip]);
 
   const redirectToHome =() => {
-    router.push("/home");
+    router.push("/dashboard");
   }
+
+  const pathname = usePathname(); // Get current pathname
+  const prevPathname = useRef(pathname); // Store previous pathname
+
+  // Invalidate current checkout after purchase when user leaves the checkout page
+  useEffect(() => {
+    if (pathname !== prevPathname.current) {
+      if (tripData.trip_purchased === true) {
+        setTripData((prevTripData) => ({
+          ...prevTripData,
+          trip_booking_active: false,
+        }));
+      }
+      prevPathname.current = pathname;
+    }
+  }, [pathname, tripData.trip_purchased, setTripData]);
 
 
   const handleFormSubmit = async (event: React.FormEvent) => {
@@ -51,7 +63,11 @@ const Checkout: React.FC = () => {
       await FetchBookingCheckout(tripData.trip);
       setSuccessLoaderShowButton(true);
       setSuccessLoaderState("success");
-      setSuccessLoaderShowButton(true)
+      setSuccessLoaderShowButton(true);
+      setTripData((prevTripData) => ({
+        ...prevTripData,
+        trip_purchased: true,
+      }));
     } catch (error) {
       console.error("Submission failed:", error);
       setSuccessLoaderShowButton(true);

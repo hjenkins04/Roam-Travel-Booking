@@ -9,6 +9,8 @@ export interface TripData {
   departure_date: Date | null;
   return_date: Date | null;
   total_cost: number;
+  trip_booking_active: boolean;
+  trip_purchased: boolean
 }
 
 interface TripState {
@@ -27,6 +29,8 @@ export const useTripStore = create<TripState>()(
         departure_date: null,
         return_date: null,
         total_cost: 0,
+        trip_booking_active: false,
+        trip_purchased: false
       },
       setTripData: (data) =>
         set((state) => {
