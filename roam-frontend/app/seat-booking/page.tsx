@@ -26,9 +26,5 @@ export default function CheckoutPage() {
     return () => clearTimeout(delayTimer);
   }, [tripData, router]);
 
-  return (
-    <>
-      {showSeatBooking && <SeatBooking />}
-    </>
-  );
+  return <>{showSeatBooking && <SeatBooking />}</>;
 }

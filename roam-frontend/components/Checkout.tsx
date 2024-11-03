@@ -16,23 +16,25 @@ const Checkout: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   const [successLoader, setSuccessLoading] = useState(false);
-  const [successLoaderState, setSuccessLoaderState] = useState<"loading" | "success" | "fail">("loading");
+  const [successLoaderState, setSuccessLoaderState] = useState<
+    "loading" | "success" | "fail"
+  >("loading");
   const [successLoaderShowButton, setSuccessLoaderShowButton] = useState(false);
-  const [successLoaderButtonLabel, setSuccessLoaderButtonLabel] = useState("View Purchases");
+  const [successLoaderButtonLabel] = useState("View Purchases");
 
   const router = useRouter();
 
   useEffect(() => {
     if (tripData.trip) {
-        setLoading(true);
-        setPurchase(mapTripToPurchase(tripData.trip));
-        setLoading(false);
+      setLoading(true);
+      setPurchase(mapTripToPurchase(tripData.trip));
+      setLoading(false);
     }
   }, [tripData.trip]);
 
-  const redirectToHome =() => {
+  const redirectToHome = () => {
     router.push("/dashboard");
-  }
+  };
 
   const pathname = usePathname(); // Get current pathname
   const prevPathname = useRef(pathname); // Store previous pathname
@@ -50,15 +52,14 @@ const Checkout: React.FC = () => {
     }
   }, [pathname, tripData.trip_purchased, setTripData]);
 
-
   const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setSuccessLoading(true);
     setSuccessLoaderState("loading");
-  
+
     try {
       if (!tripData.trip) {
-        return
+        return;
       }
       await FetchBookingCheckout(tripData.trip);
       setSuccessLoaderShowButton(true);
@@ -72,7 +73,7 @@ const Checkout: React.FC = () => {
       console.error("Submission failed:", error);
       setSuccessLoaderShowButton(true);
       setSuccessLoaderState("fail");
-      setSuccessLoaderShowButton(true)
+      setSuccessLoaderShowButton(true);
     }
   };
 
@@ -99,7 +100,9 @@ const Checkout: React.FC = () => {
                   <div className="overflow-y-auto max-h-96 hide-scrollbar">
                     {purchase.passengers.map((passenger, index) => (
                       <div key={index} className="mb-6">
-                        <h3 className="text-lg font-medium text-gray-600 mb-2">{passenger.name}</h3>
+                        <h3 className="text-lg font-medium text-gray-600 mb-2">
+                          {passenger.name}
+                        </h3>
                         <PurchaseItem
                           ban={false}
                           purchasePassenger={passenger}

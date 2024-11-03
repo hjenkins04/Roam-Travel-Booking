@@ -1,7 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
-import { Search } from "lucide-react";
 import SearchBoxButtonList from "@/components/SearchBoxButtonList";
 import HumpButton from "@/components/Buttons/HumpButton";
 
@@ -10,7 +8,7 @@ import SearchBoxButtonSkeleton from "@/components/SearchBoxButtonSkeleton";
 const SearchResultBoxSkeletonLoader: React.FC = () => {
   return (
     <>
-      <div className=" flex flex-col items-start relative" >
+      <div className=" flex flex-col items-start relative">
         {/* Toggle Button Container */}
         <div className="relative flex ml-3 -mb-0.5 justify-center items-center">
           <HumpButton

@@ -1,26 +1,48 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarIcon, UserIcon, Users, PlusIcon, MinusIcon, ChevronDown, Search, ArrowLeftRight, PlaneTakeoff, PlaneLanding } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  CalendarIcon,
+  UserIcon,
+  Users,
+  PlusIcon,
+  MinusIcon,
+  ChevronDown,
+  ArrowLeftRight,
+  PlaneTakeoff,
+  PlaneLanding,
+} from "lucide-react";
 import SearchBoxButtonList from "@/components/SearchBoxButtonList";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
 import { useRouter } from "next/navigation";
 
-import { useSearchStore  } from "@/context/SearchContext";
+import { useSearchStore } from "@/context/SearchContext";
 import { Airport } from "@/models";
 
 interface SearchResultBoxProps {
   airports: Airport[];
-  UpdatedFlightsSearch: (departureAirportId: string, arrivalAirportId: string) => Promise<void>;
+  UpdatedFlightsSearch: (
+    departureAirportId: string,
+    arrivalAirportId: string
+  ) => Promise<void>;
 }
 
-const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlightsSearch }) => {
+const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
   const { searchData, setSearchData } = useSearchStore();
-  const router = useRouter();
 
   const handleDepartureChange = (value: Airport) => {
     setSearchData({
@@ -43,7 +65,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
           : searchData.departureAirport,
     });
   };
-  
+
   const swapAirports = () => {
     setSearchData({
       ...searchData,
@@ -51,7 +73,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
       arrivalAirport: searchData.departureAirport,
     });
   };
-  
+
   const addPassenger = () => {
     setSearchData({
       ...searchData,
@@ -62,19 +84,22 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
       },
     });
   };
-  
+
   const removePassenger = () => {
     const updatedSeatTypeMapping = { ...searchData.seatTypeMapping };
     delete updatedSeatTypeMapping[searchData.passengers - 1];
-  
+
     setSearchData({
       ...searchData,
       passengers: searchData.passengers > 1 ? searchData.passengers - 1 : 1,
       seatTypeMapping: updatedSeatTypeMapping,
     });
   };
-  
-  const updatePassengerClass = (index: number, newClass: "Business" | "Economy") => {
+
+  const updatePassengerClass = (
+    index: number,
+    newClass: "Business" | "Economy"
+  ) => {
     setSearchData({
       ...searchData,
       seatTypeMapping: { ...searchData.seatTypeMapping, [index]: newClass },
@@ -93,7 +118,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
 
   return (
     <>
-      <div className=" flex flex-col items-start relative" >
+      <div className=" flex flex-col items-start relative">
         {/* Toggle Button Container */}
         <div className="relative flex ml-3 -mb-0.5 justify-center items-center">
           <HumpButton
@@ -248,21 +273,21 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
                             : "Month"
                         }
                         size="w-[175px]"
-                        onClickMainButton={() => { }}
+                        onClickMainButton={() => {}}
                       />
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                    mode="single"
-                    selected={searchData.departureDate || undefined}
-                    onSelect={(date) =>
-                      setSearchData({
-                        ...searchData,
-                        departureDate: date || null,
-                      })
-                    }
-                  />
+                      mode="single"
+                      selected={searchData.departureDate || undefined}
+                      onSelect={(date) =>
+                        setSearchData({
+                          ...searchData,
+                          departureDate: date || null,
+                        })
+                      }
+                    />
                   </PopoverContent>
                 </Popover>
 
@@ -295,21 +320,21 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
                             : "Month"
                         }
                         size="w-[175px]"
-                        onClickMainButton={() => { }}
+                        onClickMainButton={() => {}}
                       />
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                    mode="single"
-                    selected={searchData.returnDate || undefined}
-                    onSelect={(date) =>
-                      setSearchData({
-                        ...searchData,
-                        returnDate: date || null,
-                      })
-                    }
-                  />
+                      mode="single"
+                      selected={searchData.returnDate || undefined}
+                      onSelect={(date) =>
+                        setSearchData({
+                          ...searchData,
+                          returnDate: date || null,
+                        })
+                      }
+                    />
                   </PopoverContent>
                 </Popover>
               </>
@@ -345,7 +370,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
                           : "Month"
                       }
                       size="w-[230px]"
-                      onClickMainButton={() => { }}
+                      onClickMainButton={() => {}}
                     />
                   </div>
                 </PopoverTrigger>
@@ -385,7 +410,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports, UpdatedFlig
                     mainTextRight={getPassengerTypeSummary()} // Summary of passenger types
                     subTextRight=""
                     size="w-[195px]"
-                    onClickMainButton={() => { }}
+                    onClickMainButton={() => {}}
                   />
                 </div>
               </PopoverTrigger>

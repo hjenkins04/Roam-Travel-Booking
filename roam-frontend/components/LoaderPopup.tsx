@@ -13,10 +13,10 @@ const LoaderPopup: React.FC<PopupProps> = ({ isOpen = false, onClose }) => {
     setIsVisible(isOpen);
   }, [isOpen]);
 
-  const handleClose = () => {
-    setIsVisible(false);
-    onClose && onClose();
-  };
+  // const handleClose = () => {
+  //   setIsVisible(false);
+  //   onClose && onClose();
+  // };
 
   if (!isVisible) return null;
 
@@ -28,7 +28,9 @@ const LoaderPopup: React.FC<PopupProps> = ({ isOpen = false, onClose }) => {
         aria-modal="true"
         aria-labelledby="loading-popup-title"
       >
-        <h2 id="loading-popup-title" className="text-xl font-semibold">Loading</h2>
+        <h2 id="loading-popup-title" className="text-xl font-semibold">
+          Loading
+        </h2>
         <Loader2 className="w-16 h-16 text-orange-500 animate-spin" />
       </div>
     </div>

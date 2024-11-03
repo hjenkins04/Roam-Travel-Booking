@@ -31,8 +31,9 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
   const isLogin = mode === "login";
   const { signIn } = useAuthStore();
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+
   const [error, setError] = useState("");
 
   // Toggle between login and signup modes
@@ -70,9 +71,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
   return (
     <Sheet open={isOpen} onOpenChange={closeDrawer}>
       <DialogTitle>{`${mode}`} page</DialogTitle>
-      <DialogDescription>
-        Fill in the required details below.
-      </DialogDescription>
+      <DialogDescription>Fill in the required details below.</DialogDescription>
       <SheetContent
         side="right"
         className="bg-white p-8 rounded-l-lg shadow-xl flex flex-col justify-center items-center h-screen"
@@ -190,9 +189,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
                   type="checkbox"
                   className="rounded border-gray-300 text-orange-500 shadow-sm focus:border-orange-300 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                 />
-                <span className="ml-2 text-sm text-gray-600">
-                  Remember me
-                </span>
+                <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
               <button
                 onClick={handleForgotPassword}
@@ -242,7 +239,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
         </p>
       </SheetContent>
     </Sheet>
-  )
+  );
 };
 
 export default LoginSignupPopout;
