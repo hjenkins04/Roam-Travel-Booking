@@ -54,7 +54,6 @@ const ProfilePage: React.FC = () => {
   const [emailProp, setEmailProp] = useState("");
 
   const [purchases, setPurchases] = useState<DisplayPurchase[]>([]);
-  const [loading, setLoading] = useState(true);
 
   // Event handlers for form submission and cancellation
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -85,11 +84,9 @@ const ProfilePage: React.FC = () => {
     fetchTrips()
       .then((data: Trip[]) => {
         setPurchases(data.map((trip) => mapTripToPurchase(trip)));
-        setLoading(false);
       })
       .catch((error: unknown) => {
         console.error("Error fetching trips:", error);
-        setLoading(false);
       });
   }, []);
 

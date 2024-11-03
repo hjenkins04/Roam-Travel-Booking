@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,7 +33,6 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
   const router = useRouter();
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   // Toggle between login and signup modes
   const toggleLoginSignup = () => {
@@ -55,11 +54,9 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
         signIn(data.guid);
         closeDrawer();
         router.push("/home");
-      } else {
-        setError("Login failed");
       }
     } catch (error) {
-      setError(`An error occurred. Please try again: ${error}`);
+      console.error(error);
     }
   };
 
