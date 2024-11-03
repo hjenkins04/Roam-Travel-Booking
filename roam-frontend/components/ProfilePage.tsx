@@ -21,7 +21,6 @@ import { fetchUpdate } from "@/api/FetchUpdate";
 import { fetchUserInfo } from "@/api/FetchUserInfo";
 import { DisplayPurchase, Trip, mapTripToPurchase } from "@/models";
 import { fetchTrips } from "@/api/FetchTrips";
-import { useRouter } from "next/navigation";
 import { RemoveTripByGuid } from "@/api/RemoveTrip";
 import { RemoveTripTicketByGuidAndIndex } from "@/api/RemoveTripTicket";
 

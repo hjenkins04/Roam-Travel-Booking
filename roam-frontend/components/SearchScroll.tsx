@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import SearchItem from "@/components/SearchItem";
 import SearchResultExpansion from "@/components/SearchResultExpansion";
-import { getTimeCategory } from "@/components/HelperFunctions/TimeFilter";
-import { getNumStops } from "@/components/HelperFunctions/NumStopsFilter";
+import { getTimeCategory } from "@/components/HelperFunctions/timeFilter";
 import { useSearchStore } from "@/context/SearchContext";
-import { Flight, FilterOptions, getPriceByPassengerType } from "@/models"
-
-
+import { Flight, FilterOptions, getPriceByPassengerType } from "@/models";
 
 interface SearchScrollProps {
   filters: FilterOptions;
@@ -15,12 +12,14 @@ interface SearchScrollProps {
 
 const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
   const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
-  const { searchData, setSearchData } = useSearchStore();
+  const { searchData } = useSearchStore();
 
   const filterFlights = () => {
     return flights.filter((flight) => {
       const priceCheck =
-        !filters.max_price || getPriceByPassengerType(searchData.seatTypeMapping, flight) <= parseInt(filters.max_price.replace("$", ""));
+        !filters.max_price ||
+        getPriceByPassengerType(searchData.seatTypeMapping, flight) <=
+          parseInt(filters.max_price.replace("$", ""));
       const stopsCheck =
         !filters.stops || String(flight.num_stops) === filters.stops;
       const arrivalCheck =
@@ -33,10 +32,7 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
       //   !filters.airline || flight.airline === filters.airline; //TODO
 
       return (
-        priceCheck &&
-        stopsCheck &&
-        arrivalCheck &&
-        departureCheck //&&
+        priceCheck && stopsCheck && arrivalCheck && departureCheck //&&
         //airlineCheck //TODO
       );
     });
@@ -61,7 +57,7 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
           ))
         )}
       </div>
-      {selectedFlight &&(
+      {selectedFlight && (
         <div className="ml-20 w-[500px] h-full mr-10 mb-20">
           <SearchResultExpansion flight={selectedFlight} />
         </div>

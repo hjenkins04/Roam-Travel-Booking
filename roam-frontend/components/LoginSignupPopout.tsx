@@ -33,7 +33,6 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
   const router = useRouter();
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
-
   const [error, setError] = useState("");
 
   // Toggle between login and signup modes

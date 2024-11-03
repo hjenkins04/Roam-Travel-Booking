@@ -6,7 +6,7 @@ interface PopupProps {
   onClose?: () => void;
 }
 
-const LoaderPopup: React.FC<PopupProps> = ({ isOpen = false, onClose }) => {
+const LoaderPopup: React.FC<PopupProps> = ({ isOpen = false }) => {
   const [isVisible, setIsVisible] = useState(isOpen);
 
   useEffect(() => {

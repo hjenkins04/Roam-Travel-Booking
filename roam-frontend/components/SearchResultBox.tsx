@@ -28,7 +28,6 @@ import {
 import SearchBoxButtonList from "@/components/SearchBoxButtonList";
 import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
-import { useRouter } from "next/navigation";
 
 import { useSearchStore } from "@/context/SearchContext";
 import { Airport } from "@/models";

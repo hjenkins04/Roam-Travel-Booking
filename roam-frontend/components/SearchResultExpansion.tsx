@@ -258,7 +258,7 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({
           </div>
           <DialogTitle>Complete Required Field</DialogTitle>
           <DialogDescription>
-            Please complete the "{fieldName}" field before continuing.
+            Please complete the &quot;{fieldName}&quot; field before continuing.
           </DialogDescription>
           <DialogFooter>
             <Button

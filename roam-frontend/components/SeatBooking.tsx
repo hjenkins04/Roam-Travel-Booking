@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import Airplane from "@/components/SeatSelection/Airplane";
 import BookingForm from "@/components/SeatBookingForm";
 import Header from "@/components/Header";
-import LoaderPopup from "@/components/LoaderPopup";
 import SeatBookingFormFooter from "@/components/SeatBookingFormFooter";
 import { useTripStore, TripData } from "@/context/TripContext";
 import { useLoaderStore } from "@/context/LoaderContext";
@@ -27,10 +26,8 @@ export default function SeatBookingPage() {
     useState<boolean>(false);
   const [passengerIndex, setPassengerIndex] = useState<number>(0);
   const { tripData, setTripData } = useTripStore();
-  const { isLoading, showLoader, hideLoader } = useLoaderStore();
-  const [groupSize, setGroupSize] = useState<number>(
-    tripData?.trip?.passengers?.length || 5
-  );
+  const { showLoader, hideLoader } = useLoaderStore();
+  const [groupSize] = useState<number>(tripData?.trip?.passengers?.length || 5);
   const [seatStates, setSeatStates] = useState<{
     [id: number]: PossibleSeatStates;
   }>({});
