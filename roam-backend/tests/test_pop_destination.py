@@ -6,7 +6,7 @@ from app.models.entities.pop_destination_entity import PopularDestinationEntity
 @pytest.fixture
 def setup_destination(client):
     """Fixture to create a test popular destination."""
-    destination_dto = PopularDestinationDTO(guid="dest123", name="Test Destination")
+    destination_dto = PopularDestinationDTO(guid="dest123", name="Test Destination", image_path=None)
     destination_entity = PopularDestinationEntity.from_dto(destination_dto)
     db.session.add(destination_entity)
     db.session.commit()

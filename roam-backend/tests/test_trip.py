@@ -6,7 +6,7 @@ from app.models.entities.trip_entity import TripEntity
 @pytest.fixture
 def setup_trip(client):
     """Fixture to create a test trip."""
-    trip_dto = TripDTO(guid="trip123", name="Test Trip", is_round_trip=True)
+    trip_dto = TripDTO(guid="trip123", name="Test Trip", is_round_trip="true")
     trip_entity = TripEntity.from_dto(trip_dto)
     db.session.add(trip_entity)
     db.session.commit()
@@ -20,7 +20,7 @@ def test_create_trip(client):
     response = client.post('/api/trips', json={
         "guid": "trip456",
         "name": "New Trip",
-        "is_round_trip": False
+        "is_round_trip": "false"
     })
 
     assert response.status_code == 201

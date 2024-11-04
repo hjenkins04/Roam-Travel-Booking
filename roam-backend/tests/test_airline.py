@@ -6,7 +6,12 @@ from app.models.entities.airline_entity import AirlineEntity
 @pytest.fixture
 def setup_airline(client):
     """Fixture to create a test airline."""
-    airline_dto = AirlineDTO(guid="airline123", icao_code="ICAO123", name="Test Airline")
+    airline_dto = AirlineDTO(
+        guid="airline123",
+        icao_code="ICAO123",
+        name="Test Airline",
+        logo_path=None
+    )
     airline_entity = AirlineEntity.from_dto(airline_dto)
     db.session.add(airline_entity)
     db.session.commit()
@@ -18,14 +23,15 @@ def setup_airline(client):
 
 def test_create_airline(client):
     response = client.post('/api/airlines', json={
-        "guid": "airline456",
-        "icao_code": "ICAO456",
-        "name": "New Airline"
+        "guid": "airline457",
+        "icao_code": "ICAO457",
+        "name": "New Airline",
+        "logo_path": "None"
     })
 
     assert response.status_code == 201
     data = response.get_json()
-    assert data == {"message": "1 airport(s) created successfully"}
+    assert data == {"message": "1 airline(s) created successfully"}
 
 def test_get_all_airlines(client, setup_airline):
     response = client.get('/api/airlines')
