@@ -12,8 +12,8 @@ class FlightSeatsEntity(db.Model):
     flight_id: str = db.Column(db.String(36), db.ForeignKey('flights.guid'), unique=True, nullable=False)
     
     # Relationships
-    flight = db.relationship("FlightEntity", back_populates="seat_configuration", uselist=False)
-    
+    flight = db.relationship("FlightEntity", back_populates="seat_configuration", uselist=False, passive_deletes=True)
+
     # JSON seat configuration
     seat_configuration = db.Column(db.JSON, nullable=False)
     
