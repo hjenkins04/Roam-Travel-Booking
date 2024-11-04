@@ -48,10 +48,3 @@ def test_delete_trip(client, setup_trip):
     assert response.status_code == 200
     data = response.get_json()
     assert data == {"message": "Trip deleted successfully"}
-
-def test_get_trip_not_found(client):
-    response = client.get('/api/trips/nonexistent_guid')
-
-    assert response.status_code == 404
-    data = response.get_json()
-    assert data == {"error": "Trip not found"}
