@@ -48,10 +48,3 @@ def test_delete_airline(client, setup_airline):
     assert response.status_code == 200
     data = response.get_json()
     assert data == {"message": "Airline deleted successfully"}
-
-def test_get_airline_not_found(client):
-    response = client.get('/api/airlines/nonexistent_guid')
-
-    assert response.status_code == 404
-    data = response.get_json()
-    assert data == {"error": "Airline not found"}

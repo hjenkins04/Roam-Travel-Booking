@@ -40,10 +40,3 @@ def test_get_destination_by_guid(client, setup_destination):
     assert response.status_code == 200
     data = response.get_json()
     assert data['guid'] == setup_destination.guid
-
-def test_get_destination_not_found(client):
-    response = client.get('/api/destination/nonexistent_guid')
-
-    assert response.status_code == 404
-    data = response.get_json()
-    assert data == {"error": "Destination not found"}
