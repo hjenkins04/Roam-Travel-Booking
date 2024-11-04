@@ -55,6 +55,12 @@ class FlightEntity(db.Model):
     @staticmethod
     def from_dto(dto: FlightDTO) -> "FlightEntity":
         # Check for airline and create it if it doesn't exist
+        # Initialize variables to None
+        airline = None
+        departure_airport = None
+        arrival_airport = None
+        seat_config = None
+        layover = None
 
         if dto.airline:
             airline = AirlineEntity.query.filter_by(guid=dto.airline.guid).first()
