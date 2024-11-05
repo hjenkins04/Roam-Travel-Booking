@@ -2,7 +2,7 @@ import React from "react";
 
 export async function RemoveTripByGuid(guid: string): Promise<void> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/trips/${guid}`,
+    `/api/trips/${guid}`,
     {
       method: "DELETE",
       headers: {

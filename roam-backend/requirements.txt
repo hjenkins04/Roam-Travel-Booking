@@ -4,3 +4,4 @@ Flask-SQLAlchemy==2.5.1
 SQLAlchemy==1.4.46
 PyJWT
 flask-cors
+flask_migrate

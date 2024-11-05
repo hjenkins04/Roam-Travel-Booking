@@ -1,7 +1,7 @@
 import { Trip } from "@/models";
 
 export async function FetchBookingCheckout(trip: Trip): Promise<Response> {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/trips`, {
+  const response = await fetch(`/api/trips`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
