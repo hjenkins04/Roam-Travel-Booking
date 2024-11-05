@@ -53,7 +53,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
       if (data.token) {
         signIn(data.guid);
         closeDrawer();
-        router.push("/home");
+        router.push("/");
       }
     } catch (error) {
       console.error(error);

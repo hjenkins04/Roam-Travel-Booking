@@ -1,4 +1,4 @@
-import React from "react"; // Import React
+import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import SearchScroll from "@/components/SearchScroll";
 import { Flight, FilterOptions } from "@/models";

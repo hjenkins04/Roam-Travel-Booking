@@ -11,7 +11,7 @@ interface ResetPasswordModalProps {
 const EmailSentModal: React.FC<ResetPasswordModalProps> = ({ email, onClose }) => {
     const router = useRouter();
     const handleResend = () => {
-        router.push("/home");
+        router.push("/");
     }
 
     return (

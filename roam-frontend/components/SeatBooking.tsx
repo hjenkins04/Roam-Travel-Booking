@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Airplane from "@/components/SeatSelection/Airplane";
 import BookingForm from "@/components/SeatBookingForm";
@@ -33,7 +33,7 @@ export default function SeatBookingPage() {
     name: tripData?.trip?.passengers?.[passengerIndex]?.name ?? "",
   });
 
-  const loadPassengerData = (index: number) => {
+  const loadPassengerData = useCallback((index: number) => {
     const passenger = (tripData?.trip?.passengers?.[index] ??
       {}) as Partial<Passenger>;
     setFormData({
@@ -54,7 +54,7 @@ export default function SeatBookingPage() {
       emerg_email: passenger.emerg_email ?? "",
       emerg_phone: passenger.emerg_phone ?? "",
     });
-  };
+  }, []);
 
   const initializeSeatStates = (seats: Seat[]) => {
     const newSeatStates: { [id: number]: PossibleSeatStates } = {};
@@ -66,7 +66,7 @@ export default function SeatBookingPage() {
     setAreSeatsInitialized(true);
   };
 
-  const loadFlightSeats = async (flight: Flight) => {
+  const loadFlightSeats = useCallback(async (flight: Flight) => {
     try {
       const flightConfig = await fetchFlightSeats(flight.guid);
       initializeSeatStates(flightConfig.seat_configuration);
@@ -74,7 +74,7 @@ export default function SeatBookingPage() {
     } catch (error) {
       console.error("Error fetching seat data:", error);
     }
-  };
+  }, []);
 
   const toggleSeatState = (id: number) => {
     setSeatStates((prevState) => {
@@ -189,12 +189,13 @@ export default function SeatBookingPage() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (tripData?.current_flight) {
       loadFlightSeats(tripData.current_flight);
     }
     loadPassengerData(passengerIndex);
-  }, [tripData, passengerIndex, loadFlightSeats, loadPassengerData]);
+  }, [tripData, passengerIndex]);
 
   return (
     <>

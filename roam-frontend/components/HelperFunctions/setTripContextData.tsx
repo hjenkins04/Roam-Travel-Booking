@@ -21,7 +21,7 @@ export async function setTripContextData(
   try {
     if (authData.isSignedIn === false) {
       setShowPleaseSignInPopup(true);
-      router.replace("/home");
+      router.replace("/");
       return;
     }
     if (!EnsureAllSearchFields()) {

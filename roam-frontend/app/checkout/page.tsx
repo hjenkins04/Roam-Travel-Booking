@@ -19,7 +19,7 @@ export default function CheckoutPage() {
 
     if (tripData && tripData.trip_booking_active === false) {
       setBadAccessPopup(true);
-      router.replace("/home");
+      router.replace("/");
       clearTimeout(delayTimer);
     }
 

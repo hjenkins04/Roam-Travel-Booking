@@ -11,7 +11,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (authData.isSignedIn === false) {
       setShowPleaseSignInPopup(true);
-      router.replace("/home");
+      router.replace("/");
     }
   }, [authData.isSignedIn, router, setShowPleaseSignInPopup]);
 
