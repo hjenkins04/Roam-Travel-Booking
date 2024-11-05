@@ -4,6 +4,7 @@ from app.models.dto.country_dto import CountryDTO
 from app.models.dto.continent_dto import ContinentDTO
 
 class AirportDTO:
+    """DTO for airport information, including location and country details."""
     def __init__(self, guid: str, full_name: str, short_name: str, municipality_name: str, iata_code: Optional[str],
                  location: Optional[Union[Dict, LocationDTO]],
                  country: Optional[Union[Dict, CountryDTO]]) -> None:

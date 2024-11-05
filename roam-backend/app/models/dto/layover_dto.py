@@ -2,6 +2,7 @@ from typing import Optional, Dict, Union
 from app.models.dto.airport_dto import AirportDTO
 
 class LayoverDTO:
+    """DTO for layover details, including duration and airport."""
     def __init__(self, guid: str, airport: AirportDTO, duration_minutes: int):
         self.guid = guid
         self.airport = airport

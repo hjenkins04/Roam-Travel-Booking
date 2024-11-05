@@ -1,6 +1,13 @@
+# Roam Flask Backend
+
+Run the development server:
+
+```bash
+python run.py
+```
 
 
-# Backend Architecture Overview
+## Backend Architecture Overview
 
 ### Controllers
 - **Purpose**: Handle HTTP requests and define API endpoints.
@@ -33,7 +40,7 @@
 - **Purpose**: Facilitate data transfer between frontend and backend, representing the json objects.
 - **Responsibilities**:
   - Shape data sent to and from backend.
-  - Include helper methods (e.g., `to_dict`, `to_entity`) for easy conversion between DTOs and entities.
+  - Include helper methods (e.g., `to_dict`, `from_dict`)
 - **Example**: `UserDTO` structures user data for requests and responses.
 
 ### Middleware (JWT Authentication)

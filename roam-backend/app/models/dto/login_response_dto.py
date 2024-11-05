@@ -1,6 +1,7 @@
 from typing import List, Dict, Optional
 
 class LoginResponseDTO:
+    """DTO for login response, containing user token and GUID."""
     def __init__(self, token: str, guid: str) -> None:
         self.token: str = token
         self.guid: str = guid

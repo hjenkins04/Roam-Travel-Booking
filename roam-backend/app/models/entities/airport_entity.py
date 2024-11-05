@@ -10,6 +10,7 @@ from app.models.dto.country_dto import CountryDTO
 from app.models.dto.continent_dto import ContinentDTO
 
 class AirportEntity(db.Model):
+    """Represents an airport with GUID, names, location details, and relationships to flights and country."""
     __tablename__ = 'airports'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     full_name: str = db.Column(db.String(100), nullable=False)

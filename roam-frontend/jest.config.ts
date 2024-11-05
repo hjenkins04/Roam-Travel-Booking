@@ -19,6 +19,9 @@ const config: Config = {
     '^@/utils/(.*)$': '<rootDir>/utils/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
+  testPathIgnorePatterns: [
+    '<rootDir>/components/__tests__/__mocks__/'
+  ],
 };
 
 export default config;

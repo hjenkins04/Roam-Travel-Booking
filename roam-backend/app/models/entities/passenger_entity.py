@@ -4,6 +4,7 @@ from app.models.dto.passenger_dto import PassengerDTO
 from app.utils import is_valid_uuid4
 
 class PassengerEntity(db.Model):
+    """Represents a passenger associated with a trip, including seat assignments."""
     __tablename__ = 'passengers'
     guid = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     name = db.Column(db.String(100), nullable=False)

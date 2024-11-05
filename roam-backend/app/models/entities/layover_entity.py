@@ -4,6 +4,7 @@ from app.models.dto.layover_dto import LayoverDTO
 from app.models.entities.airport_entity import AirportEntity
 
 class LayoverEntity(db.Model):
+    """Represents a layover associated with a flight, including layover airport and duration."""
     __tablename__ = 'layovers'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     

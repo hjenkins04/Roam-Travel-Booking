@@ -8,6 +8,7 @@ from app.models.entities.flight_seats_entity import FlightSeatsEntity
 from app.models.dto.flight_dto import FlightDTO
 
 class FlightEntity(db.Model):
+    """Represents a flight with details like duration, departure and arrival times, stops, prices, and related airline and airports."""
     __tablename__ = 'flights'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     flight_time_minutes: int = db.Column(db.Integer, nullable=False)  # Flight duration in minutes

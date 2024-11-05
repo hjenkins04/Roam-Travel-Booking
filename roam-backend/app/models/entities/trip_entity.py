@@ -6,6 +6,7 @@ from app.models.dto.trip_dto import TripDTO
 from app.utils import is_valid_uuid4
 
 class TripEntity(db.Model):
+    """Represents a trip, including flight details and passenger assignments."""
     __tablename__ = 'trips'
     guid = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     name = db.Column(db.String(100), nullable=False)

@@ -5,6 +5,7 @@ from app.models.dto.passenger_dto import PassengerDTO
 from app.utils import parse_date
 
 class TripDTO:
+    """DTO for trip details, including flights and passengers."""
     def __init__(
         self,
         guid: str,

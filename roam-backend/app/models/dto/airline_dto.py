@@ -2,6 +2,7 @@ from typing import Optional, Dict, Union
 from typing import Optional
 
 class AirlineDTO:
+    """DTO for airline details."""
     def __init__(self, guid: str, icao_code: str, name: str, logo_path: Optional[str] = None):
         self.guid = guid
         self.icao_code = icao_code

@@ -1,6 +1,7 @@
 from typing import Optional, Dict
 
 class ContinentDTO:
+    """DTO for continent details."""
     def __init__(self, guid: str, code: str, name: str) -> None:
         self.guid = guid
         self.code = code

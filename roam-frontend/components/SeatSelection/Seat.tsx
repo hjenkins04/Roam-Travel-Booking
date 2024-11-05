@@ -16,7 +16,7 @@ export interface SeatProps {
   seatType: PossibleSeatTypes;
   seatState: PossibleSeatStates;
   onSeatClick: (id: number) => void;
-  areSeatsInitialized: boolean; // Add this as a prop to manage initialization state
+  areSeatsInitialized: boolean;
 }
 
 // Color determination function

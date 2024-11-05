@@ -1,6 +1,7 @@
 from typing import Optional, Dict
 
 class FlightSearchDTO:
+    """DTO for searching flights by airport IDs."""
     def __init__(self, departure_airport_id: str, arival_airport_id: str):
         self.departure_airport_id = departure_airport_id
         self.arival_airport_id = arival_airport_id

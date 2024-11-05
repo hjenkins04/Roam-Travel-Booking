@@ -1,6 +1,7 @@
 from typing import Optional, Dict, Union
 
 class LocationDTO:
+    """DTO for geographic location details with latitude and longitude."""
     def __init__(self, guid: str, latitude: float, longitude: float) -> None:
         self.guid = guid
         self.latitude = latitude

@@ -48,7 +48,7 @@ const FilterButton: FC<FilterButtonProps> = ({
           <ChevronDown className="text-gray-500 h-4 w-4 ml-2" />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40">
+      <DropdownMenuContent className="w-40" data-testid="dropdown-list">
         {options.map((option, index) => (
           <DropdownMenuItem
             key={index}

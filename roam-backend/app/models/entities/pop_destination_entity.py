@@ -4,6 +4,7 @@ from app import db
 from app.models.dto.pop_destination_dto import PopularDestinationDTO
 
 class PopularDestinationEntity(db.Model):
+    """Represents a popular travel destination with an optional image."""
     __tablename__ = 'popular_destinations'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     name: str = db.Column(db.String(100), nullable=False)

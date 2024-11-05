@@ -1,5 +1,5 @@
 import React from "react";
-import { Trip, parseTrip } from "@/models";
+import { Trip } from "@/models";
 
 export async function fetchTrips(): Promise<Trip[]> {
   const response = await fetch(`/api/trips`);
@@ -7,6 +7,5 @@ export async function fetchTrips(): Promise<Trip[]> {
     throw new Error("Failed to fetch trips");
   }
   const data = await response.json();
-  console.log(data);
   return data;
 }

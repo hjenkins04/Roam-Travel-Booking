@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.dto.user_dto import UserDTO
 
 class UserEntity(db.Model):
+    """Represents a user with personal details and authentication information."""
     __tablename__ = 'users'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     first_name: str = db.Column(db.String(50), nullable=False)

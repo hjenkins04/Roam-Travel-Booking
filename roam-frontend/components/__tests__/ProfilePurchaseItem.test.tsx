@@ -1,6 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import PurchaseItem from "../PurchaseItem";
+import { mockDisplayPurchasePassenger, mockFlightOutbound, mockFlightReturn } from '@/components/__tests__/__mocks__/storeMocks';
+import { formatTimeMinutes, getFlightIdString, getLayoverSummary } from "@/models"
 
 /**
  * Test File: PurchaseItem Component
@@ -23,86 +25,41 @@ import PurchaseItem from "../PurchaseItem";
  */
 
 describe("PurchaseItem Component", () => {
-  const mockOutboundFlight = {
-    date: "2024-11-01",
-    departure: "New York (JFK)",
-    airline: "Delta Airlines",
-    flightNumber: "DL 2024",
-    seat: "12A",
-    duration: "6h 30m",
-    departureTime: "08:00 AM",
-    arrivalTime: "02:30 PM",
-    layover: "2h in Boston",
-  };
-  const mockReturnFlight = {
-    date: "2024-11-10",
-    departure: "San Francisco (SFO)",
-    airline: "United Airlines",
-    flightNumber: "UA 123",
-    seat: "14B",
-    duration: "6h 15m",
-    departureTime: "10:00 AM",
-    arrivalTime: "04:15 PM",
-  };
   const mockCancelClick = jest.fn();
+
+  const renderComponent = (ban: boolean) => render(
+    <PurchaseItem
+      ban={ban}
+      purchasePassenger={mockDisplayPurchasePassenger}
+      onCancelClick={mockCancelClick}
+    />
+  );
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test("Renders title, outbound flight, and return flight information", () => {
-    render(
-      <PurchaseItem
-        title="My Flight Booking"
-        outboundFlight={mockOutboundFlight}
-        returnFlight={mockReturnFlight}
-        onCancelClick={mockCancelClick}
-      />
-    );
+    renderComponent(true)
 
     // Check that the outbound flight information is rendered
-    expect(screen.getByText(mockOutboundFlight.date)).toBeInTheDocument();
-    expect(
-      screen.getByText(`Departing ${mockOutboundFlight.departure}`)
-    ).toBeInTheDocument();
-    expect(screen.getByText(mockOutboundFlight.airline)).toBeInTheDocument();
-    expect(
-      screen.getByText(mockOutboundFlight.flightNumber)
-    ).toBeInTheDocument();
-    expect(screen.getByText(mockOutboundFlight.seat)).toBeInTheDocument();
-    expect(screen.getByText(mockOutboundFlight.duration)).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        `${mockOutboundFlight.departureTime} - ${mockOutboundFlight.arrivalTime}`
-      )
-    ).toBeInTheDocument();
-    expect(screen.getByText(mockOutboundFlight.layover)).toBeInTheDocument();
+    expect( screen.getByText(`Departing ${mockFlightOutbound.departure_airport.iata_code}`)).toBeInTheDocument();
+    expect(screen.getByText(mockFlightOutbound.airline.name)).toBeInTheDocument();
+    expect( screen.getByText(getFlightIdString(mockFlightOutbound)) ).toBeInTheDocument();
+    expect(screen.getByText(formatTimeMinutes(mockFlightOutbound.flight_time_minutes))).toBeInTheDocument();
+    expect(screen.getByText(`${mockFlightOutbound.departure_time} - ${mockFlightOutbound.arrival_time}`)).toBeInTheDocument();
+    expect(screen.getByText(getLayoverSummary(mockFlightOutbound))).toBeInTheDocument();
 
     // Check that return flight information is rendered
-    expect(screen.getByText(mockReturnFlight.date)).toBeInTheDocument();
-    expect(
-      screen.getByText(`Departing ${mockReturnFlight.departure}`)
-    ).toBeInTheDocument();
-    expect(screen.getByText(mockReturnFlight.airline)).toBeInTheDocument();
-    expect(screen.getByText(mockReturnFlight.flightNumber)).toBeInTheDocument();
-    expect(screen.getByText(mockReturnFlight.seat)).toBeInTheDocument();
-    expect(screen.getByText(mockReturnFlight.duration)).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        `${mockReturnFlight.departureTime} - ${mockReturnFlight.arrivalTime}`
-      )
-    ).toBeInTheDocument();
+    expect( screen.getByText(`Departing ${mockFlightReturn.departure_airport.iata_code}`)).toBeInTheDocument();
+    expect(screen.getByText(mockFlightReturn.airline.name)).toBeInTheDocument();
+    expect( screen.getByText(getFlightIdString(mockFlightReturn)) ).toBeInTheDocument();
+    expect(screen.getByText(formatTimeMinutes(mockFlightReturn.flight_time_minutes))).toBeInTheDocument();
+    expect(screen.getByText(`${mockFlightReturn.departure_time} - ${mockFlightReturn.arrival_time}`)).toBeInTheDocument();
   });
 
   test("Check that the cancel button is rendered and triggers the function once", () => {
-    render(
-      <PurchaseItem
-        title="My Flight Booking"
-        outboundFlight={mockOutboundFlight}
-        returnFlight={mockReturnFlight}
-        onCancelClick={mockCancelClick}
-      />
-    );
+    renderComponent(true)
 
     const cancelButton = screen.getByTestId("cancel-icon");
     fireEvent.click(cancelButton);
@@ -112,15 +69,7 @@ describe("PurchaseItem Component", () => {
   });
 
   test("Check that the cancel button is not rendered when ban is passed as false", () => {
-    render(
-      <PurchaseItem
-        title="My Flight Booking"
-        outboundFlight={mockOutboundFlight}
-        returnFlight={mockReturnFlight}
-        ban={false}
-        onCancelClick={mockCancelClick}
-      />
-    );
+    renderComponent(false)
 
     const cancelButton = screen.queryByTestId("cancel-icon");
 

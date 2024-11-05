@@ -8,9 +8,7 @@ interface ProfileSidebarProps {
 }
 
 const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
-  // Use authentication context for sign out functionality
   const { signOut } = useAuthStore();
-  // Use Next.js router for navigation
   const router = useRouter();
 
   // Handler for Home button click

@@ -2,6 +2,7 @@ from typing import Optional, Dict, Union
 from app.models.dto.continent_dto import ContinentDTO
 
 class CountryDTO:
+    """DTO for country details, linked to a continent."""
     def __init__(self, guid: str, code: str, name: str, continent: Optional[Union[Dict, ContinentDTO]] ) -> None:
         self.guid = guid
         self.code = code

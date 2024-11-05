@@ -4,6 +4,7 @@ from app.models.dto.airport_dto import AirportDTO
 from app.models.dto.layover_dto import LayoverDTO
 
 class FlightDTO:
+    """DTO for flight details, including airline, airports, and layover."""
     def __init__(self, guid: str, departure_time: str, arrival_time: str, num_stops: int,
                  price_economy: float, price_business:float, baggage_allowance: str,
                  airline: Union[Dict, AirlineDTO], departure_airport: Union[Dict, AirportDTO],

@@ -6,6 +6,7 @@ from app.models.dto.country_dto import CountryDTO
 from app.models.dto.continent_dto import ContinentDTO
 
 class CountryEntity(db.Model):
+    """Represents a country with a unique code and name, linked to a continent and associated airports."""
     __tablename__ = 'countries'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     code: str = db.Column(db.String(2), unique=True, nullable=False)

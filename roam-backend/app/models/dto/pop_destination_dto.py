@@ -1,6 +1,7 @@
 from typing import List, Dict, Optional
 
 class PopularDestinationDTO:
+    """DTO for popular destination details, including image path."""
     def __init__(self, name: str, guid: str, image_path: str) -> None:
         self.name: str = name
         self.guid: str = guid

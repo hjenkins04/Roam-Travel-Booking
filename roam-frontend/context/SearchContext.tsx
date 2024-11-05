@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Airport } from "@/models";
 
-interface SearchData {
+export interface SearchData {
   departureAirport: Airport | null;
   arrivalAirport: Airport | null;
   departureDate: Date | null;

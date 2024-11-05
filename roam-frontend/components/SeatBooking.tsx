@@ -9,28 +9,19 @@ import { useTripStore, TripData } from "@/context/TripContext";
 import { useLoaderStore } from "@/context/LoaderContext";
 import { PossibleSeatStates } from "@/components/SeatSelection/Seat";
 import { fetchFlightSeats } from "@/api/FetchFlightSeats";
-import {
-  PassengerFormData,
-  transformToPassenger,
-  Passenger,
-  Seat,
-  Flight,
-} from "@/models";
+import { PassengerFormData, transformToPassenger, Passenger, Seat, Flight } from "@/models";
 
 export default function SeatBookingPage() {
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
   const [passengerName, setPassengerName] = useState<string>("");
   const [isRoundTrip] = useState<boolean>(true);
   const [isFirstFlight, setIsFirstFlight] = useState<boolean>(true);
-  const [areSeatsInitialized, setAreSeatsInitialized] =
-    useState<boolean>(false);
+  const [areSeatsInitialized, setAreSeatsInitialized] = useState<boolean>(false);
   const [passengerIndex, setPassengerIndex] = useState<number>(0);
   const { tripData, setTripData } = useTripStore();
   const { showLoader, hideLoader } = useLoaderStore();
   const [groupSize] = useState<number>(tripData?.trip?.passengers?.length || 5);
-  const [seatStates, setSeatStates] = useState<{
-    [id: number]: PossibleSeatStates;
-  }>({});
+  const [seatStates, setSeatStates] = useState<{[id: number]: PossibleSeatStates;}>({});
 
   const router = useRouter();
 
@@ -107,7 +98,6 @@ export default function SeatBookingPage() {
   };
 
   const handleSeatClick = (seatNumber: number) => {
-    console.log(seatNumber);
     setSelectedSeat(seatNumber === selectedSeat ? null : seatNumber);
   };
 
@@ -203,9 +193,8 @@ export default function SeatBookingPage() {
     if (tripData?.current_flight) {
       loadFlightSeats(tripData.current_flight);
     }
-
     loadPassengerData(passengerIndex);
-  }, [tripData, passengerIndex]);
+  }, [tripData, passengerIndex, loadFlightSeats, loadPassengerData]);
 
   return (
     <>
@@ -216,17 +205,13 @@ export default function SeatBookingPage() {
           logoColour="black"
           displayProfilePicture
         />
-        <div
-          className="relative flex overflow-hidden z-20 bg-neutral-50"
-          style={{ height: "calc(100vh - 150px)" }}
-        >
-          <div
-            className={`relative transition-all duration-300 ease-in-out overflow-hidden ${
-              selectedSeat ? "w-2/4" : "w-full"
-            }`}
+        <div className="relative flex overflow-hidden z-20 bg-neutral-50" style={{ height: "calc(100vh - 150px)" }} >
+          <div className={`relative transition-all duration-300 ease-in-out overflow-hidden
+            ${ selectedSeat ? "w-2/4" : "w-full" }`}
             style={{ height: "100%" }}
+            data-testid={"airplane-column"}
           >
-            <div className="relative w-full h-full cursor-grab active:cursor-grabbing">
+            <div className="relative w-full h-full cursor-grab active:cursor-grabbing" data-testid={"airplane-svg"}>
               <Airplane
                 onSeatClick={toggleSeatState}
                 seatStates={seatStates}
@@ -235,7 +220,7 @@ export default function SeatBookingPage() {
             </div>
           </div>
           {selectedSeat && (
-            <div className="absolute right-0 w-4/7 h-full bg-white shadow-lg transition-opacity duration-300 ease-in-out opacity-100 flex flex-col justify-between">
+            <div className="absolute right-0 w-4/7 h-full bg-white shadow-lg transition-opacity duration-300 ease-in-out opacity-100 flex flex-col justify-between" data-testid={"booking-form-column"}>
               <div className="p-8 flex-1 overflow-auto">
                 {tripData.trip && (
                   <BookingForm
@@ -248,7 +233,7 @@ export default function SeatBookingPage() {
                   />
                 )}
               </div>
-              <div className="bg-gray-200 p-4">
+              <div className="bg-gray-200 p-4" data-testid={"booking-form-footer"}>
                 <SeatBookingFormFooter
                   passengerName={passengerName}
                   seatNumber={selectedSeat}

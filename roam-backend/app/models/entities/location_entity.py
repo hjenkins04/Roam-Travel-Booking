@@ -4,6 +4,7 @@ from app import db
 from app.models.dto.location_dto import LocationDTO
 
 class LocationEntity(db.Model):
+    """Represents a geographical location with latitude and longitude coordinates."""
     __tablename__ = 'locations'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     latitude: float = db.Column(db.Float, nullable=False)

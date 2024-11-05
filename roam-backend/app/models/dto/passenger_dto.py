@@ -1,6 +1,7 @@
 from typing import Optional
 
 class PassengerDTO:
+    """DTO for passenger details, including trip and seat information."""
     def __init__(
         self,
         guid: str,

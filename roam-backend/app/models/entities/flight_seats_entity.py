@@ -4,6 +4,7 @@ import random
 from app.models.dto.flight_seats_dto import FlightSeatsDTO
 
 class FlightSeatsEntity(db.Model):
+    """Represents seat availability and configuration for a specific flight."""
     __tablename__ = 'flight_seats'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     seats_available: int = db.Column(db.Integer)

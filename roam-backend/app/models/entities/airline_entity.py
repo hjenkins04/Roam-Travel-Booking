@@ -4,6 +4,7 @@ from app import db
 from app.models.dto.airline_dto import AirlineDTO
 
 class AirlineEntity(db.Model):
+    """Represents an airline with details such as GUID, ICAO code, name, and optional logo path."""
     __tablename__ = 'airlines'
     guid: str = db.Column(db.String(36), primary_key=True, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     icao_code: Optional[str] = db.Column(db.String(4), unique=True, nullable=True)

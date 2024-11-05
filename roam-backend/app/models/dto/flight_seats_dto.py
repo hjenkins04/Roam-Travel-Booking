@@ -1,6 +1,7 @@
 from typing import Optional, Dict, Union, List
 
 class FlightSeatsDTO:
+    """DTO for flight seat details and availability."""
     def __init__(self, guid: str, seats_available: int, flight_id: str,
                  seat_configuration: List[Dict[str, Union[int, str, bool]]] = None):
         self.guid = guid

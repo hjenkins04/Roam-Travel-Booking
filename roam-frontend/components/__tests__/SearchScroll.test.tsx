@@ -1,7 +1,11 @@
 import React from "react"; // Import React
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import SearchScroll from "@/components/SearchScroll";
-import { useRouter } from "next/navigation";
+import { Flight, FilterOptions } from "@/models";
+import { mockFlight, mockUseTripStore, mockFlightOneStop, mockFlightExpensive, mockUseSearchStore, mockAuthStoreSignedIn } from '@/components/__tests__/__mocks__/storeMocks';
+import { setTripContextData } from "@/components/HelperFunctions/setTripContextData";
+import { ImageProps } from "next/image";
+import { useRouter } from 'next/navigation';
 
 /**
  * Test File: Search Scroll Component
@@ -28,144 +32,135 @@ import { useRouter } from "next/navigation";
  *    - Expectation: Router.push() will be called with /checkout
  */
 
-interface ImageProps {
-  src: string;
-  alt: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any; // Allow any additional props
-}
-
 jest.mock("next/image", () => {
   return function MockImage({ src, alt, ...props }: ImageProps) {
-    return <img src={src} alt={alt} {...props} />;
+    return <img src={src as string} alt={alt} {...props} />;
   };
 });
-// Mock the useRouter hook
-jest.mock("next/navigation", () => ({
+
+jest.mock('@/context/TripContext', () => ({
+  useTripStore: jest.fn(() => mockUseTripStore),
+}));
+
+jest.mock('@/context/SearchContext', () => ({
+  useSearchStore: jest.fn(() => mockUseSearchStore),
+}));
+
+jest.mock('@/context/AuthContext', () => ({
+  useAuthStore: jest.fn(() => mockAuthStoreSignedIn),
+}));
+
+jest.mock('@/api/FetchRandomReturnFlight', () => {;
+  return {
+    fetchRandomReturnFlight: jest.fn().mockResolvedValue(mockFlight),
+  };
+});
+
+jest.mock("@/components/HelperFunctions/setTripContextData", () => ({
+  setTripContextData: jest.fn(),
+}));
+const setTripContextDataMock = jest.spyOn(
+  { setTripContextData },
+  "setTripContextData"
+);
+export { setTripContextDataMock };
+
+// Mock the next/navigation module
+jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-// Mocking the flightData module
-jest.mock("@/public/data/flightData", () => [
-  {
-    outgoingAirport: "JFK",
-    incomingAirport: "LAX",
-    outgoingAirportName: "John F. Kennedy International Airport",
-    incomingAirportName: "Los Angeles International Airport",
-    tripLength: "6h 30m",
-    price: "$300",
-    airline: "Delta Airlines",
-    flightDate: "2024-10-21",
-    departureTime: "10:00 AM",
-    arrivalTime: "1:30 PM",
-    baggageAllowance: "1 Carry-on, 1 Checked",
-    numStops: 0,
-  },
-]);
-
 describe("SearchScroll Component", () => {
+
+  const renderComponent = (filters: FilterOptions, flights: Flight[]) => render(<SearchScroll filters={filters} flights={flights} />);
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReset();
+  });
+
   test("Displays flight options based on filters", () => {
     const filters = {
-      maxPrice: null,
+      max_price: null,
       stops: "1",
-      arrivalTime: null,
-      departureTime: null,
+      arrival_time: null,
+      departure_time: null,
       airline: null,
     };
 
-    // Mock the router's push function
-    (useRouter as jest.Mock).mockReturnValue({
-      push: jest.fn(),
-    });
-
-    render(<SearchScroll filters={filters} />);
+   renderComponent(filters, [mockFlightOneStop]);
 
     expect(screen.queryByText(/Non-Stop/i)).toBeNull();
   });
+
   test("No Search Results if Nothing Matches the Filter", () => {
     const filters = {
-      maxPrice: "$100",
+      max_price: "$100",
       stops: null,
-      arrivalTime: null,
-      departureTime: null,
+      arrival_time: null,
+      departure_time: null,
       airline: null,
     };
 
-    // Mock the router's push function
-    (useRouter as jest.Mock).mockReturnValue({
-      push: jest.fn(),
-    });
+    renderComponent(filters, [mockFlightExpensive]);
 
-    render(<SearchScroll filters={filters} />);
-    expect(
-      screen.getByText((content) => content.startsWith("No results found"))
-    ).toBeInTheDocument();
+    expect(screen.getByText((content) => content.startsWith("No results found"))).toBeInTheDocument();
   });
+
   test("Search Result Expansion Is not open", () => {
     const filters = {
-      maxPrice: null,
+      max_price: null,
       stops: null,
-      arrivalTime: null,
-      departureTime: null,
+      arrival_time: null,
+      departure_time: null,
       airline: null,
     };
 
-    // Mock the router's push function
-    (useRouter as jest.Mock).mockReturnValue({
-      push: jest.fn(),
-    });
-
-    render(<SearchScroll filters={filters} />);
+    renderComponent(filters, [mockFlight]);
     expect(screen.queryByText(/Book My Ticket Now/i)).toBeNull();
   });
+
   test("Search Result Expansion Is Open after a Click", () => {
     const filters = {
-      maxPrice: null,
+      max_price: null,
       stops: null,
-      arrivalTime: null,
-      departureTime: null,
+      arrival_time: null,
+      departure_time: null,
       airline: null,
     };
 
-    // Mock the router's push function
-    (useRouter as jest.Mock).mockReturnValue({
-      push: jest.fn(),
-    });
-
-    render(<SearchScroll filters={filters} />);
+    renderComponent(filters, [mockFlight]);
 
     // Click on the first flight item
-    const firstFlightItem = screen.getByText("Delta Airlines");
+    expect(screen.getByTestId("search-result-0")).toBeInTheDocument();
+    const firstFlightItem = screen.getByTestId("search-result-0");
     fireEvent.click(firstFlightItem);
 
     // Check if the expansion is visible after clicking
     expect(screen.getByText(/Book My Ticket Now/i)).toBeInTheDocument();
   });
 
-  test("Book my ticket now redirects to the right page", () => {
+  test("Book my ticket now redirects to the right page", async () => {
     const filters = {
-      maxPrice: null,
+      max_price: null,
       stops: null,
-      arrivalTime: null,
-      departureTime: null,
+      arrival_time: null,
+      departure_time: null,
       airline: null,
     };
 
-    // Mock the router's push function
-    (useRouter as jest.Mock).mockReturnValue({
-      push: jest.fn(),
-    });
-
-    render(<SearchScroll filters={filters} />);
+    renderComponent(filters, [mockFlight]);
 
     // Click on the first flight item
-    const firstFlightItem = screen.getByText("Delta Airlines");
+    expect(screen.getByTestId("search-result-0")).toBeInTheDocument();
+    const firstFlightItem = screen.getByTestId("search-result-0");
     fireEvent.click(firstFlightItem);
 
     // Check if the expansion is visible after clicking
     const bookTicketButton = screen.getByText("Book My Ticket Now");
     fireEvent.click(bookTicketButton);
-    const router = useRouter();
-    expect(router.push).toHaveBeenCalledWith("/checkout");
+
+    // Check if the setTripContext has been called
+    await waitFor(() => {
+      expect(setTripContextDataMock).toHaveBeenCalled();
+    });
   });
 });

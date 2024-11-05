@@ -2,28 +2,23 @@
 
 import React, { FC } from "react";
 import Image from "next/image";
-import {
-  Flight,
-  formatTimeMinutes,
-  getLayoverSummary,
-  getStopSummary,
-  getPriceByPassengerType,
-  getSeatTypeByPassengerType,
-} from "@/models";
+import { Flight, formatTimeMinutes, getLayoverSummary, getStopSummary, getPriceByPassengerType, getSeatTypeByPassengerType } from "@/models";
 import { useSearchStore } from "@/context/SearchContext";
 
 interface SearchItemProps {
+  index: number
   flight: Flight;
   onClick: () => void;
 }
 
-const SearchItem: FC<SearchItemProps> = ({ flight, onClick }) => {
+const SearchItem: FC<SearchItemProps> = ({ index, flight, onClick }) => {
   const { searchData } = useSearchStore();
 
   return (
     <button
       className="flex items-center justify-between w-[700px] p-4 bg-white rounded-lg shadow hover:bg-gray-100 transition-all"
       onClick={onClick}
+      data-testid={`search-result-${index}`}
     >
       {/* Box for Left Icon and Airline */}
       <div className="flex items-center w-[200px]">

@@ -1,7 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import FilterButton from '../FilterButton';
-import FilterBox from '../FilterBox';
+import { render, screen, fireEvent, act, waitFor, cleanup } from '@testing-library/react';
+import userEvent from "@testing-library/user-event";
+import FilterButton from '@/components/FilterButton';
+import FilterBox from '@/components/FilterBox';
+
 /**
  * Test File: Filter Box 
  *
@@ -46,19 +48,30 @@ describe('FilterButton Component', () => {
     const mockOnOptionSelect = jest.fn();
     const mockApplyFilters = jest.fn();
 
+    const renderComponent = () => render(<FilterBox onFilterChange={mockApplyFilters} airlines={["Airline A", "Airline B"]} />);
+
     beforeEach(() => {
-        render(<FilterBox onFilterChange={mockApplyFilters} />);
+        cleanup();
+        renderComponent();
     });
+
     test('Max Price Button and Toggle Menu Functions as expected', async () => {
+        const user = userEvent.setup();
+
         const maxPriceButton = screen.getByTestId('filter-button-1');
 
         expect(maxPriceButton).toBeVisible();
-        fireEvent.click(maxPriceButton); // Simulate opening the dropdown
+
+        // Simulate opening the dropdown
+        await user.click(maxPriceButton);
+
         const dropdownList = await screen.findByTestId('dropdown-list');
         expect(dropdownList).toBeInTheDocument();
 
         const option = screen.getByTestId('dropdown-selection-0');
-        fireEvent.click(option); // Select the first option
+        
+        // Select the first option
+        await user.click(option);
         expect(maxPriceButton).toHaveTextContent('$200');
 
         // Click the button again to close the dropdown
@@ -67,15 +80,22 @@ describe('FilterButton Component', () => {
 
     });
     test('Stops Button and Toggle Menu Functions as expected', async () => {
+        const user = userEvent.setup();
+
         const maxPriceButton = screen.getByTestId('filter-button-2');
 
         expect(maxPriceButton).toBeVisible();
-        fireEvent.click(maxPriceButton); // Simulate opening the dropdown
+
+        // Simulate opening the dropdown
+        await user.click(maxPriceButton);
+
         const dropdownList = await screen.findByTestId('dropdown-list');
         expect(dropdownList).toBeInTheDocument();
 
         const option = screen.getByTestId('dropdown-selection-0');
-        fireEvent.click(option); // Select the first option
+
+        // Select the first option
+        await user.click(option);
         expect(maxPriceButton).toHaveTextContent('0');
 
         // Click the button again to close the dropdown
@@ -84,60 +104,92 @@ describe('FilterButton Component', () => {
 
     });
     test('Departure Time Button and Toggle Menu Functions as expected', async () => {
+        const user = userEvent.setup();
+
         const maxPriceButton = screen.getByTestId('filter-button-3');
 
         expect(maxPriceButton).toBeVisible();
-        fireEvent.click(maxPriceButton); // Simulate opening the dropdown
+
+        // Simulate opening the dropdown
+        await user.click(maxPriceButton);
+
         const dropdownList = await screen.findByTestId('dropdown-list');
         expect(dropdownList).toBeInTheDocument();
 
         const option = screen.getByTestId('dropdown-selection-0');
-        fireEvent.click(option); // Select the first option
+
+        // Select the first option
+        await user.click(option);
         expect(maxPriceButton).toHaveTextContent('Morning');
 
         // Click the button again to close the dropdown
-        fireEvent.click(maxPriceButton);
+        await user.click(maxPriceButton);
         expect(dropdownList).not.toBeInTheDocument();
 
     });
     test('Arrival Button and Toggle Menu Functions as expected', async () => {
+        const user = userEvent.setup();
+        
         const maxPriceButton = screen.getByTestId('filter-button-4');
 
         expect(maxPriceButton).toBeVisible();
-        fireEvent.click(maxPriceButton); // Simulate opening the dropdown
+
+        // Simulate opening the dropdown
+        await user.click(maxPriceButton);
+
         const dropdownList = await screen.findByTestId('dropdown-list');
         expect(dropdownList).toBeInTheDocument();
 
         const option = screen.getByTestId('dropdown-selection-0');
-        fireEvent.click(option); // Select the first option
+
+        // Select the first option
+        await user.click(option);
         expect(maxPriceButton).toHaveTextContent('Morning');
 
         // Click the button again to close the dropdown
-        fireEvent.click(maxPriceButton);
+        await user.click(maxPriceButton);
         expect(dropdownList).not.toBeInTheDocument();
 
     });
     test('Airline Button and Toggle Menu Functions as expected', async () => {
         const maxPriceButton = screen.getByTestId('filter-button-5');
 
-        expect(maxPriceButton).toBeVisible();
-        fireEvent.click(maxPriceButton); // Simulate opening the dropdown
+        const user = userEvent.setup();
+        
+        await waitFor(() => {
+            expect(maxPriceButton).toBeVisible();
+        });
+
+        // Simulate opening the dropdown
+        await user.click(maxPriceButton);
+
         const dropdownList = await screen.findByTestId('dropdown-list');
-        expect(dropdownList).toBeInTheDocument();
+        await waitFor(() => {
+            expect(dropdownList).toBeInTheDocument();
+          });
 
         const option = screen.getByTestId('dropdown-selection-0');
-        fireEvent.click(option); // Select the first option
-        expect(maxPriceButton).toHaveTextContent('Airline A');
+
+        // Select the first option
+        await user.click(option)
+
+        await waitFor(() => {
+            expect(maxPriceButton).toHaveTextContent('Airline A');
+          });
+
 
         // Click the button again to close the dropdown
-        fireEvent.click(maxPriceButton);
-        expect(dropdownList).not.toBeInTheDocument();
+        await act(async () => {
+            fireEvent.click(maxPriceButton);
+        });
+        await waitFor(() => {
+            expect(dropdownList).not.toBeInTheDocument();
+          });
 
     });
     test('calls onOptionSelect for a filter button component with null when reset is clicked', async () => {
         render(
             <FilterButton
-                rightIcon={<svg data-testid="chevron-icon" />}
                 mainTextRight="Max Price"
                 options={['Option 1', 'Option 2', 'Option 3']}
                 dataTestId="filter-button-6"
@@ -146,12 +198,17 @@ describe('FilterButton Component', () => {
             />
         );
 
+        const user = userEvent.setup();
+
         // Open the dropdown
-        fireEvent.click(screen.getByTestId('filter-button-6'));
+        await user.click(screen.getByTestId('filter-button-6'));
 
         // Click on reset option
-        fireEvent.click(screen.getByText('Reset'));
-        expect(mockOnOptionSelect).toHaveBeenCalledWith(null);
+        await user.click(screen.getByTestId('reset-button'));
+
+        await waitFor(() => {
+            expect(mockOnOptionSelect).toHaveBeenCalledWith(null);
+          });
     });
     test('Search Button Adjusts Filter Functions as expected', async () => {
         const searchButton = screen.getByTestId('search-button');

@@ -1,6 +1,7 @@
 from typing import List, Dict, Optional
 
 class UserDTO:
+    """DTO for user information, including contact details and password."""
     def __init__(self, guid: str, first_name: str, last_name: str, email: str, phone: Optional[str], password: Optional[str] = None) -> None:
         self.guid: str = guid
         self.first_name: str = first_name
