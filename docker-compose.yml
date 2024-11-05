@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  app:
+  frontend:
     build:
       context: ./roam-frontend
       dockerfile: Dockerfile
@@ -12,7 +12,19 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=production
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
     command: npm start
+
+  backend:
+    build:
+      context: ./roam-backend
+      dockerfile: Dockerfile
+    container_name: roam-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./roam-backend:/app
+    command: python run.py
 
 volumes:
   db_data:

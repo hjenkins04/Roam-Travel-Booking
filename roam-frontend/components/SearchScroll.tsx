@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import SearchItem from "@/components/SearchItem";
 import SearchResultExpansion from "@/components/SearchResultExpansion";
-import { getTimeCategory } from "@/components/HelperFunctions/TimeFilter";
-import { getNumStops } from "@/components/HelperFunctions/NumStopsFilter";
+import { getTimeCategory } from "@/components/HelperFunctions/timeFilter";
 import { useSearchStore } from "@/context/SearchContext";
 import { Flight, FilterOptions, getPriceByPassengerType } from "@/models"
 
