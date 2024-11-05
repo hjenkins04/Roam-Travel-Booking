@@ -29,7 +29,7 @@ def setup_airport_flight():
         country = CountryEntity(guid="country123", code="USA", name="United States", continent=continent)
         db.session.add(country)
 
-    test_airport = AirportEntity.query.filter_by(guid="test_airport123").first()
+    test_airport = AirportEntity.query.filter_by(guid="12345").first()
     if not test_airport:
         airport_dto = AirportDTO(
             guid="12345",
@@ -92,7 +92,7 @@ def setup_trip(client, setup_airport_flight):
         trip_dto = TripDTO(guid="trip123", 
                        name="Test Trip", 
                        is_round_trip=False, 
-                       departure_date="2024-11-20", 
+                       departure_date=date(2024, 11, 20),
                        departing_flight=FlightDTO(guid=flight.guid, 
                                                   departure_time=flight.departure_time, 
                                                   arrival_time=flight.arrival_time, 
