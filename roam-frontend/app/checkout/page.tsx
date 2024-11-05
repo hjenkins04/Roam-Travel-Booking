@@ -24,7 +24,7 @@ export default function CheckoutPage() {
     }
 
     return () => clearTimeout(delayTimer);
-  }, [tripData, router]);
+  }, [tripData, router, setBadAccessPopup]);
 
   if (!showCheckout) {
     return <LoaderPopup isOpen={true} />;

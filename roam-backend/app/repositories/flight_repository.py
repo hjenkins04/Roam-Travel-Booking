@@ -54,6 +54,7 @@ class FlightRepository:
     def delete_flight(guid: str) -> bool:
         """Delete a flight by its GUID."""
         flight = FlightRepository.get_by_guid(guid)
+        print(f"Flight retrieved for deletion: {flight}")
         if flight:
             db.session.delete(flight)
             db.session.commit()

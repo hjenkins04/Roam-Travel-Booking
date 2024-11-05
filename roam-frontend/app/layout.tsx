@@ -9,7 +9,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-useLoaderStore
   const { isLoading, childrenHidden } = useLoaderStore();
 
   return (

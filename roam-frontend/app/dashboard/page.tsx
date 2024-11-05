@@ -5,7 +5,7 @@ import ProfilePage from "@/components/ProfilePage";
 import { useAuthStore } from "@/context/AuthContext";
 
 export default function DashboardPage() {
-  const { authData, setAuthData, setShowPleaseSignInPopup } = useAuthStore();
+  const { authData, setShowPleaseSignInPopup } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -13,17 +13,11 @@ export default function DashboardPage() {
       setShowPleaseSignInPopup(true);
       router.replace("/home");
     }
-  }, [authData.isSignedIn, router]);
+  }, [authData.isSignedIn, router, setShowPleaseSignInPopup]);
 
   if (authData.isSignedIn === false) {
     return null;
   }
 
-  return (
-    <div>
-      {authData.isSignedIn && (
-        <ProfilePage />
-      )}
-    </div>
-  );
+  return <div>{authData.isSignedIn && <ProfilePage />}</div>;
 }

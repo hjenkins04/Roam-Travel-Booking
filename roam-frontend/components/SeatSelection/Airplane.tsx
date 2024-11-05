@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Seat, { PossibleSeatStates } from "@/components/SeatSelection/Seat";
 import RowNumber from "@/components/SeatSelection/RowNumber";
 import Information from "@/components/SeatSelection/Information";
 import Draggable from "react-draggable";
 
 // Total number of seats on the plane
-const TOTAL_SEATS = 188;
+// const TOTAL_SEATS = 188;
 
 const Airplane = ({
   onSeatClick,
   seatStates,
-  areSeatsInitialized
+  areSeatsInitialized,
 }: {
   onSeatClick: (seatNumber: number) => void;
   seatStates: { [id: number]: PossibleSeatStates };
-  areSeatsInitialized: boolean
+  areSeatsInitialized: boolean;
 }) => {
-
   return (
     <Draggable defaultPosition={{ x: -960, y: -800 }} axis="y">
       <svg

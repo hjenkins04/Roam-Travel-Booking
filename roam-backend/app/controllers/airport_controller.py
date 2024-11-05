@@ -53,12 +53,3 @@ def get_all_airports_by_country_code(country_code: str) -> Response:
     airport_list = [airport.to_dto().to_dict() for airport in airports]
     return jsonify(airport_list), 200
 
-@airport_bp.route('/api/airports/<string:guid>', methods=['DELETE'])
-def delete_airport(guid: str) -> Response:
-    try:
-        AirportService.delete_airport(guid)
-        return jsonify({"message": "Airport deleted successfully"}), 200
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 404
-    except Exception:
-        return jsonify({"error": "Internal Server Error"}), 500

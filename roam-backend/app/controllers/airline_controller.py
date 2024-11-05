@@ -18,7 +18,7 @@ def create_airline() -> Response:
         for dto in airline_dtos:
             AirlineService.create_airline(dto)
         
-        return jsonify({"message": f"{len(airline_dtos)} airport(s) created successfully"}), 201
+        return jsonify({"message": f"{len(airline_dtos)} airline(s) created successfully"}), 201
     
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
@@ -26,7 +26,7 @@ def create_airline() -> Response:
 @airline_bp.route('/api/airlines', methods=['GET'])
 def get_all_airlines() -> Response:
     airlines = AirlineService.get_all_airlines()
-    airline_list = [airline.to_dto().to_dict() for airport in airlines]
+    airline_list = [airline.to_dto().to_dict() for airline in airlines]
     return jsonify(airline_list), 200
 
 @airline_bp.route('/api/airlines/<string:guid>', methods=['GET'])

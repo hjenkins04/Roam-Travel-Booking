@@ -55,6 +55,13 @@ class FlightEntity(db.Model):
     @staticmethod
     def from_dto(dto: FlightDTO) -> "FlightEntity":
         # Check for airline and create it if it doesn't exist
+        # Initialize variables to None
+        airline = None
+        departure_airport = None
+        arrival_airport = None
+        seat_config = None
+        layover = None
+
         if dto.airline:
             airline = AirlineEntity.query.filter_by(guid=dto.airline.guid).first()
             if not airline:
@@ -62,6 +69,7 @@ class FlightEntity(db.Model):
                 db.session.add(airline)
                 
         # Check for departure airport and create it if it doesn't exist
+        departure_airport = None
         if dto.departure_airport:
             departure_airport = AirportEntity.query.filter_by(guid=dto.departure_airport.guid).first()
             if not departure_airport:
@@ -69,6 +77,7 @@ class FlightEntity(db.Model):
                 db.session.add(departure_airport)
                 
         # Check for arrival airport and create it if it doesn't exist
+        arrival_airport = None
         if dto.arrival_airport:
             arrival_airport = AirportEntity.query.filter_by(guid=dto.arrival_airport.guid).first()
             if not arrival_airport:

@@ -2,7 +2,6 @@ import React from "react"; // Import React
 import { render, screen, fireEvent } from "@testing-library/react";
 import SearchScroll from "@/components/SearchScroll";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 /**
  * Test File: Search Scroll Component

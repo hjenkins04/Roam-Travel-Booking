@@ -5,13 +5,11 @@ import { useRouter } from "next/navigation";
 import SeatBooking from "@/components/SeatBooking";
 import { useAuthStore } from "@/context/AuthContext";
 import { useTripStore } from "@/context/TripContext";
-import { useLoaderStore } from "@/context/LoaderContext";
 
 export default function CheckoutPage() {
   const { tripData } = useTripStore();
   const { setBadAccessPopup } = useAuthStore();
   const [showSeatBooking, setShowSeatBooking] = useState(false);
-  const { showLoader, hideLoader } = useLoaderStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -24,11 +22,7 @@ export default function CheckoutPage() {
     }
 
     return () => clearTimeout(delayTimer);
-  }, [tripData, router]);
+  }, [tripData, router, setBadAccessPopup]);
 
-  return (
-    <>
-      {showSeatBooking && <SeatBooking />}
-    </>
-  );
+  return <>{showSeatBooking && <SeatBooking />}</>;
 }

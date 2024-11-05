@@ -53,6 +53,7 @@ class TripDTO:
                 PassengerDTO.from_dict(p) for p in data.get("passengers", [])
             ]
         )
-        
+    
+
         
     

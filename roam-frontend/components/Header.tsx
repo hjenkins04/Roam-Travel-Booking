@@ -7,7 +7,12 @@ import TallHeaderBackground from "./Backgrounds/TallHeaderBackground";
 import { useAuthStore } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 const LoginSignupPopout = dynamic(
   () => import("@/components/LoginSignupPopout"),
@@ -29,11 +34,11 @@ const Header: React.FC<HeaderProps> = ({
   displayProfilePicture = false,
   isPasswordReset = false,
 }) => {
-  const { signOut } = useAuthStore(); 
+  const { signOut } = useAuthStore();
   const router = useRouter();
   const [isPopoutOpen, setIsPopoutOpen] = useState(false);
   const [popoutMode, setPopoutMode] = useState<"login" | "signup">("login");
-  const { authData, setAuthData } = useAuthStore();
+  const { authData } = useAuthStore();
 
   const openLoginDrawer = () => {
     setIsPopoutOpen(true);

@@ -8,7 +8,7 @@ import SearchScroll from "@/components/SearchScroll";
 import SearchResultBoxSkeletonLoader from "@/components/SearchResultBoxSkeletonLoader";
 import SearchScrollSkeletonLoader from "@/components/SearchScrollSkeletonLoader";
 
-import { useSearchStore  } from "@/context/SearchContext";
+import { useSearchStore } from "@/context/SearchContext";
 import { Airport, Flight, FlightSearch, FilterOptions } from "@/models";
 import { fetchAirports } from "@/api/FetchAirports";
 import { fetchFlightsBySearchQuery } from "@/api/FetchFlightsBySearchQuery";
@@ -28,7 +28,7 @@ export default function SearchResultsPage() {
   const [flights, setFlights] = useState<Flight[]>([]);
   const [airlines, setAirlines] = useState<string[]>([]);
 
-  const { searchData, setSearchData } = useSearchStore();
+  const { searchData } = useSearchStore();
 
   const handleFilterChange = (newFilters: FilterOptions) => {
     setFilters(newFilters);
@@ -63,9 +63,9 @@ export default function SearchResultsPage() {
           fetchAirports(),
           searchData.departureAirport && searchData.arrivalAirport
             ? fetchFlightsBySearchQuery({
-              departure_airport_id: searchData.departureAirport.guid,
-              arival_airport_id: searchData.arrivalAirport.guid,
-            })
+                departure_airport_id: searchData.departureAirport.guid,
+                arival_airport_id: searchData.arrivalAirport.guid,
+              })
             : Promise.resolve([]),
         ]);
 
@@ -73,10 +73,9 @@ export default function SearchResultsPage() {
         setFlights(flightsData);
 
         const uniqueAirlines = Array.from(
-          new Set(flightsData.map(flight => flight.airline.name))
+          new Set(flightsData.map((flight) => flight.airline.name))
         );
         setAirlines(uniqueAirlines);
-
       } catch (error) {
         console.error("Error fetching airport and flight data:", error);
       } finally {
@@ -86,7 +85,6 @@ export default function SearchResultsPage() {
 
     fetchAirportsAndFlights();
   }, [searchData]);
-
 
   return (
     <div className="relative min-h-screen items-start">
@@ -98,19 +96,39 @@ export default function SearchResultsPage() {
       />
 
       <main className="z-10 flex flex-col mt-[-95px] items-start pl-4">
-        <div className="relative w-full max-w-screen-xl z-10 py-6" style={{ transform: "scale(0.75)", transformOrigin: "left", paddingTop: "40px" }}>
+        <div
+          className="relative w-full max-w-screen-xl z-10 py-6"
+          style={{
+            transform: "scale(0.75)",
+            transformOrigin: "left",
+            paddingTop: "40px",
+          }}
+        >
           <Suspense fallback={<SearchResultBoxSkeletonLoader />}>
             {!loading ? (
-              <SearchResultBox airports={airports} UpdatedFlightsSearch={UpdatedFlightsSearch} />
+              <SearchResultBox
+                airports={airports}
+                UpdatedFlightsSearch={UpdatedFlightsSearch}
+              />
             ) : (
               <SearchResultBoxSkeletonLoader />
             )}
           </Suspense>
         </div>
-        <div className="relative w-full z-10" style={{ transform: "scale(0.75)", transformOrigin: "left", marginTop: "-50px" }}>
+        <div
+          className="relative w-full z-10"
+          style={{
+            transform: "scale(0.75)",
+            transformOrigin: "left",
+            marginTop: "-50px",
+          }}
+        >
           <FilterBox onFilterChange={handleFilterChange} airlines={airlines} />
         </div>
-        <div className="relative w-full h-full z-2" style={{ marginTop: "10px" }}>
+        <div
+          className="relative w-full h-full z-2"
+          style={{ marginTop: "10px" }}
+        >
           <Suspense fallback={<SearchScrollSkeletonLoader />}>
             {!loading || !resultsLoading ? (
               <SearchScroll filters={filters} flights={flights} />
