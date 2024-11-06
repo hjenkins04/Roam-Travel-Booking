@@ -7,18 +7,20 @@ interface ResetPasswordModalProps {
     onClose: () => void;
 }
 
+{/* Modal Indicating Password Reset Email has been sent */ }
 const EmailSentModal: React.FC<ResetPasswordModalProps> = ({ email, onClose }) => {
     const router = useRouter();
     const handleResend = () => {
-        router.push("/home");
+        router.push("/");
     }
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
                 <h2 className="text-xl font-semibold mb-4">Reset Email Sent</h2>
                 <p className="mb-4">
                     A password reset email has been sent to {email}.
-                    <span className="text-[#FF9A2A] cursor-pointer ml-1" onClick={handleResend}>
+                    <span className="text-[#FF9A2A] cursor-pointer ml-1" onClick={handleResend}> {/* Resend Logic to be setup in A3 as part of backend */}
                         Resend or Change Email.
                     </span>
                 </p>

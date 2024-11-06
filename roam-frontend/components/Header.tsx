@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import dynamic from "next/dynamic"
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import HeaderBackground from "./Backgrounds/HeaderBackground";
 import TallHeaderBackground from "./Backgrounds/TallHeaderBackground";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
-const LoginSignupPopout = dynamic(() => import("@/components/LoginSignupPopout"), { ssr: false });
+const LoginSignupPopout = dynamic(
+  () => import("@/components/LoginSignupPopout"),
+  { ssr: false }
+);
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   headerSize: string;
@@ -24,13 +32,13 @@ const Header: React.FC<HeaderProps> = ({
   backgroundImage,
   logoColour,
   displayProfilePicture = false,
-  isPasswordReset = false
+  isPasswordReset = false,
 }) => {
-
-  const { isSignedIn, signOut } = useAuth();
+  const { signOut } = useAuthStore();
   const router = useRouter();
   const [isPopoutOpen, setIsPopoutOpen] = useState(false);
   const [popoutMode, setPopoutMode] = useState<"login" | "signup">("login");
+  const { authData } = useAuthStore();
 
   const openLoginDrawer = () => {
     setIsPopoutOpen(true);
@@ -58,12 +66,13 @@ const Header: React.FC<HeaderProps> = ({
     <>
       {/* Conditionally render the background based on headerSize */}
       <div className="absolute inset-0" data-testid="header-container">
-        {backgroundImage && (headerSize === "tall" ?
-          <TallHeaderBackground data-testid="tall-header-background" /> :
-          <HeaderBackground data-testid="header-background" />
-        )}
+        {backgroundImage &&
+          (headerSize === "tall" ? (
+            <TallHeaderBackground data-testid="tall-header-background" />
+          ) : (
+            <HeaderBackground data-testid="header-background" />
+          ))}
       </div>
-
 
       <header className="flex justify-between items-center px-16 py-6 ">
         {/* Logo with click handler for redirect */}
@@ -86,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({
         {/* Conditionally render login/signup buttons or user avatar with dropdown */}
         {!isPasswordReset && (
           <div className="space-x-2 z-10">
-            {!isSignedIn && openLoginDrawer && (
+            {!authData.isSignedIn && openLoginDrawer && (
               <Button
                 variant="outline"
                 onClick={openLoginDrawer}
@@ -95,7 +104,7 @@ const Header: React.FC<HeaderProps> = ({
                 Login
               </Button>
             )}
-            {!isSignedIn && openSignupDrawer && (
+            {!authData.isSignedIn && openSignupDrawer && (
               <Button
                 className="bg-[#ff6b35] hover:bg-[#ff8c5a]"
                 onClick={openSignupDrawer}
@@ -104,12 +113,15 @@ const Header: React.FC<HeaderProps> = ({
                 Sign Up
               </Button>
             )}
-            {isSignedIn && displayProfilePicture && (
+            {authData.isSignedIn && displayProfilePicture && (
               <div className="flex items-center space-x-4">
                 {/* User Avatar with Dropdown */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Avatar className="cursor-pointer" data-testid="user-avatar">
+                    <Avatar
+                      className="cursor-pointer"
+                      data-testid="user-avatar"
+                    >
                       <AvatarImage src="/images/avatar.png" alt="User" />
                       <AvatarFallback>U</AvatarFallback>
                     </Avatar>

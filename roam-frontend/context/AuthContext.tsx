@@ -1,32 +1,71 @@
-"use client";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-interface AuthContextType {
+interface AuthData {
+  guid: string;
   isSignedIn: boolean;
-  signIn: () => void;
-  signOut: () => void;
+  showPleaseSignInPopup: boolean;
+  showBadAccessPopup: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+interface AuthStore {
+  authData: AuthData;
+  signIn: (guid: string) => void;
+  signOut: () => void;
+  setAuthData: (data: AuthData) => void;
+  setShowPleaseSignInPopup: (show: boolean) => void;
+  setBadAccessPopup: (show: boolean) => void;
+}
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+// Zustand store creation
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set) => ({
+      authData: {
+        guid: "",
+        isSignedIn: false,
+        showPleaseSignInPopup: false,
+        showBadAccessPopup: false,
+      },
 
-  const signIn = () => setIsSignedIn(true);
-  const signOut = () => setIsSignedIn(false);
+      // Function to sign in and set guid
+      signIn: (guid: string) =>
+        set((state) => ({
+          authData: { ...state.authData, isSignedIn: true, guid },
+        })),
 
-  return (
-    <AuthContext.Provider value={{ isSignedIn, signIn, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+      // Function to sign out and clear guid
+      signOut: () =>
+        set((state) => ({
+          authData: { ...state.authData, isSignedIn: false, guid: "" },
+        })),
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+      // Function to set auth data directly
+      setAuthData: (data: AuthData) =>
+        set(() => ({
+          authData: data,
+        })),
+
+      // Function to toggle showPleaseSignInPopup
+      setShowPleaseSignInPopup: (show: boolean) =>
+        set((state) => ({
+          authData: {
+            ...state.authData,
+            showPleaseSignInPopup: show,
+          },
+        })),
+
+      setBadAccessPopup: (show: boolean) =>
+        set((state) => ({
+          authData: {
+            ...state.authData,
+            showBadAccessPopup: show,
+          },
+        })),
+    }),
+    {
+      name: "authData-storage", // Local storage key
+      partialize: (state) => ({ authData: state.authData }), // Persist only authData
+    }
+  )
+);

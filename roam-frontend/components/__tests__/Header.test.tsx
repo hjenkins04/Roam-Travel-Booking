@@ -1,14 +1,18 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, cleanup, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/context/AuthContext";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
+import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from '@/components/__tests__/__mocks__/storeMocks';
 
-// Mock useAuth and useRouter hooks for testing
-jest.mock("@/context/AuthContext", () => ({
-  useAuth: jest.fn(),
-}));
+const resetAuthStore = () => {
+  const { setState } = useAuthStore;
+  act(() => {
+    setState({ ...mockAuthStoreSignedOut });
+  });
+};
+
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
@@ -63,10 +67,7 @@ describe("Header Component", () => {
   beforeEach(() => {
     // Clear all previous mock calls to ensure clean tests
     jest.clearAllMocks();
-    (useAuth as jest.Mock).mockReturnValue({
-      isSignedIn: false,
-      signOut: mockSignOut,
-    });
+    resetAuthStore();
     (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
   });
 
@@ -95,10 +96,7 @@ describe("Header Component", () => {
 
   test("Does not render the Login button when the user is signed in", () => {
     // Arrange: Simulate the user being signed in
-    (useAuth as jest.Mock).mockReturnValue({
-      isSignedIn: true,
-      signOut: mockSignOut,
-    });
+    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
 
     render(
       <Header
@@ -121,6 +119,9 @@ describe("Header Component", () => {
   });
 
   test("Renders the Sign Up button and triggers the signup drawer", async () => {
+    // Arrange: Simulate the user being signed out
+    act(() => {useAuthStore.setState(mockAuthStoreSignedOut);});
+
     // Arrange: Render the Header component with signup functionality
     render(
       <Header
@@ -164,10 +165,7 @@ describe("Header Component", () => {
 
   test("Profile dropdown menu shows options for Dashboard and Log Out when user is signed in", async () => {
     // Arrange: Simulate user being signed in
-    (useAuth as jest.Mock).mockReturnValue({
-      isSignedIn: true,
-      signOut: mockSignOut,
-    });
+    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
 
     render(
       <Header
@@ -193,10 +191,7 @@ describe("Header Component", () => {
 
   test("Profile dropdown menu redirects to the Dashboard when clicked", async () => {
     // Arrange: Simulate user being signed in
-    (useAuth as jest.Mock).mockReturnValue({
-      isSignedIn: true,
-      signOut: mockSignOut,
-    });
+    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
 
     render(
       <Header
@@ -218,11 +213,14 @@ describe("Header Component", () => {
     expect(mockPush).toHaveBeenCalledWith("/dashboard");
   });
 
-  test('Clicking "Log Out" in the dropdown calls the signOut function', async () => {
+  test('Clicking Log Out in the dropdown calls the signOut function', async () => {
     // Arrange: Simulate user being signed in
-    (useAuth as jest.Mock).mockReturnValue({
-      isSignedIn: true,
-      signOut: mockSignOut,
+    act(() => {
+      useAuthStore.setState({
+        ...mockAuthStoreSignedOut,
+        authData: { ...mockAuthStoreSignedOut.authData, isSignedIn: true },
+        signOut: mockSignOut,
+      });
     });
 
     render(

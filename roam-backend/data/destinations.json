@@ -1,0 +1,57 @@
+[
+    {
+        "guid": "Tokyo-68",
+        "image_path": "/images/destinations/tokyo.png",
+        "name": "Tokyo"
+    },
+    {
+        "guid": "fd1bfe33-e07e-4827-ab01-2d8b882fb4fe",
+        "image_path": "/images/destinations/tokyo.png",
+        "name": "Tokyo"
+    },
+    {
+        "guid": "b5f92b70-cc32-4d65-a6d6-37a1b0e89e3e",
+        "image_path": "/images/destinations/paris.png",
+        "name": "Paris"
+    },
+    {
+        "guid": "f8a47c5b-12c1-4e57-9c69-e2b129d1eaf0",
+        "image_path": "/images/destinations/newyork.png",
+        "name": "New York"
+    },
+    {
+        "guid": "a11d7021-f9ab-41a2-8357-0f8d1230f748",
+        "image_path": "/images/destinations/london.png",
+        "name": "London"
+    },
+    {
+        "guid": "4f8d8f0d-45c3-41d9-a7c8-1b92f1f4e185",
+        "image_path": "/images/destinations/sydney.png",
+        "name": "Sydney"
+    },
+    {
+        "guid": "c4d9b2b3-08b4-4729-8baf-62c34b20650b",
+        "image_path": "/images/destinations/rome.png",
+        "name": "Rome"
+    },
+    {
+        "guid": "c3f2b1e2-1c12-4bba-8c25-4f4056f0d909",
+        "image_path": "/images/destinations/dubai.png",
+        "name": "Dubai"
+    },
+    {
+        "guid": "6b5d368f-bfa5-44c5-bc02-cf32f96d0b76",
+        "image_path": "/images/destinations/singapore.png",
+        "name": "Singapore"
+    },
+    {
+        "guid": "dc6f4748-7d37-44f3-96d8-8d3055c6e823",
+        "image_path": "/images/destinations/barcelona.png",
+        "name": "Barcelona"
+    },
+    {
+        "guid": "ff4e36c1-d8d0-49c2-9e1f-e301f1719052",
+        "image_path": "/images/destinations/rio.png",
+        "name": "Rio de Janeiro"
+    }
+]

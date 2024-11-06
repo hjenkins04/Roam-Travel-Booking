@@ -8,7 +8,7 @@ interface SeatBookingFormFooterProps {
     passengerIndex: number;
     isRoundTrip: boolean;
     isFirstFlight: boolean;
-    onSave: () => void;
+    onCancel: () => void;
     onNextPassenger: () => void;
     onNextFlight: () => void;
     onContinue: () => void;
@@ -21,7 +21,7 @@ const SeatBookingFormFooter: React.FC<SeatBookingFormFooterProps> = ({
     passengerIndex,
     isRoundTrip,
     isFirstFlight,
-    onSave,
+    onCancel,
     onNextPassenger,
     onNextFlight,
     onContinue
@@ -47,14 +47,21 @@ const SeatBookingFormFooter: React.FC<SeatBookingFormFooterProps> = ({
                     <span className="text-sm font-medium text-gray-500">Seat number</span>
                     <span className="text-lg font-semibold">{seatNumber}</span>
                 </div>
+                 {/* Remove */}
+                <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-500">{`Passenger Index: ${passengerIndex}`}</span>
+                    <span className="text-sm font-medium text-gray-500">{`Group Size: ${groupSize}`}</span>
+                    <span className="text-sm font-medium text-gray-500">{`Round Trip: ${isRoundTrip}`}</span>
+                    <span className="text-sm font-medium text-gray-500">{`First Flight: ${isFirstFlight}`}</span>
+                </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex space-x-4">
-                {/* Save and Close button - always visible */}
+                {/* Cancel - always visible */}
                 {showSaveAndCloseButton && (
-                    <Button variant="outline" className="border-orange-400 text-orange-400" onClick={onSave}>
-                        Save and close
+                    <Button variant="outline" className="border-orange-400 text-orange-400" onClick={onCancel}>
+                        Cancel
                     </Button>
                 )}
 
@@ -68,14 +75,14 @@ const SeatBookingFormFooter: React.FC<SeatBookingFormFooterProps> = ({
                 {/* Next Flight button */}
                 {showNextFlightButton && (
                     <Button className="bg-[#ff6b35] hover:bg-[#ff8c5a]" onClick={onNextFlight}>
-                        Next Flight
+                        Book Return Flight
                     </Button>
                 )}
 
-                {/* Continue button */}
+                {/* Checkout button */}
                 {showContinueButton && (
                     <Button className="bg-[#ff6b35] hover:bg-[#ff8c5a]" onClick={onContinue}>
-                        Continue
+                        Checkout
                     </Button>
                 )}
             </div>

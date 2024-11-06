@@ -26,9 +26,11 @@ const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({ onSubmit }) => 
         router.back();
     }
 
+    {/* Forgot Password Form*/ }
     return (
         <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md border border-gray-300">
             <div className="mb-6">
+                {/* Email Address Input */}
                 <label htmlFor="email" className="block text-sm font-medium text-gray-500 mb-5 ">
                     Email Address
                 </label>
@@ -44,13 +46,15 @@ const ForgotPasswordCard: React.FC<ForgotPasswordCardProps> = ({ onSubmit }) => 
             </div>
 
             <div className="flex justify-center space-x-4">
+                {/* Cancel Button */}
                 <button
-                    type="button" // Change type to "button" for the cancel button
+                    type="button"
                     className="bg-white text-gray-400 py-2 px-4  rounded-lg"
-                    onClick={handleCancel} // Add a handler for the cancel action
+                    onClick={handleCancel} // Handler for the cancel action
                 >
                     Cancel
                 </button>
+                {/* Reset Password Button */}
                 <button
                     type="submit"
                     className="bg-[#FF9A2A] text-white  py-2 px-4 shadow-lg rounded-lg"

@@ -1,28 +1,35 @@
 ﻿# CISC327 Group 34
 
-## How to run the (Next.js) front-end
+## How to run the app
 
-To run the front-end project located in the `roam-frontend` folder, follow these steps:
+To run project with both the fronend and backend, follow these steps:
 
 ## Using Docker
 
 1. [Install Docker](https://docs.docker.com/get-docker/) on your machine.
-2. Navigate into the front-end project: `cd roam-frontend`.
-3. Build your container: `docker build -t roam-frontend .`.
-4. Run your container: `docker run -p 3000:3000 roam-frontend`.
+2. Ensure you are in the repo directory.
+3. Build the containers: `docker compose build`.
+4. Run your container: `docker run compose up -d`.
+5. Ensure both the frontend and backend containers are running `docker ps`.
 5. Open your browser and navigate to `http://localhost:3000` to see the webpage.
-6. To run the tests see the instructions below to setup the dev dependencies and then run: `npm test`.
+6. To run the tests see the instructions below.
 
-You can view your images created with `docker images`.
+You can view your docekr images created with `docker images`.
+
+
+## Frontend
+
+- Navigate into the `roam-fronend` directory.
 
 ### Prerequisites
 - Node.js installed
 - `npm` or `pnpm` package manager installed
 
-## Using Node.js
-### Step 1: Install Node.js
+### Step-by-Step Setup
 
-#### Option 1: Using `nvm` (Node Version Manager)
+#### Step 1: Install Node.js
+
+##### Option 1: Using `nvm` (Node Version Manager)
 Using `nvm` allows you to easily manage multiple Node.js versions on your machine.
 
 **macOS/Linux:**
@@ -55,7 +62,7 @@ Using `nvm` allows you to easily manage multiple Node.js versions on your machin
     nvm use latest
     ```
 
-### Step 2: Install Dependencies
+#### Step 2: Install Dependencies
 Once Node.js is installed, navigate to the `roam-frontend` directory:
 
 ```bash
@@ -64,13 +71,13 @@ cd roam-frontend
 
 Now, you can install the dependencies using either `npm` or `pnpm`.
 
-#### Option 1: Using `npm` (default Node.js package manager)
+##### Option 1: Using `npm` (default Node.js package manager)
 1. Install the required packages:
     ```bash
     npm install
     ```
 
-#### Option 2: Using `pnpm` (alternative package manager)
+##### Option 2: Using `pnpm` (alternative package manager)
 1. If `pnpm` is not installed, you can install it globally:
     ```bash
     npm install -g pnpm
@@ -80,22 +87,22 @@ Now, you can install the dependencies using either `npm` or `pnpm`.
     pnpm install
     ```
 
-### Step 3: Run the Development Server
+#### Step 3: Run the Development Server
 After installing the dependencies, run the following command to start the development server:
 
-#### Using `npm`:
+##### Using `npm`:
 ```bash
 npm run dev
 ```
 
-#### Using `pnpm`:
+##### Using `pnpm`:
 ```bash
 pnpm run dev
 ```
 
-This will start the development server. By default, you can access the application in your browser at `http://localhost:3000`.
+This will start the development server. You can access the application in your browser at `http://localhost:3000`.
 
-### Additional Commands
+#### Tesing the frontend
 - To test the application:
     ```bash
     npm test
@@ -105,7 +112,8 @@ This will start the development server. By default, you can access the applicati
     pnpm test
     ```
 
-- To build the application for production:
+#### Building the frontend
+- To build the application:
     ```bash
     npm run build
     ```
@@ -114,11 +122,58 @@ This will start the development server. By default, you can access the applicati
     pnpm run build
     ```
 
-- To start the production server:
-    ```bash
-    npm start
-    ```
-    or
-    ```bash
-    pnpm start
-    ```
+## Backend
+
+- Navigate into the `roam-backend` directory.
+
+### Prerequisites
+- Python installed.
+
+### Step-by-Step Setup
+
+#### Step 1: Set up Virtual Environment
+
+1. Create a virtual environment in the `roam-backend` directory:
+   ```bash
+   python -m venv venv
+   ```
+
+2. Activate the virtual environment:
+
+   - **macOS/Linux**:
+     ```bash
+     source venv/bin/activate
+     ```
+   - **Windows**:
+     ```bash
+     .\venv\Scripts\activate
+     ```
+
+3. Once activated, your terminal prompt will show `(venv)` at the beginning.
+
+#### Step 2: Install Dependencies
+
+After activating the virtual environment, install the required packages listed in `requirements.txt`:
+
+```bash
+pip install -r requirements.txt
+```
+
+#### Step 3: Run the Application
+
+Start the Flask backend.
+
+1. Run the application:
+   ```bash
+   python run.py
+   ```
+
+2. The app will be available at `http://127.0.0.1:5000` by default. You can change the host or port by updating the environment variables `FLASK_RUN_HOST` and `FLASK_RUN_PORT` if needed.
+
+### Testing the Backend
+
+To run tests for the backend, use `pytest`:
+
+```bash
+pytest
+```

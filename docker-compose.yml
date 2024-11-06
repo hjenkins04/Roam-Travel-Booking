@@ -1,18 +1,39 @@
 version: '3.8'
 services:
-  app:
+  frontend:
     build:
       context: ./roam-frontend
       dockerfile: Dockerfile
     container_name: roam-frontend
     ports:
       - "3000:3000"
-    volumes:
-      - ./roam-frontend:/app
-      - /app/node_modules
     environment:
       - NODE_ENV=production
-    command: npm start
+    depends_on:
+      - backend
+    command: node server.js
+    networks:
+      - shared-app-network
 
-volumes:
-  db_data:
+  backend:
+    build:
+      context: ./roam-backend
+      dockerfile: Dockerfile
+    container_name: roam-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_RUN_PORT=5000
+    volumes:
+      - ./roam-backend:/app
+    command: python run.py
+    networks:
+      - shared-app-network
+
+networks:
+  shared-app-network:
+    driver: bridge
+    name: shared-app-network

@@ -4,10 +4,16 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { Sheet, SheetContent, SheetHeader, SheetClose, } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetClose,
+} from "@/components/ui/sheet";
 import Underline from "@/components/Effects/TextUnderline";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/context/AuthContext";
 import { DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { fetchLogin } from "@/api/FetchLogin";
 
 interface LoginSignupPopoutProps {
   isOpen: boolean;
@@ -23,8 +29,10 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
   setPopoutMode,
 }) => {
   const isLogin = mode === "login";
-  const { signIn } = useAuth();
+  const { signIn } = useAuthStore();
   const router = useRouter();
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
   // Toggle between login and signup modes
   const toggleLoginSignup = () => {
@@ -36,22 +44,24 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
   };
 
   // Handle form submission for standard login/signup
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate successful login/signup
-    signIn();
-    closeDrawer();
-  };
+    // Simulate successful login
+    try {
+      const data = await fetchLogin();
 
-  // Handle Google sign-in or sign-up
-  const handleGoogleSignIn = () => {
-    // Simulate successful login/signup
-    signIn();
-    closeDrawer();
+      if (data.token) {
+        signIn(data.guid);
+        closeDrawer();
+        router.push("/");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleForgotPassword = () => {
-    router.push('/forgot-password');
+    router.push("/forgot-password");
   };
 
   return (
@@ -85,7 +95,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
         </SheetHeader>
 
         {/* Form Section */}
-        <form className="space-y-5 w-full" onSubmit={handleFormSubmit}>
+        <form className="space-y-5 w-full" onSubmit={handleLoginSubmit}>
           {/* Full Name & Phone Number (for signup) */}
           {!isLogin && (
             <>
@@ -179,7 +189,8 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
               </label>
               <button
                 onClick={handleForgotPassword}
-                className="text-sm text-orange-500 hover:underline cursor-pointer bg-transparent border-none p-0 m-0">
+                className="text-sm text-orange-500 hover:underline cursor-pointer bg-transparent border-none p-0 m-0"
+              >
                 Forgot Password?
               </button>
             </div>
@@ -199,7 +210,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
           <Button
             variant="outline"
             className="w-full flex items-center justify-center py-3 rounded-lg"
-            onClick={handleGoogleSignIn}
+            onClick={handleLoginSubmit}
           >
             <Image
               src="/assets/google-icon.svg"

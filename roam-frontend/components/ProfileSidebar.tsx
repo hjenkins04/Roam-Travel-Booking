@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 // Define props interface for the Sidebar component
@@ -8,9 +8,7 @@ interface ProfileSidebarProps {
 }
 
 const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
-  // Use authentication context for sign out functionality
-  const { signOut } = useAuth();
-  // Use Next.js router for navigation
+  const { signOut } = useAuthStore();
   const router = useRouter();
 
   // Handler for Home button click

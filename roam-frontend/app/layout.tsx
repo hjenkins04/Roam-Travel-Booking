@@ -1,17 +1,21 @@
 "use client";
 
-import { AuthProvider } from '@/context/AuthContext';
 import "./globals.css";
+import { useLoaderStore } from "@/context/LoaderContext";
+import LoaderPopup from "@/components/LoaderPopup";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isLoading, childrenHidden } = useLoaderStore();
+
   return (
     <html lang="en">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <LoaderPopup isOpen={isLoading} />
+        {!childrenHidden && children}
       </body>
     </html>
   );

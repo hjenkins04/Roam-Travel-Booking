@@ -2,6 +2,33 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ResetPasswordCard from '@/components/ResetPasswordCard';
 
+/**
+ * Test File: Reset Password Form 
+ *
+ * Purpose:
+ * - Ensures the functionality and rendering behavior of the Reset Password Form Component. 
+ * - The Reset Password Form Component includes:
+ *      - Two input sections: New Password and Confirm Password 
+ *
+ * Test Cases:
+ * 1. Render the form correctly. 
+ *    - Expectation: The two input sections new password and confirm password are visible. 
+ * 
+ * 2. Can toggle visibility of New Password Input 
+ *    - Expectation: Clicking the toggle button should switch the new password type between 
+ *      password and text. 
+ * 
+ * 3. Can toggle visibility of Confirm Password Input 
+ *    - Expectation: Clicking the toggle button should switch the confirm password type between 
+ *      password and text. 
+ * 
+ * 4. Form submits if passwords match
+ *    - Expectation: If password inputs match, the onSubmit function will be called once. 
+ * 
+ * 5. Form does not submit if passwords do not match
+ *    - Expectation:If password inputs do not match, the onSubmit function will not be called. 
+*/
+
 describe('ResetPasswordCard Component', () => {
     const mockOnSubmit = jest.fn();
 
@@ -9,14 +36,14 @@ describe('ResetPasswordCard Component', () => {
         mockOnSubmit.mockClear();
     });
 
-    test('renders the component correctly', () => {
+    test('Renders the component correctly', () => {
         render(<ResetPasswordCard onSubmit={mockOnSubmit} />);
 
         expect(screen.getByLabelText(/New Password/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/Confirm Password/i)).toBeInTheDocument();
     });
 
-    test('toggles password visibility', () => {
+    test('Toggles new password visibility', () => {
         render(<ResetPasswordCard onSubmit={mockOnSubmit} />);
 
         const passwordInput = screen.getByLabelText(/New Password/i);
@@ -34,7 +61,7 @@ describe('ResetPasswordCard Component', () => {
         expect(passwordInput).toHaveAttribute('type', 'password');
     });
 
-    test('toggles confirm password visibility', () => {
+    test('Toggles confirm password visibility', () => {
         render(<ResetPasswordCard onSubmit={mockOnSubmit} />);
 
         const confirmPasswordInput = screen.getByLabelText(/Confirm Password/i);
@@ -52,7 +79,7 @@ describe('ResetPasswordCard Component', () => {
         expect(confirmPasswordInput).toHaveAttribute('type', 'password');
     });
 
-    test('submits the form when passwords match', () => {
+    test('Submits the form when passwords match', () => {
         render(<ResetPasswordCard onSubmit={mockOnSubmit} />);
 
         const newPasswordInput = screen.getByLabelText(/New Password/i);
@@ -67,7 +94,7 @@ describe('ResetPasswordCard Component', () => {
         expect(mockOnSubmit).toHaveBeenCalledWith('newpassword123');
     });
 
-    test('does not submit the form if passwords do not match', () => {
+    test('Does not submit the form if passwords do not match', () => {
         render(<ResetPasswordCard onSubmit={mockOnSubmit} />);
 
         const newPasswordInput = screen.getByLabelText(/New Password/i);

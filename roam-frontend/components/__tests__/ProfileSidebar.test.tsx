@@ -1,16 +1,22 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { useAuth } from "@/context/AuthContext";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
+import { useAuthStore } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import Sidebar from "../ProfileSidebar";
+import Sidebar from "@/components/ProfileSidebar";
+import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from '@/components/__tests__/__mocks__/storeMocks';
 
 // Mock useAuth and useRouter hooks for testing
-jest.mock("@/context/AuthContext", () => ({
-  useAuth: jest.fn(),
-}));
+
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
+
+const resetAuthStore = () => {
+  const { setState } = useAuthStore;
+  act(() => {
+    setState({ ...mockAuthStoreSignedOut });
+  });
+};
 
 /**
  * Test File: Profile Sidebar Component
@@ -39,18 +45,19 @@ describe("Profile Sidebar Component", () => {
   const mockSignOut = jest.fn();
   const mockPush = jest.fn();
 
+  const renderComponent = () => render(<Sidebar onEditProfile={mockEditProfile} />);
+
   beforeEach(() => {
     // Clear all previous mock calls to ensure clean tests
     jest.clearAllMocks();
-    (useAuth as jest.Mock).mockReturnValue({
-      isSignedIn: false,
-      signOut: mockSignOut,
-    });
+    resetAuthStore();
     (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
   });
 
-  test("Render the Home button and redirects to home page", () => {
-    render(<Sidebar onEditProfile={mockEditProfile} />);
+  test("Render the Home button and redirects to home page", async () => {
+    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
+
+    renderComponent();
 
     const homeButton = screen.getByTestId("home-button");
     fireEvent.click(homeButton);
@@ -59,8 +66,10 @@ describe("Profile Sidebar Component", () => {
     expect(mockPush).toHaveBeenCalledWith("/");
   });
 
-  test("Render the Purchases button and trigger function once", () => {
-    render(<Sidebar onEditProfile={mockEditProfile} />);
+  test("Render the Purchases button and trigger function once", async () => {
+    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
+
+    renderComponent();
 
     const purchasesButton = screen.getByTestId("purchases-button");
     fireEvent.click(purchasesButton);
@@ -70,12 +79,15 @@ describe("Profile Sidebar Component", () => {
   });
 
   test("Render the Log Out button, log out user on click and redirect to home page", async () => {
-    (useAuth as jest.Mock).mockReturnValue({
-      isSignedIn: true,
-      signOut: mockSignOut,
+    act(() => {
+      useAuthStore.setState({
+        ...mockAuthStoreSignedOut,
+        authData: { ...mockAuthStoreSignedOut.authData, isSignedIn: true },
+        signOut: mockSignOut,
+      });
     });
 
-    render(<Sidebar onEditProfile={mockEditProfile} />);
+    renderComponent();
 
     const logOutButton = screen.getByTestId("sidebar-logout-button");
     fireEvent.click(logOutButton);

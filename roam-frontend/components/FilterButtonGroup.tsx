@@ -8,7 +8,7 @@ interface FilterButtonListProps extends ComponentPropsWithoutRef<"div"> {
 const FilterButtonGroup = ({ children, className = "", ...props }: FilterButtonListProps) => {
     return (
         <div
-            className={`flex flex-wrap justify-start items-center space-x-4 space-y-2 w-full ${className}`} // Flexbox setup for inline buttons with spacing
+            className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4 ${className}`}
             {...props}
         >
             {children}
