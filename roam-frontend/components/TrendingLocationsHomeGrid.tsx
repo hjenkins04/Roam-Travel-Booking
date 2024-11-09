@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import { PopularDestination } from "@/models/popular_destination";
 
@@ -11,7 +12,7 @@ const TrendingLocationsHomeGrid: React.FC<TrendingLocationsHomeGridProps> = ({
   destinations,
 }) => {
   return (
-    <section className="mb-16">
+    <section className="mb-16" data-testid="trending-locations-grid">
       <h2 className="text-5xl font-bold text-center mb-2">
         Popular Destinations
       </h2>
@@ -27,18 +28,29 @@ const TrendingLocationsHomeGrid: React.FC<TrendingLocationsHomeGridProps> = ({
               className={`flex flex-col items-center ${
                 index === 4 ? "hidden lg:flex" : ""
               }`}
+              data-testid={`destination-item-${index}`}
             >
-              <figure className="relative rounded-2xl overflow-hidden group w-full sm:max-w-[250px] md:max-w-[300px] lg:max-w-[1200px] lg:min-w-[200px] aspect-[3/2]">
+              <figure
+                className="relative rounded-2xl overflow-hidden group w-full sm:max-w-[250px] md:max-w-[300px] lg:max-w-[1200px] lg:min-w-[200px] aspect-[3/2]"
+                data-testid="destination-figure"
+              >
                 <Image
                   src={destination.image_path || "/assets/placeholder.svg"}
                   alt={destination.name}
                   fill
                   style={{ objectFit: "cover" }}
                   className="transition-transform duration-300 group-hover:scale-110"
+                  data-testid="destination-image"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"></div>
+                <div
+                  className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"
+                  data-testid="image-overlay"
+                ></div>
               </figure>
-              <figcaption className="mt-3 text-lg font-semibold text-gray-800 tracking-wide">
+              <figcaption
+                className="mt-3 text-lg font-semibold text-gray-800 tracking-wide"
+                data-testid="destination-name"
+              >
                 {destination.name}
               </figcaption>
             </li>

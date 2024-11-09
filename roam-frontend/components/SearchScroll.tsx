@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogFooter, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Flight, getPriceByPassengerType, FilterOptions } from "@/models";
 import { useRouter } from "next/navigation";
-import { setTripContextData} from "@/components/HelperFunctions/setTripContextData"
+import { setTripContextData } from "@/components/HelperFunctions/setTripContextData"
 
 interface SearchScrollProps {
   filters: FilterOptions;
@@ -33,7 +33,7 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
       const priceCheck =
         !filters.max_price ||
         getPriceByPassengerType(searchData.seatTypeMapping, flight) <=
-          parseInt(filters.max_price.replace("$", ""));
+        parseInt(filters.max_price.replace("$", ""));
       const stopsCheck =
         !filters.stops || String(flight.num_stops) === filters.stops;
       const arrivalCheck =
@@ -42,12 +42,11 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
       const departureCheck =
         !filters.departure_time ||
         getTimeCategory(flight.departure_time) === filters.departure_time;
-      // const airlineCheck =
-      //   !filters.airline || flight.airline === filters.airline; //TODO
+      const airlineCheck =
+        !filters.airline || flight.airline.name === filters.airline;
 
       return (
-        priceCheck && stopsCheck && arrivalCheck && departureCheck //&&
-        //airlineCheck //TODO
+        priceCheck && stopsCheck && arrivalCheck && departureCheck && airlineCheck
       );
     });
   };
@@ -127,8 +126,8 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
         )}
       </div>
 
-    {/* Field Required Popup */}
-    <Dialog open={fieldPopupOpen} onOpenChange={setFieldPopupOpen}>
+      {/* Field Required Popup */}
+      <Dialog open={fieldPopupOpen} onOpenChange={setFieldPopupOpen}>
         <DialogContent>
           <div className="flex justify-center mb-4">
             <AlertTriangle size={48} className="text-orange-500" />

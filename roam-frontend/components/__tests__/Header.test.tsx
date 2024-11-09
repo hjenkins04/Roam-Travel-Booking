@@ -6,17 +6,6 @@ import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
 import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from '@/components/__tests__/__mocks__/storeMocks';
 
-const resetAuthStore = () => {
-  const { setState } = useAuthStore;
-  act(() => {
-    setState({ ...mockAuthStoreSignedOut });
-  });
-};
-
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
-
 /**
  * Test File: Header Component
  *
@@ -50,14 +39,25 @@ jest.mock("next/navigation", () => ({
  *    - Expectation: The dropdown should contain options for navigating to the Dashboard and logging out.
  *
  * 8. Profile dropdown menu redirects to the Dashboard when clicked.
- *    - Expectation: Clicking the "Dashboard" option should navigate to the dashboard page.
+ *    - Expectation: Clicking the Dashboard option should navigate to the dashboard page.
  *
  * 9. Clicking Log Out in the dropdown calls the signOut function.
- *    - Expectation: User should be logged out when "Log Out" is clicked.
+ *    - Expectation: User should be logged out when Log Out is clicked.
  *
  * 10. Test the rendering of tall and small header sizes, and background image.
  *    - Expectation: Proper background and header size should render based on props.
  */
+
+const resetAuthStore = () => {
+  const { setState } = useAuthStore;
+  act(() => {
+    setState({ ...mockAuthStoreSignedOut });
+  });
+};
+
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+}));
 
 describe("Header Component", () => {
   // Arrange: Set up reusable variables and mocks for the test suite
