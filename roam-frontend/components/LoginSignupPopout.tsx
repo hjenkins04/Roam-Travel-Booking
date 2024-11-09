@@ -31,8 +31,6 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
   const isLogin = mode === "login";
   const { signIn } = useAuthStore();
   const router = useRouter();
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
 
   // Toggle between login and signup modes
   const toggleLoginSignup = () => {
@@ -75,7 +73,11 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
         data-testid={`${mode}-popout`}
       >
         {/* Close Button */}
-        <SheetClose asChild className="h-6 w-6 cursor-pointer"></SheetClose>
+        <SheetClose
+          asChild
+          className="h-6 w-6 cursor-pointer"
+          data-testid="close-button"
+        ></SheetClose>
 
         {/* Header Section with Underline */}
         <SheetHeader className="text-center mb-10">
