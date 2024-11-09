@@ -7,6 +7,7 @@ import HumpButton from "@/components/Buttons/HumpButton";
 
 import SearchBoxButtonSkeleton from "@/components/SearchBoxButtonSkeleton";
 
+
 const SearchBoxSkeletonLoader: React.FC = () => {
   return (
     <>

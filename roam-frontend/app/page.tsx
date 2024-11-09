@@ -114,12 +114,9 @@ export default function HomePage() {
       <Footer />
 
       {/* Login or Signup Popup */}
-      <Dialog
-        open={authData.showPleaseSignInPopup}
-        onOpenChange={closeSignInPopup}
-      >
+      <Dialog open={authData.showPleaseSignInPopup} onOpenChange={closeSignInPopup}>
         <DialogContent>
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-4" data-testid="please-sign-in-popup">
             <AlertTriangle size={48} className="text-orange-500" />
           </div>
           <DialogTitle>Please Login or Signup</DialogTitle>
@@ -140,7 +137,7 @@ export default function HomePage() {
       {/* Field Required Popup */}
       <Dialog open={fieldPopupOpen} onOpenChange={setFieldPopupOpen}>
         <DialogContent>
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-4"  data-testid="required-fields-popup">
             <AlertTriangle size={48} className="text-orange-500" />
           </div>
           <DialogTitle>Complete Required Field</DialogTitle>
@@ -159,12 +156,9 @@ export default function HomePage() {
       </Dialog>
 
       {/* Unable to Access Popup */}
-      <Dialog
-        open={authData.showBadAccessPopup}
-        onOpenChange={() => setBadAccessPopup(false)}
-      >
+      <Dialog open={authData.showBadAccessPopup} onOpenChange={() => setBadAccessPopup(false)}>
         <DialogContent>
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-4" data-testid="bad-access-popup">
             <AlertTriangle size={48} className="text-orange-500" />
           </div>
           <DialogTitle>Unable to Access</DialogTitle>

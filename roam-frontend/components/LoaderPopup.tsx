@@ -21,7 +21,7 @@ const LoaderPopup: React.FC<PopupProps> = ({ isOpen = false }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" data-testid="loader-popup">
       <div
         className="bg-white rounded-lg w-64 h-64 p-8 flex flex-col items-center justify-center space-y-6 animate-in fade-in zoom-in duration-300"
         role="dialog"
