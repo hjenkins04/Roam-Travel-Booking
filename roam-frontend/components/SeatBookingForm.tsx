@@ -16,7 +16,6 @@ interface SeatBookingFormProps {
   setPassengerName: (name: string) => void;
   formData: PassengerFormData;
   updateFormData: (data: Partial<PassengerFormData>) => void;
-  onSubmit: () => void;
 }
 
 const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
@@ -24,8 +23,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
   firstPassengerData,
   setPassengerName,
   formData,
-  updateFormData,
-  onSubmit
+  updateFormData
 }) => {
   useEffect(() => {
     const fullName = `${formData.name} ${formData.last}`;
@@ -63,14 +61,14 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
   return (
     <>
       <SearchResultsOverviewBox />
-      <div className="flex pt-10">
+      <div className="flex pt-10" data-testid="booking-form">
         <div className="w-1/6">
           <Avatar className="w-4/5 h-fit">
             <AvatarImage src="/images/avatar.png" alt="Passenger Avatar" />
             <AvatarFallback>Avatar</AvatarFallback>
           </Avatar>
         </div>
-        <form className="space-y-6 w-5/6" onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>
+        <form className="space-y-6 w-5/6">
           {/* Passenger Info */}
           <div className="flex items-start space-x-4">
             <h2 className="text-xl font-semibold text-slate-500">
@@ -85,31 +83,35 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               value={formData.name || ""}
               onChange={handleInputChange}
               required
+              data-testid="form-field-first-name"
             />
             <Input
               placeholder="Middle name"
               name="middle"
               value={formData.middle || ""}
               onChange={handleInputChange}
+              data-testid="form-field-middle-name"
             />
             <Input
               placeholder="Last name*"
               name="last"
               value={formData.last || ""}
               onChange={handleInputChange}
+              data-testid="form-field-last-name"
             />
             <Input
               placeholder="Prefix"
               name="prefix"
               value={formData.prefix || ""}
               onChange={handleInputChange}
+              data-testid="form-field-prefix"
             />
           </div>
 
            {/* Date Picker for Date of Birth */}
           <Popover>
             <PopoverTrigger asChild>
-              <div className="relative">
+              <div className="relative" data-testid="form-field-calender-button">
                 <Input
                   type="text"
                   placeholder="Date of birth*"
@@ -130,6 +132,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
                     updateFormData({ dob: date });
                   }
                 }}
+                data-testid="form-field-dob"
               />
             </PopoverContent>
           </Popover>
@@ -141,12 +144,14 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               name="passport_number"
               value={formData.passport_number || ""}
               onChange={handleInputChange}
+              data-testid="form-field-passport-number"
             />
             <Input
               placeholder="Known traveller number*"
               name="known_traveller_number"
               value={formData.known_traveller_number || ""}
               onChange={handleInputChange}
+              data-testid="form-field-known-traveller-number"
             />
           </div>
 
@@ -157,6 +162,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               name="email"
               value={formData.email || ""}
               onChange={handleInputChange}
+               data-testid="form-field-email"
             />
             <Input
               type="tel"
@@ -164,6 +170,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               name="phone"
               value={formData.phone || ""}
               onChange={handleInputChange}
+               data-testid="form-field-phone"
             />
           </div>
 
@@ -173,6 +180,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
             name="street_address"
             value={formData.street_address || ""}
             onChange={handleInputChange}
+            data-testid="form-field-address"
           />
           <div className="grid grid-cols-3 gap-4">
             <Input
@@ -180,18 +188,21 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               name="apt_number"
               value={formData.apt_number || ""}
               onChange={handleInputChange}
+              data-testid="form-field-apt-number"
             />
             <Input
               placeholder="Province*"
               name="province"
               value={formData.province || ""}
               onChange={handleInputChange}
+              data-testid="form-field-province"
             />
             <Input
               placeholder="Zip code*"
               name="zip_code"
               value={formData.zip_code || ""}
               onChange={handleInputChange}
+              data-testid="form-field-zip"
             />
           </div>
 
@@ -206,6 +217,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
                 checked={Boolean(formData.same_as_passenger)}
                 onCheckedChange={(checked) => handleCheckboxChange(checked === true)}
                 disabled={currentPassengerIndex === 0}
+                data-testid="form-field-checkbox-same-as-first"
               />
               <label htmlFor="same_as_passenger" className="text-slate-400">
                 Same as Passenger 1
@@ -219,12 +231,14 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               name="emerg_name"
               value={formData.emerg_name || ""}
               onChange={handleInputChange}
+              data-testid="form-field-emerg-first-name"
             />
             <Input
               placeholder="Last name*"
               name="emerg_last"
               value={formData.emerg_last || ""}
               onChange={handleInputChange}
+              data-testid="form-field-emerg-last-name"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -234,6 +248,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               name="emerg_email"
               value={formData.emerg_email || ""}
               onChange={handleInputChange}
+              data-testid="form-field-emerg-email"
             />
             <Input
               type="tel"
@@ -241,6 +256,7 @@ const SeatBookingForm: React.FC<SeatBookingFormProps> = ({
               name="emerg_phone"
               value={formData.emerg_phone || ""}
               onChange={handleInputChange}
+              data-testid="form-field-emerg-phone"
             />
           </div>
         </form>
