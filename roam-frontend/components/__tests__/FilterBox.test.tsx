@@ -3,6 +3,7 @@ import { render, screen, fireEvent, act, waitFor, cleanup } from '@testing-libra
 import userEvent from "@testing-library/user-event";
 import FilterButton from '@/components/FilterButton';
 import FilterBox from '@/components/FilterBox';
+import FilterButtonGroup from '@/components/FilterButtonGroup';
 
 /**
  * Test File: Filter Box 
@@ -69,7 +70,7 @@ describe('FilterButton Component', () => {
         expect(dropdownList).toBeInTheDocument();
 
         const option = screen.getByTestId('dropdown-selection-0');
-        
+
         // Select the first option
         await user.click(option);
         expect(maxPriceButton).toHaveTextContent('$200');
@@ -129,7 +130,7 @@ describe('FilterButton Component', () => {
     });
     test('Arrival Button and Toggle Menu Functions as expected', async () => {
         const user = userEvent.setup();
-        
+
         const maxPriceButton = screen.getByTestId('filter-button-4');
 
         expect(maxPriceButton).toBeVisible();
@@ -155,7 +156,7 @@ describe('FilterButton Component', () => {
         const maxPriceButton = screen.getByTestId('filter-button-5');
 
         const user = userEvent.setup();
-        
+
         await waitFor(() => {
             expect(maxPriceButton).toBeVisible();
         });
@@ -166,7 +167,7 @@ describe('FilterButton Component', () => {
         const dropdownList = await screen.findByTestId('dropdown-list');
         await waitFor(() => {
             expect(dropdownList).toBeInTheDocument();
-          });
+        });
 
         const option = screen.getByTestId('dropdown-selection-0');
 
@@ -175,7 +176,7 @@ describe('FilterButton Component', () => {
 
         await waitFor(() => {
             expect(maxPriceButton).toHaveTextContent('Airline A');
-          });
+        });
 
 
         // Click the button again to close the dropdown
@@ -184,7 +185,7 @@ describe('FilterButton Component', () => {
         });
         await waitFor(() => {
             expect(dropdownList).not.toBeInTheDocument();
-          });
+        });
 
     });
     test('calls onOptionSelect for a filter button component with null when reset is clicked', async () => {
@@ -208,7 +209,7 @@ describe('FilterButton Component', () => {
 
         await waitFor(() => {
             expect(mockOnOptionSelect).toHaveBeenCalledWith(null);
-          });
+        });
     });
     test('Search Button Adjusts Filter Functions as expected', async () => {
         const searchButton = screen.getByTestId('search-button');
@@ -218,4 +219,59 @@ describe('FilterButton Component', () => {
         expect(mockApplyFilters).toHaveBeenCalled();
 
     });
-}); 
+    test('FilterButtonGroup renders children and applies className', () => {
+
+        const groupElement = screen.getByTestId('filter-button-group');
+        expect(groupElement).toHaveClass('grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4 w-full justify-between w-full justify-between');
+    });
+});
+
+//Appended Test in Assignment 4: Adding test Coverage for Filter Button Group 
+describe('FilterButtonGroup Component', () => {
+    it('Renders children correctly', () => {
+        render(
+            <FilterButtonGroup>
+                <div data-testid="child-element">Child</div>
+            </FilterButtonGroup>
+        );
+
+        const childElement = screen.getByTestId('child-element');
+        expect(childElement).toBeInTheDocument();
+    });
+
+    it('Applies the passed className', () => {
+        render(
+            <FilterButtonGroup className="custom-class">
+                <div data-testid="child-element">Child</div>
+            </FilterButtonGroup>
+        );
+
+        const groupElement = screen.getByTestId('filter-button-group');
+        expect(groupElement).toHaveClass('custom-class');
+    });
+
+    it('Renders with default classes when no className is passed', () => {
+        render(
+            <FilterButtonGroup>
+                <div data-testid="child-element">Child</div>
+            </FilterButtonGroup>
+        );
+
+        const groupElement = screen.getByTestId('filter-button-group');
+        expect(groupElement).toHaveClass('grid');
+        expect(groupElement).toHaveClass('gap-4');
+        expect(groupElement).toHaveClass('w-full');
+        expect(groupElement).toHaveClass('justify-between');
+    });
+
+    it('Renders with additional props passed through', () => {
+        render(
+            <FilterButtonGroup data-testid="custom-group" role="group">
+                <div data-testid="child-element">Child</div>
+            </FilterButtonGroup>
+        );
+
+        const groupElement = screen.getByTestId('custom-group');
+        expect(groupElement).toHaveAttribute('role', 'group');
+    });
+});

@@ -73,9 +73,11 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({
             </li>
             <li className="flex items-center my-6">
               <Calendar className="mr-2" />
-              {searchData.departureDate
-                ? formatDate(searchData.departureDate)
-                : "No date selected"}
+              <span data-testid="formatted-departure-date">
+                {searchData.departureDate
+                  ? formatDate(searchData.departureDate)
+                  : "No date selected"}
+              </span>
               <br />
               {formatTimeMinutes(flight.flight_time_minutes)}
             </li>

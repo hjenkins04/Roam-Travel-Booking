@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ResetPasswordCard from '@/components/ResetPasswordCard';
+import PasswordChangeHeader from "@/components/Text/PasswordChangeHeading";
 
 /**
  * Test File: Reset Password Form 

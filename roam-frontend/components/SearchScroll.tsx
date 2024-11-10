@@ -53,37 +53,38 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
 
   const filteredFlights = filterFlights();
 
-
-  const showRequiredFieldPopup = (name: string) => {
+  const showRequiredFieldPopup = (name: string, setFieldName: React.Dispatch<React.SetStateAction<string>>, setFieldPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
     setFieldName(name);
     setFieldPopupOpen(true);
   };
 
+
   const EnsureAllSearchFields = (): boolean => {
     // Check if all required fields are selected
     if (!searchData.departureAirport) {
-      showRequiredFieldPopup("Departure City");
+      showRequiredFieldPopup("Departure City", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     } else if (!searchData.arrivalAirport) {
-      showRequiredFieldPopup("Arrival City");
+      showRequiredFieldPopup("Arrival City", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     } else if (!searchData.departureDate) {
-      showRequiredFieldPopup("Departure Date");
+      showRequiredFieldPopup("Departure Date", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     } else if (searchData.isRoundTrip && !searchData.returnDate) {
-      showRequiredFieldPopup("Return Date");
+      showRequiredFieldPopup("Return Date", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     } else if (!searchData.passengers || searchData.passengers < 1) {
-      showRequiredFieldPopup("Passengers");
+      showRequiredFieldPopup("Passengers", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     }
     return true;
   };
+
 
   const handleSetTripData = () => {
     setTripContextData(

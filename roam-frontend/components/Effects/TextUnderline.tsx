@@ -8,6 +8,7 @@ interface TextUnderlineProps {
 
 const TextUnderline: React.FC<TextUnderlineProps> = ({ width = 330, height = 34, className }) => (
   <svg
+    data-testid="text-underline"
     className={className}
     width={width}
     height={height}
