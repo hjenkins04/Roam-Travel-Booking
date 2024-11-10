@@ -6,10 +6,12 @@ import { PopularDestination } from "@/models/popular_destination";
 
 interface TrendingLocationsHomeGridProps {
   destinations: PopularDestination[];
+  isSmallScreen?: boolean; // Optional override screen size for testing
 }
 
 const TrendingLocationsHomeGrid: React.FC<TrendingLocationsHomeGridProps> = ({
   destinations,
+  isSmallScreen,
 }) => {
   return (
     <section className="mb-16" data-testid="trending-locations-grid">
@@ -21,12 +23,19 @@ const TrendingLocationsHomeGrid: React.FC<TrendingLocationsHomeGridProps> = ({
       </p>
 
       <div className="px-4 md:px-8 lg:px-16 max-w-[1440px] mx-auto">
-        <ul className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 list-none">
+        <ul
+          className={`grid grid-cols-2 ${
+            isSmallScreen === false ? "" : "md:grid-cols-4 lg:grid-cols-5"
+          } gap-4 list-none`}
+          data-testid={"destinations"}
+        >
           {destinations.map((destination, index) => (
             <li
               key={destination.guid}
               className={`flex flex-col items-center ${
-                index === 4 ? "hidden lg:flex" : ""
+                index === 4 && (isSmallScreen === true || isSmallScreen === undefined)
+                  ? "hidden lg:flex"
+                  : ""
               }`}
               data-testid={`destination-item-${index}`}
             >

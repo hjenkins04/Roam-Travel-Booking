@@ -231,10 +231,11 @@ describe("SeatBooking Component", () => {
       fireEvent.click(screen.getByTestId("airplane-seat-1"));
     });
 
-    // Assert: Ensure that the seat is selected and the seat selection form is shown, i.e. width changes to 2/4
+    // Assert: Ensure that the cancel button is visible
     const cancelButton = screen.getByTestId("cancel-button");
     fireEvent.click(cancelButton);
 
+    // Assert: Ensure that router.back was called
     expect(mockBack).toHaveBeenCalled();
   });
 
