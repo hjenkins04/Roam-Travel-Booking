@@ -40,5 +40,9 @@
   ],
   "exclude": [
     "node_modules"
+  ],
+  "types": [
+    "@testing-library/jest-dom",
+    "@testing-library/react-hooks"
   ]
 }

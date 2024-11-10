@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogFooter, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Flight, getPriceByPassengerType, FilterOptions } from "@/models";
 import { useRouter } from "next/navigation";
-import { setTripContextData} from "@/components/HelperFunctions/setTripContextData"
+import { setTripContextData } from "@/components/HelperFunctions/setTripContextData"
 
 interface SearchScrollProps {
   filters: FilterOptions;
@@ -33,7 +33,7 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
       const priceCheck =
         !filters.max_price ||
         getPriceByPassengerType(searchData.seatTypeMapping, flight) <=
-          parseInt(filters.max_price.replace("$", ""));
+        parseInt(filters.max_price.replace("$", ""));
       const stopsCheck =
         !filters.stops || String(flight.num_stops) === filters.stops;
       const arrivalCheck =
@@ -54,37 +54,38 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
 
   const filteredFlights = filterFlights();
 
-
-  const showRequiredFieldPopup = (name: string) => {
+  const showRequiredFieldPopup = (name: string, setFieldName: React.Dispatch<React.SetStateAction<string>>, setFieldPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
     setFieldName(name);
     setFieldPopupOpen(true);
   };
 
+
   const EnsureAllSearchFields = (): boolean => {
     // Check if all required fields are selected
     if (!searchData.departureAirport) {
-      showRequiredFieldPopup("Departure City");
+      showRequiredFieldPopup("Departure City", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     } else if (!searchData.arrivalAirport) {
-      showRequiredFieldPopup("Arrival City");
+      showRequiredFieldPopup("Arrival City", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     } else if (!searchData.departureDate) {
-      showRequiredFieldPopup("Departure Date");
+      showRequiredFieldPopup("Departure Date", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     } else if (searchData.isRoundTrip && !searchData.returnDate) {
-      showRequiredFieldPopup("Return Date");
+      showRequiredFieldPopup("Return Date", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     } else if (!searchData.passengers || searchData.passengers < 1) {
-      showRequiredFieldPopup("Passengers");
+      showRequiredFieldPopup("Passengers", setFieldName, setFieldPopupOpen);
       hideLoader();
       return false;
     }
     return true;
   };
+
 
   const handleSetTripData = () => {
     setTripContextData(
@@ -127,8 +128,8 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
         )}
       </div>
 
-    {/* Field Required Popup */}
-    <Dialog open={fieldPopupOpen} onOpenChange={setFieldPopupOpen}>
+      {/* Field Required Popup */}
+      <Dialog open={fieldPopupOpen} onOpenChange={setFieldPopupOpen}>
         <DialogContent>
           <div className="flex justify-center mb-4">
             <AlertTriangle size={48} className="text-orange-500" />
