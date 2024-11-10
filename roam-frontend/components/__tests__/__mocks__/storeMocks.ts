@@ -210,7 +210,6 @@ export const mockFlightNoStop: Flight = {
   layover: undefined,
 };
 
-
 export const mockFlightOneStop: Flight = {
   guid: "flight-guid",
   airline: mockAirline,

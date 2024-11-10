@@ -1,10 +1,20 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor, cleanup, act } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  cleanup,
+  act,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useAuthStore } from "@/context/AuthContext";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from '@/components/__tests__/__mocks__/storeMocks';
+import {
+  mockAuthStoreSignedIn,
+  mockAuthStoreSignedOut,
+} from "@/components/__tests__/__mocks__/storeMocks";
 
 /**
  * Test File: Header Component
@@ -96,7 +106,9 @@ describe("Header Component", () => {
 
   test("Does not render the Login button when the user is signed in", () => {
     // Arrange: Simulate the user being signed in
-    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
+    act(() => {
+      useAuthStore.setState(mockAuthStoreSignedIn);
+    });
 
     render(
       <Header
@@ -120,7 +132,9 @@ describe("Header Component", () => {
 
   test("Renders the Sign Up button and triggers the signup drawer", async () => {
     // Arrange: Simulate the user being signed out
-    act(() => {useAuthStore.setState(mockAuthStoreSignedOut);});
+    act(() => {
+      useAuthStore.setState(mockAuthStoreSignedOut);
+    });
 
     // Arrange: Render the Header component with signup functionality
     render(
@@ -165,7 +179,9 @@ describe("Header Component", () => {
 
   test("Profile dropdown menu shows options for Dashboard and Log Out when user is signed in", async () => {
     // Arrange: Simulate user being signed in
-    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
+    act(() => {
+      useAuthStore.setState(mockAuthStoreSignedIn);
+    });
 
     render(
       <Header
@@ -191,7 +207,9 @@ describe("Header Component", () => {
 
   test("Profile dropdown menu redirects to the Dashboard when clicked", async () => {
     // Arrange: Simulate user being signed in
-    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
+    act(() => {
+      useAuthStore.setState(mockAuthStoreSignedIn);
+    });
 
     render(
       <Header
@@ -213,7 +231,7 @@ describe("Header Component", () => {
     expect(mockPush).toHaveBeenCalledWith("/dashboard");
   });
 
-  test('Clicking Log Out in the dropdown calls the signOut function', async () => {
+  test("Clicking Log Out in the dropdown calls the signOut function", async () => {
     // Arrange: Simulate user being signed in
     act(() => {
       useAuthStore.setState({
@@ -241,6 +259,28 @@ describe("Header Component", () => {
 
     // Assert: Ensure the signOut function is called once
     expect(mockSignOut).toHaveBeenCalledTimes(1);
+  });
+
+  test("Clicking X on the popout closes the popout", async () => {
+    render(
+      <Header
+        headerSize="small"
+        backgroundImage={true}
+        logoColour="black"
+        displayProfilePicture={true}
+      />
+    );
+
+    const user = userEvent.setup();
+    const loginButton = screen.getByTestId("login-button");
+    await user.click(loginButton);
+
+    const loginPopout = await screen.findByTestId("login-popout");
+    const xButton = screen.getByRole("button", { name: "Close" });
+
+    await user.click(xButton);
+
+    expect(loginPopout).not.toBeInTheDocument();
   });
 
   test("Renders correct header sizes and background images", async () => {
