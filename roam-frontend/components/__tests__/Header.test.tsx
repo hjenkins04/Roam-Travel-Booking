@@ -1,10 +1,20 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor, cleanup, act } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  cleanup,
+  act,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useAuthStore } from "@/context/AuthContext";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from "@/components/__tests__/__mocks__/storeMocks";
+import {
+  mockAuthStoreSignedIn,
+  mockAuthStoreSignedOut,
+} from "@/components/__tests__/__mocks__/storeMocks";
 
 /**
  * Test File: Header Component
@@ -46,6 +56,9 @@ import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from "@/components/__te
  *
  * 10. Test the rendering of tall and small header sizes, and background image.
  *    - Expectation: Proper background and header size should render based on props.
+ *
+ * 11. Clicking X on the popout closes the popout.
+ *    - Expectation: The popout should close when the X button is clicked.
  */
 
 const resetAuthStore = () => {
