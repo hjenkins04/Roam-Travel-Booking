@@ -23,7 +23,8 @@ import ForgotPasswordCard from '@/components/ForgotPasswordCard';
  *    - Expectation: if there is not an email entered in the email input OnSubmit will not be called.
  * 
  * 4. The cancel button routes to the previous page. 
- *    - Expectation: If the cancel button is pressed, router.back() will be called once. 
+ *    - Expectation: If the cancel button is pressed, router.back() will be called once.
+
  */
 
 // Mock the useRouter hook

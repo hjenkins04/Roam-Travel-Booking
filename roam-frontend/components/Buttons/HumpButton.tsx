@@ -2,19 +2,19 @@
 
 import React from "react";
 
-interface HumpButton2Props {
+interface HumpButtonProps {
   primaryColor: string;
   secondaryColor: string;
   primaryText: string;
   secondaryText: string;
   isPrimaryActive?: boolean;
-  onPrimaryClick: () => void;
-  onSecondaryClick: () => void;
+  onPrimaryClick?: () => void;
+  onSecondaryClick?: () => void;
   width?: number;
   height?: number;
 }
 
-const HumpButton2: React.FC<HumpButton2Props> = ({
+const HumpButton: React.FC<HumpButtonProps> = ({
   primaryColor,
   secondaryColor,
   primaryText,
@@ -27,12 +27,16 @@ const HumpButton2: React.FC<HumpButton2Props> = ({
 }) => {
   const handlePrimaryClick = () => {
     isPrimaryActive = true;
-    onPrimaryClick();
+    if (onPrimaryClick) {
+      onPrimaryClick();
+    }
   };
 
   const handleSecondaryClick = () => {
     isPrimaryActive = false;
-    onSecondaryClick();
+    if (onSecondaryClick) {
+      onSecondaryClick();
+    }
   };
 
   return (
@@ -95,7 +99,6 @@ const HumpButton2: React.FC<HumpButton2Props> = ({
         tabIndex={0}
         aria-pressed={isPrimaryActive}
         onClick={handlePrimaryClick}
-        onKeyDown={(e) => e.key === "Enter" && handlePrimaryClick()}
         style={{
           position: "absolute",
           top: "50%",
@@ -115,7 +118,6 @@ const HumpButton2: React.FC<HumpButton2Props> = ({
         tabIndex={0}
         aria-pressed={!isPrimaryActive}
         onClick={handleSecondaryClick}
-        onKeyDown={(e) => e.key === "Enter" && handleSecondaryClick()}
         style={{
           position: "absolute",
           top: "50%",
@@ -132,4 +134,4 @@ const HumpButton2: React.FC<HumpButton2Props> = ({
   );
 };
 
-export default HumpButton2;
+export default HumpButton;

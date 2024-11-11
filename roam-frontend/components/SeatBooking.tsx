@@ -32,10 +32,10 @@ export default function SeatBookingPage() {
   const [formData, setFormData] = useState<PassengerFormData>({
     name: tripData?.trip?.passengers?.[passengerIndex]?.name ?? "",
   });
+  
 
   const loadPassengerData = useCallback((index: number) => {
-    const passenger = (tripData?.trip?.passengers?.[index] ??
-      {}) as Partial<Passenger>;
+    const passenger = (tripData?.trip?.passengers?.[index] ?? {}) as Passenger;
     setFormData({
       name: passenger.name ?? "",
       last: passenger.last ?? "",
@@ -54,7 +54,7 @@ export default function SeatBookingPage() {
       emerg_email: passenger.emerg_email ?? "",
       emerg_phone: passenger.emerg_phone ?? "",
     });
-  }, []);
+  }, [tripData, setFormData]);
 
   const initializeSeatStates = (seats: Seat[]) => {
     const newSeatStates: { [id: number]: PossibleSeatStates } = {};
@@ -153,6 +153,7 @@ export default function SeatBookingPage() {
       if (passengerIndex < groupSize - 1) {
         setPassengerIndex(passengerIndex + 1);
         loadPassengerData(passengerIndex + 1);
+        setPassengerIndex(passengerIndex + 1);
         setSelectedSeat(null);
         hideLoader();
       } else {
@@ -175,6 +176,7 @@ export default function SeatBookingPage() {
     } else if (passengerIndex < groupSize - 1) {
       setPassengerIndex(passengerIndex + 1);
       loadPassengerData(passengerIndex + 1);
+      setPassengerIndex(passengerIndex + 1);
       setSelectedSeat(null);
       hideLoader();
     } else {
@@ -185,16 +187,22 @@ export default function SeatBookingPage() {
         current_flight: nextFlight,
         current_flight_departure_date: tripData.departure_date,
       });
+      hideLoader();
       router.push("/checkout");
     }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (tripData?.current_flight) {
-      loadFlightSeats(tripData.current_flight);
+    if(!areSeatsInitialized){
+      if (tripData?.current_flight) {
+        loadFlightSeats(tripData.current_flight);
+      }
+      loadPassengerData(passengerIndex);
     }
-    loadPassengerData(passengerIndex);
+    if (tripData?.trip?.passengers) {
+      loadPassengerData(passengerIndex);
+    }
   }, [tripData, passengerIndex]);
 
   return (
@@ -206,6 +214,15 @@ export default function SeatBookingPage() {
           logoColour="black"
           displayProfilePicture
         />
+
+        {/* MetaData Hidden */}
+        <div className="flex flex-col" style={{ display: "none" }}>
+            <span className="text-sm font-medium text-gray-500" data-testid="passenger-index">{`Passenger Index: ${passengerIndex}`}</span>
+            <span className="text-sm font-medium text-gray-500" data-testid="group-size">{`Group Size: ${groupSize}`}</span>
+            <span className="text-sm font-medium text-gray-500" data-testid="is-round-trip">{`Round Trip: ${isRoundTrip}`}</span>
+            <span className="text-sm font-medium text-gray-500" data-testid="is-first-flight">{`First Flight: ${isFirstFlight}`}</span>
+        </div>
+
         <div className="relative flex overflow-hidden z-20 bg-neutral-50" style={{ height: "calc(100vh - 150px)" }} >
           <div className={`relative transition-all duration-300 ease-in-out overflow-hidden
             ${ selectedSeat ? "w-2/4" : "w-full" }`}
@@ -230,7 +247,6 @@ export default function SeatBookingPage() {
                     setPassengerName={setPassengerName}
                     formData={formData}
                     updateFormData={updateFormData}
-                    onSubmit={handleFormSubmit}
                   />
                 )}
               </div>

@@ -54,7 +54,8 @@ export const useAuthStore = create<AuthStore>()(
             showPleaseSignInPopup: show,
           },
         })),
-
+      
+      // Function to toggle showBadAccessPopup
       setBadAccessPopup: (show: boolean) =>
         set((state) => ({
           authData: {

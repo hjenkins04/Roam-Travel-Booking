@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { Flight, Airport, Continent, Country, Location, Airline, Layover, FlightSeatConfiguration, DisplayPurchasePassenger, DisplayPurchase  } from '@/models';
+import { Flight, Airport, Continent, Country, Location, Airline, Layover, FlightSeatConfiguration, DisplayPurchasePassenger, Passenger, DisplayPurchase, PassengerFormData, Trip  } from '@/models';
 import { TripData } from "@/context/TripContext"
 
 export const mockContinent: Continent = {
@@ -111,6 +111,12 @@ export const mockAirlineOther: Airline = {
   logo_path: "/logos/acc.png",
 };
 
+export const mockAirlineNoPhoto: Airline = {
+  guid: "airline-guid-no-photo",
+  icao_code: "ABB",
+  name: "Air Baltic"
+}
+
 export const mockLayover: Layover = {
   guid: "layover-guid",
   airport: mockDepartureAirport,
@@ -136,6 +142,61 @@ export const mockSeatConfiguration: FlightSeatConfiguration = {
   seats_available: mockSeats.filter(seat => seat.available).length,
   flight_id: "flight-guid",
   seat_configuration: mockSeats,
+};
+
+export const mockSeatSimple = ([
+  {
+    seat_id: 1,
+    type: "Business",
+    position: "Window" ,
+    available: true,
+  },
+  {
+    seat_id: 2,
+    type: "Business",
+    position: "Window" ,
+    available: false,
+  },
+]);
+
+
+export const mockSeatConfigurationSimple: FlightSeatConfiguration = {
+  guid: "seat-config-guid",
+  seats_available: 2,
+  flight_id: "flight-guid",
+  seat_configuration: mockSeatSimple,
+};
+
+export const mockCurrentFlight: Flight = {
+  guid: "flight-guid",
+  airline: mockAirline,
+  departure_airport: mockDepartureAirport,
+  arrival_airport: mockArrivalAirport,
+  flight_time_minutes: 300,
+  departure_time: "2023-12-25T10:00:00Z",
+  arrival_time: "2023-12-25T13:00:00Z",
+  num_stops: 1,
+  price_economy: 300,
+  price_business: 600,
+  baggage_allowance: "2 bags",
+  seat_configuration: mockSeatConfigurationSimple,
+  layover: undefined,
+};
+
+export const mockFlightReturnNoSeats: Flight = {
+  guid: "flight-guid-return",
+  airline: mockAirlineNoPhoto,
+  departure_airport: mockDepartureAirportOther,
+  arrival_airport: mockArrivalAirportOther,
+  flight_time_minutes: 500,
+  departure_time: "2024-10-25T10:00:00Z",
+  arrival_time: "2024-10-25T13:00:00Z",
+  num_stops: 1,
+  price_economy: 200,
+  price_business: 800,
+  baggage_allowance: "1 bag",
+  seat_configuration: null,
+  layover: undefined,
 };
 
 export const mockFlight: Flight = {
@@ -169,7 +230,6 @@ export const mockFlightNoStop: Flight = {
   seat_configuration: mockSeatConfiguration,
   layover: undefined,
 };
-
 
 export const mockFlightOneStop: Flight = {
   guid: "flight-guid",
@@ -221,7 +281,7 @@ export const mockFlightOutbound: Flight = {
 
 export const mockFlightReturn: Flight = {
   guid: "flight-guid-return",
-  airline: mockAirlineOther,
+  airline: mockAirlineNoPhoto,
   departure_airport: mockDepartureAirportOther,
   arrival_airport: mockArrivalAirportOther,
   flight_time_minutes: 500,
@@ -235,13 +295,58 @@ export const mockFlightReturn: Flight = {
   layover: undefined,
 };
 
-export const mockPassengers = [
+export const mockPassengerFormData: PassengerFormData = {
+  name: "John",
+  middle: "A",
+  last: "Doe",
+  prefix: "Mr.",
+  dob: new Date("1990-01-01"),
+  passport_number: "A1234567",
+  email: "johndoe@example.com",
+  phone: "123-456-7890",
+  street_address: "123 Main St",
+  apt_number: "4B",
+  province: "ON",
+  zip_code: "12345",
+  emerg_name: "Jane",
+  emerg_last: "Doe",
+  emerg_email: "janedoe@example.com",
+  emerg_phone: "098-765-4321",
+  known_traveller_number: "KT123456789",
+  same_as_passenger: true
+};
+
+export const mockPassengerSingle: Passenger = {
+  guid: "passenger-guid-1",
+  trip_id: "trip-guid",
+  name: "John Doe",
+  departing_seat_id: 1,
+  returning_seat_id: 1,
+  middle: "A.",
+  last: "Doe",
+  prefix: "Mr.",
+  dob: new Date("1990-01-01"),
+  passport_number: "123456789",
+  known_traveller_number: "KT123456",
+  email: "john.doe@example.com",
+  phone: "+1234567890",
+  street_address: "123 Main St",
+  apt_number: "4B",
+  province: "NY",
+  zip_code: "10001",
+  emerg_name: "Jane Doe",
+  emerg_last: "Doe",
+  emerg_email: "jane.doe@example.com",
+  emerg_phone: "+1234567891",
+}
+
+export const mockPassengers: Passenger[] = [
   {
     guid: "passenger-guid-1",
     trip_id: "trip-guid",
     name: "John Doe",
     departing_seat_id: 1,
-    returning_seat_id: 2,
+    returning_seat_id: 1,
     middle: "A.",
     last: "Doe",
     prefix: "Mr.",
@@ -263,8 +368,8 @@ export const mockPassengers = [
     guid: "passenger-guid-2",
     trip_id: "trip-guid",
     name: "Jane Doe",
-    departing_seat_id: 3,
-    returning_seat_id: 4,
+    departing_seat_id: 2,
+    returning_seat_id: 2,
     middle: "B.",
     last: "Doe",
     prefix: "Ms.",
@@ -284,6 +389,31 @@ export const mockPassengers = [
   }
 ];
 
+export const mockPassengerMin: Passenger =
+  {
+    guid: "passenger-guid-1",
+    trip_id: "trip-guid",
+    name: undefined,
+    departing_seat_id: 0,
+    returning_seat_id: undefined,
+    middle: undefined,
+    last: undefined,
+    prefix: undefined,
+    dob: undefined,
+    passport_number: undefined,
+    known_traveller_number: undefined,
+    email: undefined,
+    phone: undefined,
+    street_address: undefined,
+    apt_number: undefined,
+    province: undefined,
+    zip_code: undefined,
+    emerg_name: undefined,
+    emerg_last: undefined,
+    emerg_email: undefined,
+    emerg_phone: undefined,
+  };
+
 export const mockTripData: TripData = {
   trip: {
     guid: "trip-guid",
@@ -292,6 +422,58 @@ export const mockTripData: TripData = {
     departing_flight: mockFlight,
     returning_flight: mockFlight,
     passengers: mockPassengers,
+    departure_date: new Date("2023-12-25T10:00:00Z"),
+    return_date: new Date("2023-12-31T15:00:00Z"),
+  },
+  current_flight: mockFlight,
+  current_flight_departure_date: new Date("2023-12-25T10:00:00Z"),
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: new Date("2023-12-31T15:00:00Z"),
+  total_cost: 900,
+  trip_booking_active: true,
+  trip_purchased: false,
+};
+
+export const mockTrip: Trip = {
+  guid: "trip-guid",
+  name: "Holiday Trip",
+  is_round_trip: true,
+  departing_flight: mockFlight,
+  returning_flight: mockFlight,
+  passengers: mockPassengers,
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: new Date("2023-12-31T15:00:00Z"),
+};
+
+export const mockTripOneWay: Trip = {
+  guid: "trip-guid",
+  name: "Holiday Trip",
+  is_round_trip: false,
+  departing_flight: mockFlight,
+  passengers: mockPassengers,
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: null,
+}
+
+export const mockTripNoSeats: Trip = {
+  guid: "trip-guid",
+  name: "Holiday Trip",
+  is_round_trip: true,
+  departing_flight: mockFlight,
+  returning_flight: mockFlightReturnNoSeats,
+  passengers: mockPassengers,
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: new Date("2023-12-31T15:00:00Z"),
+}
+
+export const mockTripDataOther: TripData = {
+  trip: {
+    guid: "trip-guid",
+    name: "Holiday Trip",
+    is_round_trip: true,
+    departing_flight: mockFlight,
+    returning_flight: mockFlight,
+    passengers: [mockPassengerMin],
     departure_date: new Date("2023-12-25T10:00:00Z"),
     return_date: new Date("2023-12-31T15:00:00Z"),
   },
@@ -328,9 +510,22 @@ export const mockDisplayPurchase: DisplayPurchase = {
 
 
 // Mock Zustand stores
+type TripDataUpdate = Partial<TripData> | ((prev: TripData) => TripData);
+
 export const mockUseTripStore = {
   tripData: mockTripData,
   setTripData: jest.fn(),
+
+  getState: jest.fn(() => ({
+    tripData: mockTripData,
+  })),
+
+  setState: jest.fn((update: TripDataUpdate) => {
+    mockUseTripStore.tripData = 
+      typeof update === "function" 
+        ? update(mockUseTripStore.tripData)
+        : { ...mockUseTripStore.tripData, ...update };
+  }),
 };
 
 export const mockUseLoaderStore = {

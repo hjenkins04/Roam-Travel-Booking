@@ -1,4 +1,5 @@
-import Underline from '@/components/Effects/TextUnderline';
+import React from "react";
+import Underline from "@/components/Effects/TextUnderline";
 
 const LandingPageText = () => (
   <div className="relative text-center mt-12">
