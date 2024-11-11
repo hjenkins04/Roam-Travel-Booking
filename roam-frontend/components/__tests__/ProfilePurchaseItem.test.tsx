@@ -113,6 +113,24 @@ describe("PurchaseItem Component", () => {
         `${mockFlightReturn.departure_time} - ${mockFlightReturn.arrival_time}`
       )
     ).toBeInTheDocument();
+
+    const departImg = screen.getByTestId(
+      "departure-flight-airline-logo"
+    ) as HTMLImageElement;
+    const returnImg = screen.getByTestId(
+      "return-flight-airline-logo"
+    ) as HTMLImageElement;
+
+    expect(departImg.src).toContain(
+      mockFlightOutbound.airline.logo_path
+        ? mockFlightOutbound.airline.logo_path.split("/").pop()
+        : "default.png"
+    );
+    expect(returnImg.src).toContain(
+      mockFlightReturn.airline.logo_path
+        ? mockFlightReturn.airline.logo_path.split("/").pop()
+        : "default.png"
+    );
   });
 
   test("Check that the cancel button is rendered and triggers the function once", () => {

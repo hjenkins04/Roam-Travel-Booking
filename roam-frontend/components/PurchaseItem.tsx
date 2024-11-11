@@ -75,7 +75,10 @@ const DepartureFlightDetails: React.FC<{
           </p>
           {/* Flight details container */}
           <div className="flex gap-2 items-start self-stretch mt-2 max-md:ml-2">
-            <AirlinePhoto imagePath={departingFlight.airline.logo_path} />
+            <AirlinePhoto
+              imagePath={departingFlight.airline.logo_path}
+              testid="departure-flight-airline-logo"
+            />
             {/* Airline, flight number, and seat information */}
             <div className="flex flex-col self-stretch text-xs">
               <div className="flex flex-col text-base min-h-[48px]">
@@ -140,7 +143,10 @@ const ReturnFlightDetails: React.FC<{
           </p>
           {/* Flight details container */}
           <div className="flex gap-2 items-start self-stretch mt-2 max-md:ml-2">
-            <AirlinePhoto imagePath={returningFlight.airline.logo_path} />
+            <AirlinePhoto
+              imagePath={returningFlight.airline.logo_path}
+              testid="return-flight-airline-logo"
+            />
             {/* Airline, flight number, and seat information */}
             <div className="flex flex-col self-stretch text-xs">
               <div className="flex flex-col text-base min-h-[48px]">
