@@ -25,7 +25,10 @@ const PurchaseItem: React.FC<PurchaseItemProps> = ({
   onCancelClick,
 }) => {
   return (
-    <section className="relative flex flex-col justify-center p-6 mt-4 bg-white rounded-lg border border-gray-200 max-md:mt-2 max-md:max-w-full">
+    <section
+      role="section"
+      className="relative flex flex-col justify-center p-6 mt-4 bg-white rounded-lg border border-gray-200 max-md:mt-2 max-md:max-w-full"
+    >
       {/* Render cancel icon if ban prop is true */}
       {ban && (
         <Ban
@@ -50,7 +53,7 @@ const PurchaseItem: React.FC<PurchaseItemProps> = ({
 };
 
 // Component for displaying departure flight details
-const DepartureFlightDetails: React.FC<{
+export const DepartureFlightDetails: React.FC<{
   purchasePassenger?: DisplayPurchasePassenger;
 }> = ({ purchasePassenger }) => {
   const {
@@ -65,7 +68,7 @@ const DepartureFlightDetails: React.FC<{
   if (!departingFlight) return null;
 
   return (
-    <div className="flex flex-col max-md:ml-0 max-md:w-full">
+    <div role="region" className="flex flex-col max-md:ml-0 max-md:w-full">
       <div className="flex flex-col grow max-md:max-w-full">
         <div className="flex flex-col items-start pr-6 pl-6 w-full max-md:px-5 max-md:max-w-full">
           {/* Flight date and departure information */}
@@ -117,7 +120,7 @@ const DepartureFlightDetails: React.FC<{
 };
 
 // Component for displaying return flight details
-const ReturnFlightDetails: React.FC<{
+export const ReturnFlightDetails: React.FC<{
   purchasePassenger?: DisplayPurchasePassenger;
 }> = ({ purchasePassenger }) => {
   const {
@@ -132,7 +135,7 @@ const ReturnFlightDetails: React.FC<{
   if (!returningFlight) return null;
 
   return (
-    <div className="flex flex-col max-md:ml-0 max-md:w-full">
+    <div role="region" className="flex flex-col max-md:ml-0 max-md:w-full">
       <div className="flex flex-col grow max-md:max-w-full">
         <div className="flex flex-col items-start pr-6 pl-6 w-full max-md:px-5 max-md:max-w-full">
           {/* Flight date and departure information */}
