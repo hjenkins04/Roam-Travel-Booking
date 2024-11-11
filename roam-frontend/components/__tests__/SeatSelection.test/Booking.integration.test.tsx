@@ -51,6 +51,15 @@ describe("SeatBooking Component", () => {
   const renderComponent = () => render(<SeatBooking />);
 
   test("keeps seat state unchanged for non-interactive states", async () => {
+    // Supress finDOMNode console warning for this specfic test by mocking console.error
+    const originalConsoleError = console.error;
+    jest.spyOn(console, 'error').mockImplementation((msg) => {
+      if (msg.includes('findDOMNode is deprecated')) {
+        return; // Ignore this specific warning
+      }
+      originalConsoleError(msg); // Allow other warnings to be logged
+    });
+    
     // Mock initial seat state with one seat as "taken"
     mockUseTripStore.getState().tripData = {
       ...mockUseTripStore.getState().tripData

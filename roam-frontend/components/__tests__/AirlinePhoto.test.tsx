@@ -2,10 +2,12 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import AirlinePhoto from "../Images/AirlinePhoto";
 
-jest.mock(
-  "next/image",
-  () => (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} />
-);
+jest.mock("next/image", () => {
+  return ({ fill, ...props }: { fill?: boolean } & React.ImgHTMLAttributes<HTMLImageElement>) => {
+    return <img {...props} />;
+  };
+});
+
 
 /**
  * Test File: AirlinePhoto

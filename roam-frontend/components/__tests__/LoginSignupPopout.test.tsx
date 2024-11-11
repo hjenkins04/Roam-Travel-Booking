@@ -17,7 +17,10 @@ jest.mock("@/context/AuthContext", () => ({
 
 // Mock the fetchLogin API
 jest.mock("@/api/FetchLogin", () => ({
-  fetchLogin: jest.fn(),
+  fetchLogin: jest.fn().mockResolvedValue({
+    token: "mock-token",
+    guid: "mock-guid",
+  }),
 }));
 
 /**
