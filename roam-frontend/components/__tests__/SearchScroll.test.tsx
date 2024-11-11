@@ -1,15 +1,12 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import SearchScroll from "@/components/SearchScroll";
-import { Flight, FilterOptions } from "@/models";
-import { mockFlight, mockUseTripStore, mockFlightOneStop, mockFlightExpensive, mockUseSearchStore, mockAuthStoreSignedIn } from '@/components/__tests__/__mocks__/storeMocks';
-import { setTripContextData } from "@/components/HelperFunctions/setTripContextData";
 import { ImageProps } from "next/image";
 import { useRouter } from 'next/navigation';
 import { useSearchStore } from "@/context/SearchContext";
 import { useLoaderStore } from "@/context/LoaderContext";
 import { useAuthStore } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { mockFlightReturn } from "@/components/__tests__/__mocks__/storeMocks"
 
 /**
  * Test File: Search Scroll
@@ -98,6 +95,14 @@ useRouterMock.mockReturnValue({
   replace: jest.fn(),
 });
 
+jest.mock('@/api/FetchRandomReturnFlight', () => ({
+  fetchRandomReturnFlight: jest.fn()
+}));
+
+jest.mock('@/api/FetchFlightsBySearchQuery', () => ({
+  fetchFlightsBySearchQuery: jest.fn()
+}));
+
 describe("SearchScroll Component", () => {
   beforeEach(() => {
     // Setup mock data for the store
@@ -164,12 +169,14 @@ describe("SearchScroll Component", () => {
     airline: null,
   };
 
-  test("Displays flight options based on filters", () => {
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+  test("Displays flight options based on filters", async () => {
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
     expect(screen.getByText("LATAM Airlines")).toBeInTheDocument();
   });
 
-  test("No Search Results if Nothing Matches the max_price Filter", () => {
+  test("No Search Results if Nothing Matches the max_price Filter", async () => {
     const noResultsFilters = {
       max_price: "$100",  // Price lower than available flights
       stops: null,
@@ -178,13 +185,15 @@ describe("SearchScroll Component", () => {
       airline: null,
     };
 
-    render(<SearchScroll filters={noResultsFilters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={noResultsFilters} flights={mockFlights} />);
+    });
 
     // Expect 'No results found' text to be visible
     expect(screen.getByText((content) => content.startsWith("No results found"))).toBeInTheDocument();
   });
 
-  test("No Search Results if Nothing Matches the stops Filter", () => {
+  test("No Search Results if Nothing Matches the stops Filter", async () => {
     const noResultsFilters = {
       max_price: null,  // Price lower than available flights
       stops: "1",
@@ -193,13 +202,15 @@ describe("SearchScroll Component", () => {
       airline: null,
     };
 
-    render(<SearchScroll filters={noResultsFilters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={noResultsFilters} flights={mockFlights} />);
+    });
 
     // Expect 'No results found' text to be visible
     expect(screen.getByText((content) => content.startsWith("No results found"))).toBeInTheDocument();
   });
 
-  test("No Search Results if Nothing Matches the Time Filter", () => {
+  test("No Search Results if Nothing Matches the Time Filter", async () => {
     const noResultsFilters = {
       max_price: null,  // Price lower than available flights
       stops: null,
@@ -208,25 +219,33 @@ describe("SearchScroll Component", () => {
       airline: null,
     };
 
-    render(<SearchScroll filters={noResultsFilters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={noResultsFilters} flights={mockFlights} />);
+    });
 
     // Expect 'No results found' text to be visible
     expect(screen.getByText((content) => content.startsWith("No results found"))).toBeInTheDocument();
   });
 
-  test("Search Result Expansion Is not open", () => {
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+  test("Search Result Expansion Is not open", async () => {
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Expect no "Book My Ticket Now" text to be visible initially
     expect(screen.queryByText(/Book My Ticket Now/i)).toBeNull();
   });
 
-  test("Search Result Expansion Is Open after a Click", () => {
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+  test("Search Result Expansion Is Open after a Click", async () => {
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item
     const firstFlightItem = screen.getByText("LATAM Airlines");
-    fireEvent.click(firstFlightItem);
+    await act(async () => {
+      fireEvent.click(firstFlightItem);
+    });
 
     // Check if the expansion is visible after clicking
     expect(screen.getByText(/Book My Ticket Now/i)).toBeInTheDocument();
@@ -249,18 +268,24 @@ describe("SearchScroll Component", () => {
     });
 
     // Render the component
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
-    fireEvent.click(firstFlightItem);
+    await act(async () => {
+      fireEvent.click(firstFlightItem);
+    });
 
     // Ensure "Book My Ticket Now" is visible
     const bookTicketButton = screen.getByText("Book My Ticket Now");
     expect(bookTicketButton).toBeInTheDocument();
 
     // Simulate clicking the "Book My Ticket Now" button
-    fireEvent.click(bookTicketButton);
+    await act(async () => {
+      fireEvent.click(bookTicketButton);
+    });
 
     // Check if the popup appears due to missing departure date
     await waitFor(() => {
@@ -290,18 +315,24 @@ describe("SearchScroll Component", () => {
     });
 
     // Render the component
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
-    fireEvent.click(firstFlightItem);
+    await act(async () => {
+      fireEvent.click(firstFlightItem);
+    });
 
     // Ensure "Book My Ticket Now" is visible
     const bookTicketButton = screen.getByText("Book My Ticket Now");
     expect(bookTicketButton).toBeInTheDocument();
 
     // Simulate clicking the "Book My Ticket Now" button
-    fireEvent.click(bookTicketButton);
+    await act(async () => {
+      fireEvent.click(bookTicketButton);
+    });
 
     // Check if the popup appears due to missing departure date
     await waitFor(() => {
@@ -332,18 +363,24 @@ describe("SearchScroll Component", () => {
     });
 
     // Render the component
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
-    fireEvent.click(firstFlightItem);
+    await act(async () => {
+      fireEvent.click(firstFlightItem);
+    });
 
     // Ensure "Book My Ticket Now" is visible
     const bookTicketButton = screen.getByText("Book My Ticket Now");
     expect(bookTicketButton).toBeInTheDocument();
 
     // Simulate clicking the "Book My Ticket Now" button
-    fireEvent.click(bookTicketButton);
+    await act(async () => {
+      fireEvent.click(bookTicketButton);
+    });
 
     // Check if the popup appears due to missing departure date
     await waitFor(() => {
@@ -374,18 +411,24 @@ describe("SearchScroll Component", () => {
     });
 
     // Render the component
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
-    fireEvent.click(firstFlightItem);
+    await act(async () => {
+      fireEvent.click(firstFlightItem);
+    });
 
     // Ensure "Book My Ticket Now" is visible
     const bookTicketButton = screen.getByText("Book My Ticket Now");
     expect(bookTicketButton).toBeInTheDocument();
 
     // Simulate clicking the "Book My Ticket Now" button
-    fireEvent.click(bookTicketButton);
+    await act(async () => {
+      fireEvent.click(bookTicketButton);
+    });
 
     // Check if the popup appears due to missing departure date
     await waitFor(() => {
@@ -416,18 +459,24 @@ describe("SearchScroll Component", () => {
     });
 
     // Render the component
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
-    fireEvent.click(firstFlightItem);
+    await act(async () => {
+      fireEvent.click(firstFlightItem);
+    });
 
     // Ensure "Book My Ticket Now" is visible
     const bookTicketButton = screen.getByText("Book My Ticket Now");
     expect(bookTicketButton).toBeInTheDocument();
 
     // Simulate clicking the "Book My Ticket Now" button
-    fireEvent.click(bookTicketButton);
+    await act(async () => {
+      fireEvent.click(bookTicketButton);
+    });
 
     // Check if the popup appears due to missing departure date
     await waitFor(() => {
@@ -438,7 +487,9 @@ describe("SearchScroll Component", () => {
     const okButton = screen.getByText("OK");
     expect(okButton).toBeInTheDocument();
 
-    fireEvent.click(okButton);
+    await act(async () => {
+      fireEvent.click(okButton);
+    });
 
     expect(okButton).not.toBeInTheDocument();
   });
@@ -449,7 +500,6 @@ describe("SearchScroll Component", () => {
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
     });
-    const mockOnClick = jest.fn();
 
     // Setup search data with null departure date
     setupSearchStoreMock({
@@ -462,18 +512,26 @@ describe("SearchScroll Component", () => {
     });
 
     // Render the component
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
-
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
+   
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
-    fireEvent.click(firstFlightItem);
+    await act(async () => {
+      fireEvent.click(firstFlightItem);
+    });
 
     // Ensure "Book My Ticket Now" is visible
     const bookTicketButton = screen.getByText("Book My Ticket Now");
     expect(bookTicketButton).toBeInTheDocument();
 
     // Simulate clicking the "Book My Ticket Now" button
-    fireEvent.click(bookTicketButton);
+    await act(async () => {
+      fireEvent.click(bookTicketButton);
+    });
 
+    // Assert: Ensure the expected behavior occurs
+    //expect(mockPush).toHaveBeenCalledWith('/checkout');
   });
 });

@@ -2,7 +2,7 @@ export function getTimeCategory(time: string): "Morning" | "Afternoon" | "Evenin
     const [hour, minutePart] = time.split(":");
     const [minutes, period] = minutePart.trim().split(" ");
     const hourNum = parseInt(hour);
-    const isAM = period.toLowerCase() === "am";
+    const isAM = period?.toLowerCase() === "am";
 
     if (isAM) {
         // Morning: 12:00 AM (midnight) to 11:59 AM
