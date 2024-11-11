@@ -2,10 +2,8 @@ import React from "react";
 import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SeatBooking from "@/components/SeatBooking";
-import SeatBookingForm from "@/components/SeatBookingForm";
 import '@testing-library/jest-dom';
 import { fetchFlightSeats } from "@/api/FetchFlightSeats"
-import { PossibleSeatStates } from "@/components/SeatSelection/Seat";
 import { mockUseTripStore, mockUseLoaderStore, mockTripData, mockTripDataOther } from '@/components/__tests__/__mocks__/storeMocks';
 
 const mockBack = jest.fn();
@@ -81,23 +79,22 @@ jest.mock('@/api/FetchFlightSeats', () => ({
 }));
 
 /**
- * Test File: SeatBooking Component
+ * Test File: SeatBooking
  *
  * Purpose:
- * - Ensures the functionality and rendering behavior of the SeatBooking component.
- * - The SeatBooking component includes:
- *      - Properly rendering the header and airplane components.
- *      - Correctly updating the layout and selected seat state.
+ * - Ensures correct rendering and behavior of the SeatBooking component's seat selection, form interactions, and button functionality.
+ * - Tests cover:
+ *      - Proper initial rendering of the SeatBooking layout and visibility of necessary elements.
+ *      - Seat selection and deselection behavior.
+ *      - Interaction with the trip form (updating form data, submitting forms, and navigating between flights).
  *
  * Test Cases:
- * 1. Renders the SeatBooking component.
- *    - Expectation: The SeatBooking component should render the header and airplane components correctly.
- *
- * 2. Selecting a seat should show the seat selection form.
- *    - Expectation: Clicking a seat should show the seat selection form.
- *
- * 3. Deselecting a seat should hide the seat selection from.
- *    - Expectation: Clicking the same seat twice should deselect it and hide the seat selection form.
+ * 1. Renders the component correctly with expected elements, such as the airplane seats.
+ * 2. Seat selection shows the seat selection form, and deselecting hides it.
+ * 3. Verifies the back navigation through the cancel button.
+ * 4. Tests for successful seat reservation on both departing and returning flights.
+ * 5. Verifies correct form data updating and submits when form fields are changed.
+ * 6. Handles undefined trip data gracefully without errors.
  */
 
 describe("SeatBooking Component", () => {

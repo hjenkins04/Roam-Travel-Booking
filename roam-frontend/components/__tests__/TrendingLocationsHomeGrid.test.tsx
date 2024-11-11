@@ -14,10 +14,10 @@ const mockDestinations: PopularDestination[] = [
 ];
 
 /**
- * Test File: TrendingLocationsHomeGrid Component
+ * Test File: TrendingLocationsHomeGrid
  *
  * Purpose:
- * - Ensure proper rendering of the `TrendingLocationsHomeGrid` component.
+ * - Ensure proper rendering of the TrendingLocationsHomeGrid component.
  * - Verify correct display of destinations based on screen sizes:
  *   - Display 4 images on medium (md) screens.
  *   - Display 5 images on large (lg) screens.

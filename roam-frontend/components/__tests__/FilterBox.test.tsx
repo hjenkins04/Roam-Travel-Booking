@@ -41,7 +41,6 @@ import FilterBox from '@/components/FilterBox';
  *
  * 6. Render the Search Button and when clicked the dropdown selections of the filter buttons should be applied to update the search results in Search Scroll. 
  *    - Expectation: Upon clicking, applyFilters should be called. 
- *
  */
 
 describe('FilterButton Component', () => {

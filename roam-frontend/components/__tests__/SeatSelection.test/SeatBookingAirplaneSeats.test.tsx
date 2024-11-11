@@ -1,11 +1,10 @@
 // Airplane.test.tsx
 
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import '@testing-library/jest-dom';
-import { mockUseTripStore, mockFlight, mockCurrentFlight } from '@/components/__tests__/__mocks__/storeMocks';
+import { mockFlight } from '@/components/__tests__/__mocks__/storeMocks';
 import { PossibleSeatStates } from "@/components/SeatSelection/Seat";
-import SeatBooking from "@/components/SeatBooking"
 
 jest.mock('@/context/TripContext', () => ({
   useTripStore: jest.fn(() => ({

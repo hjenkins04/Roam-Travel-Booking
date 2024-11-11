@@ -19,8 +19,6 @@ const SearchBoxSkeletonLoader: React.FC = () => {
             secondaryColor="#FFFFFF"
             primaryText="Round Trip"
             secondaryText="One Way"
-            onPrimaryClick={() => {}}
-            onSecondaryClick={() => {}}
           />
         </div>
 
@@ -41,7 +39,6 @@ const SearchBoxSkeletonLoader: React.FC = () => {
             {/* Swap Icon between Departure and Arrival */}
             <div
               className="bg-orange-500 rounded-full p-5 z-10 cursor-pointer"
-              onClick={() => {}}
               style={{
                 position: "relative",
                 transform: "translateX(25%)",
@@ -81,7 +78,6 @@ const SearchBoxSkeletonLoader: React.FC = () => {
           {/* Search Button */}
           <div className="flex justify-center pt-6 relative">
             <Button
-              onClick={() => {}}
               className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2"
             >
               <span>Search Flights</span>

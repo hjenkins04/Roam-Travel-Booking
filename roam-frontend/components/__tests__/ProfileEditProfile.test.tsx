@@ -6,25 +6,25 @@ import EditProfile from "../EditProfile";
  * Test File: Profile EditProfile Component
  *
  * Purpose:
- * - Validates the `EditProfile` component's rendering, form handling, and state management.
- * - The `EditProfile` component provides:
+ * - Validates the EditProfile component's rendering, form handling, and state management.
+ * - The EditProfile component provides:
  *      - Required form fields for first name, last name, email, phone number, and address.
  *      - Optional form fields for middle name, suffix, and apartment number.
- *      - A submit button that calls the provided `handleSubmit` function.
- *      - Controlled inputs that update component state through `onChange` functions.
+ *      - A submit button that calls the provided handleSubmit function.
+ *      - Controlled inputs that update component state through onChange functions.
  *
  * Test Cases:
  * 1. Render the required form fields.
  *    - Expectation: The required fields (first name, last name, email, phone number, address, province, and postal code) should be visible and marked as required.
  *
  * 2. Submit the form and call the handleSubmit function.
- *    - Expectation: When the form is submitted, the `handleSubmit` function should be called once.
+ *    - Expectation: When the form is submitted, the handleSubmit function should be called once.
  *
  * 3. Render the optional form fields.
  *    - Expectation: The optional fields (middle name, suffix, and apartment number) should be visible and not required.
  *
  * 4. Verify onChange event handlers for required fields.
- *    - Expectation: Typing in each required field should trigger the corresponding `onChange` handler and update the respective mock state function with the entered value.
+ *    - Expectation: Typing in each required field should trigger the corresponding onChange handler and update the respective mock state function with the entered value.
  */
 
 describe("EditProfile Component", () => {

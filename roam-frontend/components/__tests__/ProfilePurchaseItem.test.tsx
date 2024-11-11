@@ -1,22 +1,14 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import PurchaseItem from "../PurchaseItem";
-import {
-  mockDisplayPurchasePassenger,
-  mockFlightOutbound,
-  mockFlightReturn,
-} from "@/components/__tests__/__mocks__/storeMocks";
-import {
-  formatTimeMinutes,
-  getFlightIdString,
-  getLayoverSummary,
-} from "@/models";
+import { mockDisplayPurchasePassenger, mockFlightOutbound, mockFlightReturn } from "@/components/__tests__/__mocks__/storeMocks";
+import { formatTimeMinutes, getFlightIdString, getLayoverSummary } from "@/models";
 import { format } from "date-fns";
 
 /**
- * Test Suite for `PurchaseItem` Component
+ * Test Suite for PurchaseItem Component
  *
- * This suite tests the `PurchaseItem` component, ensuring correct rendering and functionality
+ * This suite tests the PurchaseItem component, ensuring correct rendering and functionality
  * for various scenarios involving flight details and the cancel button.
  *
  * The component displays information related to departing and returning flights for a passenger,
@@ -28,26 +20,26 @@ import { format } from "date-fns";
  *      flight time, and layover summary, are displayed properly.
  *
  * 2. **Cancel button functionality**:
- *    - Ensures the cancel button (Ban icon) is rendered when `ban` is `true` and triggers the `onCancelClick` function when clicked.
+ *    - Ensures the cancel button (Ban icon) is rendered when ban is true and triggers the onCancelClick function when clicked.
  *
  * 3. **Cancel button visibility**:
- *    - Ensures the cancel button is not rendered when `ban` is set to `false`.
+ *    - Ensures the cancel button is not rendered when ban is set to false.
  *
  * 4. **Handling null flight details**:
- *    - Verifies that no flight details are rendered when either the `departing_flight` or `returning_flight`
- *      is `null` in the `purchasePassenger` object.
+ *    - Verifies that no flight details are rendered when either the departing_flight or returning_flight
+ *      is null in the purchasePassenger object.
  *
  * 5. **Flight details rendering when both flights exist**:
- *    - Ensures that flight details are rendered when both `departing_flight` and `returning_flight` are provided.
+ *    - Ensures that flight details are rendered when both departing_flight and returning_flight are provided.
  *
  * 6. **Formatted flight dates rendering**:
- *    - Verifies that departure and return flight dates are formatted correctly using the `format` function.
+ *    - Verifies that departure and return flight dates are formatted correctly using the format function.
  *
- * 7. **Non-rendering of outbound flight details when `departing_flight` is null**:
- *    - Verifies that the outbound flight details are not rendered when `departing_flight` is `null`.
+ * 7. **Non-rendering of outbound flight details when departing_flight is null**:
+ *    - Verifies that the outbound flight details are not rendered when departing_flight is null.
  *
- * 8. **Non-rendering of return flight details when `returning_flight` is null**:
- *    - Verifies that the return flight details are not rendered when `returning_flight` is `null`.
+ * 8. **Non-rendering of return flight details when returning_flight is null**:
+ *    - Verifies that the return flight details are not rendered when returning_flight is null.
  */
 
 describe("PurchaseItem Component", () => {

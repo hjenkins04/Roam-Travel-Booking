@@ -8,7 +8,7 @@ import { ImageProps } from "next/image";
 import { useRouter } from 'next/navigation';
 
 /**
- * Test File: Search Scroll Component
+ * Test File: Search Scroll
  *
  * Purpose:
  * - Ensures the functionality and rendering behavior of the Search Scroll Component.

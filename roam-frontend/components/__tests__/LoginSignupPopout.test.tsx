@@ -50,26 +50,6 @@ jest.mock("@/api/FetchLogin", () => ({
  *
  * 4. Handle all required props and validates interface
  *    - Expectation: The component should render with all required props and validate the interface
- *
- * Key Test Coverage:
- * - Component Rendering:
- *   - Proper display of login/signup forms
- *   - Conditional rendering of form fields based on mode
- *
- * - User Interactions:
- *   - Form submissions
- *   - Mode toggling
- *   - Button clicks
- *
- * - Integration Points:
- *   - API calls (fetchLogin)
- *   - Authentication state management
- *   - Navigation routing
- *
- * Dependencies Mocked:
- * - next/navigation (useRouter)
- * - @/api/FetchLogin
- * - @/context/AuthContext (useAuthStore)
  */
 
 describe("LoginSignupPopout Component", () => {
