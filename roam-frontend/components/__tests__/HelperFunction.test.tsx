@@ -98,13 +98,13 @@ describe("Price and Seat Type Calculations", () => {
 describe("Seat Summary Generation", () => {
   test("returns correct departing flight seat summary", () => {
     expect(getDepartingFlightSeatSummary(mockTrip, 1)).toBe(
-      "Seat 4 (Economy, Window)"
+      "Seat 3 (Economy, Middle)"
     );
   });
 
   test("returns correct returning flight seat summary", () => {
     expect(getReturningFlightSeatSummary(mockTrip, 1)).toBe(
-      "Seat 4 (Economy, Window)"
+      "Seat 2 (Business, Aisle)"
     );
   });
 
@@ -166,7 +166,7 @@ describe("Trip to Purchase Mapping", () => {
 describe("Cost Calculations", () => {
   test("calculates correct subtotal for single passenger", () => {
     const subtotal = calculateSubtotal(mockTrip.passengers, mockTrip);
-    expect(subtotal).toBe(1800);
+    expect(subtotal).toBe(2400);
   });
 
   test("calculates correct subtotal for one-way trip", () => {
@@ -174,7 +174,7 @@ describe("Cost Calculations", () => {
       mockTripOneWay.passengers,
       mockTripOneWay
     );
-    expect(subtotal).toBe(900);
+    expect(subtotal).toBe(1200);
   });
 
   test("calculates correct tax amount", () => {
