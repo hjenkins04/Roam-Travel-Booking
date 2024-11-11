@@ -14,7 +14,7 @@ import {
 
 interface PurchaseItemProps {
   ban?: boolean;
-  purchasePassenger: DisplayPurchasePassenger;
+  purchasePassenger: DisplayPurchasePassenger | null;
   onCancelClick: () => void;
 }
 
@@ -36,7 +36,9 @@ const PurchaseItem: React.FC<PurchaseItemProps> = ({
       )}
       {/* Container for outbound and return flight details */}
       <div className="flex gap-6 mt-4 max-md:flex-col">
-        <DepartureFlightDetails purchasePassenger={purchasePassenger} />
+        {purchasePassenger && (
+          <DepartureFlightDetails purchasePassenger={purchasePassenger} />
+        )}
 
         {/* Only show return flight if returningFlight is not null */}
         {purchasePassenger?.returning_flight && (
@@ -54,7 +56,7 @@ const DepartureFlightDetails: React.FC<{
   const {
     departing_flight: departingFlight = null,
     departure_date: departureDate = null,
-    departure_seat: departureSeat = "No seat assigned",
+    departure_seat: departureSeat = null,
   } = purchasePassenger || {};
   const formattedDepartureDate = departureDate
     ? format(new Date(departureDate), "MMMM do, yyyy")
@@ -87,7 +89,9 @@ const DepartureFlightDetails: React.FC<{
                   {getFlightIdString(departingFlight)}
                 </p>
               </div>
-              <p className="text-black max-md:mr-2.5">{departureSeat}</p>
+              <p className="text-black max-md:mr-2.5">
+                {departureSeat ? departureSeat : "No seat assigned"}
+              </p>
               <p className="self-start text-black">
                 {departingFlight.baggage_allowance}
               </p>
@@ -119,7 +123,7 @@ const ReturnFlightDetails: React.FC<{
   const {
     returning_flight: returningFlight = null,
     return_date: returnDate = null,
-    return_seat: returnSeat = "No seat assigned",
+    return_seat: returnSeat = null,
   } = purchasePassenger || {};
   const formattedReturnDate = returnDate
     ? format(new Date(returnDate), "MMMM do, yyyy")
@@ -155,7 +159,9 @@ const ReturnFlightDetails: React.FC<{
                   {getFlightIdString(returningFlight)}
                 </p>
               </div>
-              <p className="text-black max-md:mr-2.5">{returnSeat}</p>
+              <p className="text-black max-md:mr-2.5">
+                {returnSeat ? returnSeat : "No seat assigned"}
+              </p>
               <p className="self-start text-black">
                 {returningFlight.baggage_allowance}
               </p>

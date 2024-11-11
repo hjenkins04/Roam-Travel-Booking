@@ -1,9 +1,22 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import PurchaseItem from "../PurchaseItem";
-import { mockDisplayPurchasePassenger, mockFlightOutbound, mockFlightReturn } from "@/components/__tests__/__mocks__/storeMocks";
-import { formatTimeMinutes, getFlightIdString, getLayoverSummary } from "@/models";
+import {
+  mockDisplayPurchasePassenger,
+  mockFlightOutbound,
+  mockFlightReturn,
+  mockDisplayPurchasePassengerNoFlights,
+  mockDisplayPurchasePassengerOther,
+  mockDisplayPurchasePassengerNoReturn,
+} from "@/components/__tests__/__mocks__/storeMocks";
+import {
+  formatTimeMinutes,
+  getFlightIdString,
+  getLayoverSummary,
+} from "@/models";
 import { format } from "date-fns";
+
+import { DisplayPurchasePassenger } from "@/models/display_purchase";
 
 /**
  * Test Suite for PurchaseItem Component
@@ -243,6 +256,62 @@ describe("PurchaseItem Component", () => {
       screen.queryByText(
         `Departing ${mockFlightReturn.departure_airport.iata_code}`
       )
+    ).not.toBeInTheDocument();
+  });
+
+  test("renders the component with no departure or return flight details", () => {
+    render(
+      <PurchaseItem
+        purchasePassenger={mockDisplayPurchasePassengerNoFlights}
+        onCancelClick={jest.fn()}
+      />
+    );
+
+    // Ensure no flight details are rendered
+    expect(screen.queryByText("Departing")).not.toBeInTheDocument();
+    expect(screen.queryByText("Test Airline")).not.toBeInTheDocument();
+    expect(screen.queryByText("Flight 1")).not.toBeInTheDocument();
+    expect(screen.queryByText("Seat 10A")).not.toBeInTheDocument();
+    expect(screen.queryByText("1h 0m")).not.toBeInTheDocument();
+    expect(screen.queryByText("9:00 AM - 10:00 AM")).not.toBeInTheDocument();
+    expect(screen.queryByText("Seat 15B")).not.toBeInTheDocument();
+    expect(screen.queryByText("4:00 PM - 5:00 PM")).not.toBeInTheDocument();
+  });
+
+  test("handles missing flight details gracefully", () => {
+    render(
+      <PurchaseItem
+        purchasePassenger={mockDisplayPurchasePassengerOther}
+        onCancelClick={jest.fn()}
+      />
+    );
+
+    // Ensure the component still renders without errors
+    expect(screen.getAllByText("Date not available")[0]).toBeInTheDocument();
+    expect(screen.getAllByText("No seat assigned")[0]).toBeInTheDocument();
+  });
+
+  test("handles no return flight", () => {
+    render(
+      <PurchaseItem
+        onCancelClick={jest.fn()}
+        purchasePassenger={mockDisplayPurchasePassengerNoReturn}
+      />
+    );
+
+    expect(
+      screen.queryByTestId("return-flight-departure")
+    ).not.toBeInTheDocument();
+  });
+
+  test("handles no purchase passenger given", () => {
+    render(<PurchaseItem onCancelClick={jest.fn()} purchasePassenger={null} />);
+
+    expect(
+      screen.queryByTestId("departure-flight-airline-logo")
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("return-flight-departure")
     ).not.toBeInTheDocument();
   });
 });

@@ -6,8 +6,8 @@ export interface Flight {
     departure_airport: Airport;
     arrival_airport: Airport;
     flight_time_minutes: number;
-    departure_time: string;
-    arrival_time: string;
+    departure_time: string | null;
+    arrival_time: string | null;
     num_stops: number;
     price_economy: number;
     price_business: number;

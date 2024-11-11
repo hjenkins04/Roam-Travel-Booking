@@ -496,6 +496,36 @@ export const mockDisplayPurchasePassenger: DisplayPurchasePassenger = {
   return_date: new Date("2023-12-30T15:00:00Z"),
 };
 
+export const mockDisplayPurchasePassengerNoFlights: DisplayPurchasePassenger = {
+  name: "John Doe",
+  departing_flight: null,
+  returning_flight: null,
+  departure_seat: "12",
+  return_seat: "14",
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: new Date("2023-12-30T15:00:00Z"),
+}
+
+export const mockDisplayPurchasePassengerNoReturn: DisplayPurchasePassenger = {
+  name: "John Doe",
+  departing_flight: mockFlightOutbound,
+  returning_flight: null,
+  departure_seat: "12",
+  return_seat: null,
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: null
+}
+
+export const mockDisplayPurchasePassengerOther: DisplayPurchasePassenger = {
+  name: "John Doe",
+  departing_flight: mockFlightOutbound,
+  returning_flight: mockFlightReturn,
+  departure_seat: null,
+  return_seat: null,
+  departure_date: null,
+  return_date: null,
+}
+
 export const mockDisplayPurchase: DisplayPurchase = {
   guid: "purchase-guid-456",
   title: "Holiday Trip to NYC",
