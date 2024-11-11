@@ -8,8 +8,7 @@ from app.models.dto.country_dto import CountryDTO
 from app.models.entities.country_entity import CountryEntity
 from app.models.entities.location_entity import LocationEntity
 from app.models.entities.continent_entity import ContinentEntity
-from flask import Flask
-import sys
+
 
 SQLALCHEMY_SILENCE_UBER_WARNING=1.
 
@@ -117,3 +116,21 @@ def test_get_airport_by_guid(client, setup_airport):
     data = response.get_json()
     assert data['guid'] == setup_airport.guid, "Returned airport GUID should match the setup airport"
 
+def test_delete_airport(client, setup_airport):
+    """Test deleting an airport."""
+    existing_airport = AirportEntity.query.filter_by(guid=setup_airport.guid).first()
+    print("Before deletion:", existing_airport) 
+
+    # Perform the delete operation
+    response = client.delete(f'/api/airports/{setup_airport.guid}')
+    print(response.data) 
+    print(f"Trying to delete airport with GUID: {setup_airport.guid}")
+    deleted_airport = AirportEntity.query.filter_by(guid=setup_airport.guid).first()
+    print("After deletion:", deleted_airport)
+    
+    # Check for a successful response
+    assert response.status_code == 204, f"Unexpected status code: {response.status_code}"
+
+    # Optionally, verify the airport is actually deleted
+    response_check = client.get(f'/api/airports/{setup_airport.guid}')
+    assert response_check.status_code == 404, "Airport should not be found after deletion."
