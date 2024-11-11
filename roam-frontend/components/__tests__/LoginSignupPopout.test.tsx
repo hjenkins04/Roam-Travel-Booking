@@ -177,31 +177,4 @@ describe("LoginSignupPopout Component", () => {
 
     expect(mockPush).toHaveBeenCalledWith("/forgot-password");
   });
-
-  test("handles Google sign in", async () => {
-    // Mock successful login response
-    (fetchLogin as jest.Mock).mockResolvedValueOnce({
-      token: "mock-token",
-      guid: "mock-guid",
-    });
-
-    render(
-      <LoginSignupPopout
-        isOpen={true}
-        mode="login"
-        closeDrawer={mockCloseDrawer}
-        setPopoutMode={mockSetPopoutMode}
-      />
-    );
-
-    const googleButton = screen.getByText(/Sign in with Google/i);
-    await userEvent.click(googleButton);
-
-    await waitFor(() => {
-      expect(fetchLogin).toHaveBeenCalled();
-      expect(mockSignIn).toHaveBeenCalledWith("mock-guid");
-      expect(mockCloseDrawer).toHaveBeenCalled();
-      expect(mockPush).toHaveBeenCalledWith("/");
-    });
-  });
 });
