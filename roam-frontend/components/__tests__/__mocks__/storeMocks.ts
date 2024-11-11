@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { Flight, Airport, Continent, Country, Location, Airline, Layover, FlightSeatConfiguration, DisplayPurchasePassenger, Passenger, DisplayPurchase, PassengerFormData  } from '@/models';
+import { Flight, Airport, Continent, Country, Location, Airline, Layover, FlightSeatConfiguration, DisplayPurchasePassenger, Passenger, DisplayPurchase, PassengerFormData, Trip  } from '@/models';
 import { TripData } from "@/context/TripContext"
 
 export const mockContinent: Continent = {
@@ -111,6 +111,12 @@ export const mockAirlineOther: Airline = {
   logo_path: "/logos/acc.png",
 };
 
+export const mockAirlineNoPhoto: Airline = {
+  guid: "airline-guid-no-photo",
+  icao_code: "ABB",
+  name: "Air Baltic"
+}
+
 export const mockLayover: Layover = {
   guid: "layover-guid",
   airport: mockDepartureAirport,
@@ -177,6 +183,21 @@ export const mockCurrentFlight: Flight = {
   layover: undefined,
 };
 
+export const mockFlightReturnNoSeats: Flight = {
+  guid: "flight-guid-return",
+  airline: mockAirlineNoPhoto,
+  departure_airport: mockDepartureAirportOther,
+  arrival_airport: mockArrivalAirportOther,
+  flight_time_minutes: 500,
+  departure_time: "2024-10-25T10:00:00Z",
+  arrival_time: "2024-10-25T13:00:00Z",
+  num_stops: 1,
+  price_economy: 200,
+  price_business: 800,
+  baggage_allowance: "1 bag",
+  seat_configuration: null,
+  layover: undefined,
+};
 
 export const mockFlight: Flight = {
   guid: "flight-guid",
@@ -260,7 +281,7 @@ export const mockFlightOutbound: Flight = {
 
 export const mockFlightReturn: Flight = {
   guid: "flight-guid-return",
-  airline: mockAirlineOther,
+  airline: mockAirlineNoPhoto,
   departure_airport: mockDepartureAirportOther,
   arrival_airport: mockArrivalAirportOther,
   flight_time_minutes: 500,
@@ -413,6 +434,38 @@ export const mockTripData: TripData = {
   trip_purchased: false,
 };
 
+export const mockTrip: Trip = {
+  guid: "trip-guid",
+  name: "Holiday Trip",
+  is_round_trip: true,
+  departing_flight: mockFlight,
+  returning_flight: mockFlight,
+  passengers: mockPassengers,
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: new Date("2023-12-31T15:00:00Z"),
+};
+
+export const mockTripOneWay: Trip = {
+  guid: "trip-guid",
+  name: "Holiday Trip",
+  is_round_trip: false,
+  departing_flight: mockFlight,
+  passengers: mockPassengers,
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: null,
+}
+
+export const mockTripNoSeats: Trip = {
+  guid: "trip-guid",
+  name: "Holiday Trip",
+  is_round_trip: true,
+  departing_flight: mockFlight,
+  returning_flight: mockFlightReturnNoSeats,
+  passengers: mockPassengers,
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: new Date("2023-12-31T15:00:00Z"),
+}
+
 export const mockTripDataOther: TripData = {
   trip: {
     guid: "trip-guid",
@@ -442,6 +495,36 @@ export const mockDisplayPurchasePassenger: DisplayPurchasePassenger = {
   departure_date: new Date("2023-12-25T10:00:00Z"),
   return_date: new Date("2023-12-30T15:00:00Z"),
 };
+
+export const mockDisplayPurchasePassengerNoFlights: DisplayPurchasePassenger = {
+  name: "John Doe",
+  departing_flight: null,
+  returning_flight: null,
+  departure_seat: "12",
+  return_seat: "14",
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: new Date("2023-12-30T15:00:00Z"),
+}
+
+export const mockDisplayPurchasePassengerNoReturn: DisplayPurchasePassenger = {
+  name: "John Doe",
+  departing_flight: mockFlightOutbound,
+  returning_flight: null,
+  departure_seat: "12",
+  return_seat: null,
+  departure_date: new Date("2023-12-25T10:00:00Z"),
+  return_date: null
+}
+
+export const mockDisplayPurchasePassengerOther: DisplayPurchasePassenger = {
+  name: "John Doe",
+  departing_flight: mockFlightOutbound,
+  returning_flight: mockFlightReturn,
+  departure_seat: null,
+  return_seat: null,
+  departure_date: null,
+  return_date: null,
+}
 
 export const mockDisplayPurchase: DisplayPurchase = {
   guid: "purchase-guid-456",

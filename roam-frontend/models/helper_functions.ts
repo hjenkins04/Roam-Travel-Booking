@@ -1,4 +1,4 @@
-import { Flight, Seat, Trip, Airline, Airport, Layover, FlightSeatConfiguration } from "@/models";
+import { Flight, Trip } from "@/models";
 import { DisplayPurchase, DisplayPurchasePassenger } from '@/models';
 
 type SeatTypeMapping = { [index: number]: "Economy" | "Business" };
