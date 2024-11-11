@@ -8,23 +8,20 @@ jest.mock(
 );
 
 /**
- * Test File: AirlinePhoto Component
+ * Test File: AirlinePhoto
  *
  * Purpose:
- * - Verifies the `AirlinePhoto` component's rendering behavior with different `imagePath` values.
- * - The `AirlinePhoto` component displays:
- *      - An airline photo using the provided `imagePath` or, if not provided, a default image.
+ * - Verifies the AirlinePhoto component's rendering behavior with different imagePath values.
+ * - The AirlinePhoto component displays:
+ *      - An airline photo using the provided imagePath or, if not provided, a default image.
  *      - The photo in a fixed 40x40 pixel container with a cover-fit style to ensure it fills the container properly.
  *
  * Test Cases:
  * 1. Render the component with a custom image path.
- *    - Expectation: The component should render an image element with the `src` attribute matching the provided `imagePath` and an `alt` attribute of "Airline photo".
+ *    - Expectation: The component should render an image element with the src attribute matching the provided imagePath and an alt attribute of "Airline photo".
  *
  * 2. Render the component without an imagePath (default behavior).
- *    - Expectation: When no `imagePath` is provided, the component should render an image element with the `src` attribute set to the default path (`"/images/default.png"`).
- *
- * Mocking:
- * - The Next.js `Image` component is mocked to simplify testing by rendering a standard `<img>` element.
+ *    - Expectation: When no imagePath is provided, the component should render an image element with the src attribute set to the default path ("/images/default.png").
  */
 
 describe("AirlinePhoto Component", () => {

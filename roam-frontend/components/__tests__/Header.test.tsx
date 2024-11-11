@@ -1,20 +1,10 @@
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  cleanup,
-  act,
-} from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, cleanup, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useAuthStore } from "@/context/AuthContext";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import {
-  mockAuthStoreSignedIn,
-  mockAuthStoreSignedOut,
-} from "@/components/__tests__/__mocks__/storeMocks";
+import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from "@/components/__tests__/__mocks__/storeMocks";
 
 /**
  * Test File: Header Component

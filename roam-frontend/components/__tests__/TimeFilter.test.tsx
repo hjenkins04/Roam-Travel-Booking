@@ -4,7 +4,7 @@ import { getTimeCategory } from "../HelperFunctions/timeFilter";
  * Test File: getTimeCategory Function
  *
  * Purpose:
- * - Verifies the functionality and correctness of the `getTimeCategory` function, which categorizes a given time string
+ * - Verifies the functionality and correctness of the getTimeCategory function, which categorizes a given time string
  *   into one of three time periods: "Morning," "Afternoon," or "Evening."
  * - The function accepts a time string formatted as "HH:MM AM/PM" and is expected to:
  *      - Categorize times from 12:00 AM to 11:59 AM as "Morning"

@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import Sidebar from "@/components/ProfileSidebar";
 import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from '@/components/__tests__/__mocks__/storeMocks';
 
-// Mock useAuth and useRouter hooks for testing
-
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));

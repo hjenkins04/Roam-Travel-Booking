@@ -47,41 +47,34 @@ const SeatBookingFormFooter: React.FC<SeatBookingFormFooterProps> = ({
                     <span className="text-sm font-medium text-gray-500">Seat number</span>
                     <span className="text-lg font-semibold">{seatNumber}</span>
                 </div>
-                 {/* Remove */}
-                <div className="flex flex-col">
-                    <span className="text-sm font-medium text-gray-500">{`Passenger Index: ${passengerIndex}`}</span>
-                    <span className="text-sm font-medium text-gray-500">{`Group Size: ${groupSize}`}</span>
-                    <span className="text-sm font-medium text-gray-500">{`Round Trip: ${isRoundTrip}`}</span>
-                    <span className="text-sm font-medium text-gray-500">{`First Flight: ${isFirstFlight}`}</span>
-                </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex space-x-4">
                 {/* Cancel - always visible */}
                 {showSaveAndCloseButton && (
-                    <Button variant="outline" className="border-orange-400 text-orange-400" onClick={onCancel}>
+                    <Button variant="outline" className="border-orange-400 text-orange-400" onClick={onCancel} data-testid="cancel-button">
                         Cancel
                     </Button>
                 )}
 
                 {/* Next Passenger button */}
                 {showNextPassengerButton && (
-                    <Button className="bg-[#ff6b35] hover:bg-[#ff8c5a]" onClick={onNextPassenger}>
+                    <Button className="bg-[#ff6b35] hover:bg-[#ff8c5a]" onClick={onNextPassenger} data-testid="next-passenger-button">
                         Next Passenger
                     </Button>
                 )}
 
                 {/* Next Flight button */}
                 {showNextFlightButton && (
-                    <Button className="bg-[#ff6b35] hover:bg-[#ff8c5a]" onClick={onNextFlight}>
+                    <Button className="bg-[#ff6b35] hover:bg-[#ff8c5a]" onClick={onNextFlight} data-testid="book-return-flight-button">
                         Book Return Flight
                     </Button>
                 )}
 
                 {/* Checkout button */}
                 {showContinueButton && (
-                    <Button className="bg-[#ff6b35] hover:bg-[#ff8c5a]" onClick={onContinue}>
+                    <Button className="bg-[#ff6b35] hover:bg-[#ff8c5a]" onClick={onContinue} data-testid="checkout-button">
                         Checkout
                     </Button>
                 )}

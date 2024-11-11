@@ -23,6 +23,7 @@ const SearchResultsOverviewBox = () => {
         <SearchBoxButtonList className="w-full justify-center space-y-4 sm:space-y-6 space-x-3">
           {/* Departure City Button */}
           <SearchBoxButton
+            data-testid="departure-city-button"
             leftIcon={<PlaneTakeoff className="text-gray-500 h-4 w-4" />}
             headerText="DEPARTURE CITY"
             mainTextLeft={
@@ -80,7 +81,7 @@ const SearchResultsOverviewBox = () => {
                     : "Month"
                 }
                 size="w-[175px]"
-                onClickMainButton={() => {}}
+                onClickMainButton={() => { }}
               />
             </>
           )}
@@ -89,16 +90,16 @@ const SearchResultsOverviewBox = () => {
           <SearchBoxButtonOneSide
             leftIcon={
               (tripData.trip?.passengers?.length ?? 0) > 1 ? (
-                <Users className="text-gray-500 h-4 w-4" />
+                <Users className="text-gray-500 h-4 w-4" data-testid="users-icon" />
               ) : (
-                <UserIcon className="text-gray-500 h-4 w-4" />
+                <UserIcon className="text-gray-500 h-4 w-4" data-testid="user-icon" />
               )
             }
             headerText="TRAVELERS"
             mainText={`${tripData.trip?.passengers?.length || 1}`}
             subText=""
             size="w-[120px]"
-            onClickMainButton={() => {}}
+            onClickMainButton={() => { }}
           />
         </SearchBoxButtonList>
       </div>

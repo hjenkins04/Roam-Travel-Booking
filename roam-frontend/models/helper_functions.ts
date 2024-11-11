@@ -4,60 +4,60 @@ import { DisplayPurchase, DisplayPurchasePassenger } from '@/models';
 type SeatTypeMapping = { [index: number]: "Economy" | "Business" };
 
 export function formatTimeMinutes(minutes: number): string {
-  if (minutes < 60) {
-      return `${minutes}min`;
-  }
+    if (minutes < 60) {
+        return `${minutes}min`;
+    }
 
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
 
-  if (remainingMinutes === 0){
-    return `${hours}h`
-  }
+    if (remainingMinutes === 0) {
+        return `${hours}h`
+    }
 
-  return `${hours}h ${remainingMinutes}min`;
+    return `${hours}h ${remainingMinutes}min`;
 }
 
 export function getLayoverSummary(flight: Flight): string {
-  if (!flight.layover) {
-      return "";
-  }
+    if (!flight.layover) {
+        return "";
+    }
 
-  const { duration_minutes, airport } = flight.layover;
-  const formattedDuration = formatTimeMinutes(duration_minutes);
-  
-  return `${formattedDuration} in ${airport.iata_code}`;
+    const { duration_minutes, airport } = flight.layover;
+    const formattedDuration = formatTimeMinutes(duration_minutes);
+
+    return `${formattedDuration} in ${airport.iata_code}`;
 }
 
 export function getStopSummary(flight: Flight): string {
-  if (!flight.layover) {
-      return "Nonstop";
-  }
+    if (!flight.layover) {
+        return "Nonstop";
+    }
 
-  return "1 stop"
+    return "1 stop"
 }
 
-export function getPriceByPassengerType(seatTypeMapping:SeatTypeMapping, flight:Flight){
-  const seatTypes = Object.values(seatTypeMapping);
-  const allBusiness = seatTypes.every((type) => type === "Business");
+export function getPriceByPassengerType(seatTypeMapping: SeatTypeMapping, flight: Flight) {
+    const seatTypes = Object.values(seatTypeMapping || {});
+    const allBusiness = seatTypes.every((type) => type === "Business");
 
-  if (allBusiness) return flight.price_business;
-  else return  flight.price_economy;
+    if (allBusiness) return flight.price_business;
+    else return flight.price_economy;
 };
 
-export function getSeatTypeByPassengerType(seatTypeMapping:SeatTypeMapping){
-  const seatTypes = Object.values(seatTypeMapping);
-  const allBusiness = seatTypes.every((type) => type === "Business");
+export function getSeatTypeByPassengerType(seatTypeMapping: SeatTypeMapping) {
+    const seatTypes = Object.values(seatTypeMapping || {});
+    const allBusiness = seatTypes.every((type) => type === "Business");
 
-  if (allBusiness) return "Business";
-  else return  "Economy";
+    if (allBusiness) return "Business";
+    else return "Economy";
 };
 
 export function getDepartingFlightSeatSummary(trip: Trip, passengerIndex: number): string {
     let passengerSeatIndex = trip.passengers[passengerIndex].departing_seat_id ?? undefined
     const seat = trip.departing_flight?.seat_configuration?.seat_configuration[passengerSeatIndex] ?? undefined
     passengerSeatIndex -= 1;
-    if (seat){
+    if (seat) {
         return `Seat ${seat.seat_id} (${seat.type}, ${seat.position})`;
     }
     else return ""
@@ -65,7 +65,7 @@ export function getDepartingFlightSeatSummary(trip: Trip, passengerIndex: number
 
 export function getReturningFlightSeatSummary(trip: Trip, passengerIndex: number): string {
     let passengerSeatIndex = trip.passengers[passengerIndex].returning_seat_id ?? undefined
-    if (passengerSeatIndex){
+    if (passengerSeatIndex) {
         passengerSeatIndex -= 1;
         const seat = trip.returning_flight?.seat_configuration?.seat_configuration[passengerSeatIndex] ?? undefined
         if (seat)
