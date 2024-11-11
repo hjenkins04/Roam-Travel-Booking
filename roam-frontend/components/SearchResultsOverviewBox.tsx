@@ -81,7 +81,6 @@ const SearchResultsOverviewBox = () => {
                     : "Month"
                 }
                 size="w-[175px]"
-                onClickMainButton={() => { }}
               />
             </>
           )}
@@ -99,7 +98,6 @@ const SearchResultsOverviewBox = () => {
             mainText={`${tripData.trip?.passengers?.length || 1}`}
             subText=""
             size="w-[120px]"
-            onClickMainButton={() => { }}
           />
         </SearchBoxButtonList>
       </div>

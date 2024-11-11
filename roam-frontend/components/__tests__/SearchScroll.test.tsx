@@ -10,6 +10,7 @@ import {
   mockUseSearchStore,
   mockAuthStoreSignedIn,
 } from "@/components/__tests__/__mocks__/storeMocks";
+
 import { setTripContextData } from "@/components/HelperFunctions/setTripContextData";
 import { ImageProps } from "next/image";
 import { useRouter } from "next/navigation";
