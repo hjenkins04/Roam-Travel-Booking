@@ -42,12 +42,11 @@ const SearchScroll: React.FC<SearchScrollProps> = ({ filters, flights }) => {
       const departureCheck =
         !filters.departure_time ||
         getTimeCategory(flight.departure_time) === filters.departure_time;
-      // const airlineCheck =
-      //   !filters.airline || flight.airline === filters.airline; //TODO
+      const airlineCheck =
+        !filters.airline || flight.airline.name === filters.airline;
 
       return (
-        priceCheck && stopsCheck && arrivalCheck && departureCheck //&&
-        //airlineCheck //TODO
+        priceCheck && stopsCheck && arrivalCheck && departureCheck && airlineCheck
       );
     });
   };

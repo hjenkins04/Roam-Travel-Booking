@@ -4,18 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { useAuthStore } from "@/context/AuthContext";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from '@/components/__tests__/__mocks__/storeMocks';
-
-const resetAuthStore = () => {
-  const { setState } = useAuthStore;
-  act(() => {
-    setState({ ...mockAuthStoreSignedOut });
-  });
-};
-
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
+import { mockAuthStoreSignedIn, mockAuthStoreSignedOut } from "@/components/__tests__/__mocks__/storeMocks";
 
 /**
  * Test File: Header Component
@@ -50,14 +39,25 @@ jest.mock("next/navigation", () => ({
  *    - Expectation: The dropdown should contain options for navigating to the Dashboard and logging out.
  *
  * 8. Profile dropdown menu redirects to the Dashboard when clicked.
- *    - Expectation: Clicking the "Dashboard" option should navigate to the dashboard page.
+ *    - Expectation: Clicking the Dashboard option should navigate to the dashboard page.
  *
  * 9. Clicking Log Out in the dropdown calls the signOut function.
- *    - Expectation: User should be logged out when "Log Out" is clicked.
+ *    - Expectation: User should be logged out when Log Out is clicked.
  *
  * 10. Test the rendering of tall and small header sizes, and background image.
  *    - Expectation: Proper background and header size should render based on props.
  */
+
+const resetAuthStore = () => {
+  const { setState } = useAuthStore;
+  act(() => {
+    setState({ ...mockAuthStoreSignedOut });
+  });
+};
+
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+}));
 
 describe("Header Component", () => {
   // Arrange: Set up reusable variables and mocks for the test suite
@@ -96,7 +96,9 @@ describe("Header Component", () => {
 
   test("Does not render the Login button when the user is signed in", () => {
     // Arrange: Simulate the user being signed in
-    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
+    act(() => {
+      useAuthStore.setState(mockAuthStoreSignedIn);
+    });
 
     render(
       <Header
@@ -120,7 +122,9 @@ describe("Header Component", () => {
 
   test("Renders the Sign Up button and triggers the signup drawer", async () => {
     // Arrange: Simulate the user being signed out
-    act(() => {useAuthStore.setState(mockAuthStoreSignedOut);});
+    act(() => {
+      useAuthStore.setState(mockAuthStoreSignedOut);
+    });
 
     // Arrange: Render the Header component with signup functionality
     render(
@@ -165,7 +169,9 @@ describe("Header Component", () => {
 
   test("Profile dropdown menu shows options for Dashboard and Log Out when user is signed in", async () => {
     // Arrange: Simulate user being signed in
-    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
+    act(() => {
+      useAuthStore.setState(mockAuthStoreSignedIn);
+    });
 
     render(
       <Header
@@ -191,7 +197,9 @@ describe("Header Component", () => {
 
   test("Profile dropdown menu redirects to the Dashboard when clicked", async () => {
     // Arrange: Simulate user being signed in
-    act(() => {useAuthStore.setState(mockAuthStoreSignedIn);});
+    act(() => {
+      useAuthStore.setState(mockAuthStoreSignedIn);
+    });
 
     render(
       <Header
@@ -213,7 +221,7 @@ describe("Header Component", () => {
     expect(mockPush).toHaveBeenCalledWith("/dashboard");
   });
 
-  test('Clicking Log Out in the dropdown calls the signOut function', async () => {
+  test("Clicking Log Out in the dropdown calls the signOut function", async () => {
     // Arrange: Simulate user being signed in
     act(() => {
       useAuthStore.setState({
@@ -241,6 +249,28 @@ describe("Header Component", () => {
 
     // Assert: Ensure the signOut function is called once
     expect(mockSignOut).toHaveBeenCalledTimes(1);
+  });
+
+  test("Clicking X on the popout closes the popout", async () => {
+    render(
+      <Header
+        headerSize="small"
+        backgroundImage={true}
+        logoColour="black"
+        displayProfilePicture={true}
+      />
+    );
+
+    const user = userEvent.setup();
+    const loginButton = screen.getByTestId("login-button");
+    await user.click(loginButton);
+
+    const loginPopout = await screen.findByTestId("login-popout");
+    const xButton = screen.getByRole("button", { name: "Close" });
+
+    await user.click(xButton);
+
+    expect(loginPopout).not.toBeInTheDocument();
   });
 
   test("Renders correct header sizes and background images", async () => {

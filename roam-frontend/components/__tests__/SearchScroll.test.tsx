@@ -1,10 +1,46 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import SearchScroll from "@/components/SearchScroll";
+import { Flight, FilterOptions } from "@/models";
+import { mockFlight, mockUseTripStore, mockFlightOneStop, mockFlightExpensive, mockUseSearchStore, mockAuthStoreSignedIn } from '@/components/__tests__/__mocks__/storeMocks';
+import { setTripContextData } from "@/components/HelperFunctions/setTripContextData";
+import { ImageProps } from "next/image";
+import { useRouter } from 'next/navigation';
 import { useSearchStore } from "@/context/SearchContext";
 import { useLoaderStore } from "@/context/LoaderContext";
 import { useAuthStore } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+
+/**
+ * Test File: Search Scroll
+ *
+ * Purpose:
+ * - Ensures the functionality and rendering behavior of the Search Scroll Component.
+ * - The Search Scroll Component includes:
+ *      - Some number of search items in a cointainer, overflowing items beyond the size of the container are accessed by scrolling.
+ *
+ * Test Cases:
+ * 1. Renders correctly based on applied filters - flights that contain 1 stop.
+ *    - Expectation: There will be no flights listed that contain the text "non-stop"
+ *
+ * 2. If no results for the given filters, displays "No results match your search criteria"
+ *    - Expectation: That 'no results' text is visible.
+ *
+ * 3. Search result expansion is not open automatically.
+ *    - Expectation: Book My Ticket text is not visible.
+ *
+ * 4. Search result expansion opens when a search item is clicked.
+ *    - Expectation: That Book My Ticket text is now visible.
+ *
+ * 5. Book My Ticket Button routes to the checkout page
+ *    - Expectation: Router.push() will be called with /checkout
+ */
+
+jest.mock("next/image", () => {
+  return function MockImage({ src, alt, ...props }: ImageProps) {
+    return <img src={src as string} alt={alt} {...props} />;
+  };
+});
 
 // Mock contexts and dependencies
 jest.mock("@/context/SearchContext");
