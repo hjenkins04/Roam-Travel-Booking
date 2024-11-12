@@ -350,12 +350,12 @@ describe('SearchBox', () => {
         render(
             <SearchBox
                 airports={[mockDepartureAirport, mockArrivalAirport]}
-                showRequiredFieldPopup={showRequiredFieldPopupMock}  // Ensure it's passed here
+                showRequiredFieldPopup={showRequiredFieldPopupMock}
             />
         );
 
         // Simulate clicking the "Search Flights" button
-        fireEvent.click(screen.getByText('Search Flights'));  // Assuming 'Search' is the button text
+        fireEvent.click(screen.getByText('Search Flights'));
 
         // Wait for the mock function to be called
         await waitFor(() => {
@@ -391,18 +391,18 @@ describe('SearchBox', () => {
         );
 
         // Simulate selecting a new arrival airport
-        const arrivalAirportButton = screen.getByText('Select City'); // Assuming "LAX" is one of the airports
+        const arrivalAirportButton = screen.getByText('Select City');
         fireEvent.click(arrivalAirportButton);
 
         const newArrivalAirport = await screen.getByText(/LAX/i);
         fireEvent.click(newArrivalAirport);
 
-        const expectedArrivalAirport = mockArrivalAirport; // The object corresponding to the selected airport
+        const expectedArrivalAirport = mockArrivalAirport;
 
         // Verify that setSearchData was called with the updated arrival airport and unchanged departure airport
         expect(setSearchDataMock).toHaveBeenCalledWith(expect.objectContaining({
-            arrivalAirport: expectedArrivalAirport,      // Ensure arrival airport is updated with the correct object
-            departureAirport: mockDepartureAirport,     // Ensure departure airport remains unchanged
+            arrivalAirport: expectedArrivalAirport,
+            departureAirport: mockDepartureAirport,
         }));
     });
 
@@ -576,7 +576,6 @@ describe('SearchBox', () => {
             },
             setSearchData: setSearchDataMock,
         });
-
 
         // Render the component
         render(

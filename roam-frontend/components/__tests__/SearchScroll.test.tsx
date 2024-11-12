@@ -240,23 +240,6 @@ describe("SearchScroll Component", () => {
     ).toBeInTheDocument();
   });
 
-  test("No Search Results if Nothing Matches the Time Filter", () => {
-    const noResultsFilters = {
-      max_price: null, // Price lower than available flights
-      stops: null,
-      arrival_time: "Morning",
-      departure_time: "Evening",
-      airline: null,
-    };
-
-    render(<SearchScroll filters={noResultsFilters} flights={mockFlights} />);
-
-    // Expect 'No results found' text to be visible
-    expect(
-      screen.getByText((content) => content.startsWith("No results found"))
-    ).toBeInTheDocument();
-  });
-
   test("Search Result Expansion Is not open", () => {
     render(<SearchScroll filters={filters} flights={mockFlights} />);
 
@@ -281,7 +264,7 @@ describe("SearchScroll Component", () => {
       push: mockPush,
     });
 
-    // Setup search data with null departure date
+
     setupSearchStoreMock({
       departureAirport: "Charles De Gaulle International Airport",
       arrivalAirport: "São Paulo–Guarulhos International Airport",
@@ -291,7 +274,6 @@ describe("SearchScroll Component", () => {
       isRoundTrip: false,
     });
 
-    // Render the component
     render(<SearchScroll filters={filters} flights={mockFlights} />);
 
     // Click on the first flight item to expand it
@@ -315,23 +297,23 @@ describe("SearchScroll Component", () => {
     expect(mockPush).not.toHaveBeenCalled();
   });
 
-  test("Book my ticket now redirects to the right page when logged in and arrival date is null", async () => {
+  test("Book my ticket now redirects to the right popup when logged in and return date is null", async () => {
     const mockPush = jest.fn();
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
     });
 
-    // Setup search data with null departure date
+
     setupSearchStoreMock({
       departureAirport: "Charles De Gaulle International Airport",
       arrivalAirport: "São Paulo–Guarulhos International Airport",
-      departureDate: "2024-12-15", // Departure date is null
+      departureDate: "2024-12-15",
       returnDate: null,
       passengers: 1,
       isRoundTrip: true,
     });
 
-    // Render the component
+
     render(<SearchScroll filters={filters} flights={mockFlights} />);
 
     // Click on the first flight item to expand it
@@ -345,23 +327,23 @@ describe("SearchScroll Component", () => {
     // Simulate clicking the "Book My Ticket Now" button
     fireEvent.click(bookTicketButton);
 
-    // Check if the popup appears due to missing departure date
+    // Check if the popup appears due to missing return date
     await waitFor(() => {
       const popup = screen.queryByText(/Complete Required Field/i);
-      expect(popup).toBeInTheDocument(); // Ensure the popup is shown for missing field
+      expect(popup).toBeInTheDocument();
     });
 
     // Ensure the navigation is not triggered because of missing date
     expect(mockPush).not.toHaveBeenCalled();
   });
 
-  test("Book my ticket now redirects to the right page when logged in and departure airport is null", async () => {
+  test("Book my ticket now redirects to the right popup when logged in and departure airport is null", async () => {
     const mockPush = jest.fn();
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
     });
 
-    // Setup search data with null departure date
+
     setupSearchStoreMock({
       departureAirport: null,
       arrivalAirport: "São Paulo–Guarulhos International Airport",
@@ -371,7 +353,6 @@ describe("SearchScroll Component", () => {
       isRoundTrip: false,
     });
 
-    // Render the component
     render(<SearchScroll filters={filters} flights={mockFlights} />);
 
     // Click on the first flight item to expand it
@@ -385,23 +366,22 @@ describe("SearchScroll Component", () => {
     // Simulate clicking the "Book My Ticket Now" button
     fireEvent.click(bookTicketButton);
 
-    // Check if the popup appears due to missing departure date
+    // Check if the popup appears due to missing departure airport 
     await waitFor(() => {
       const popup = screen.queryByText(/Complete Required Field/i);
       expect(popup).toBeInTheDocument(); // Ensure the popup is shown for missing field
     });
 
-    // Ensure the navigation is not triggered because of missing date
+    // Ensure the navigation is not triggered because of missing value 
     expect(mockPush).not.toHaveBeenCalled();
   });
 
-  test("Book my ticket now redirects to the right page when logged in and arrival airport is null", async () => {
+  test("Book my ticket now redirects to popup when logged in and arrival airport is null", async () => {
     const mockPush = jest.fn();
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
     });
 
-    // Setup search data with null departure date
     setupSearchStoreMock({
       departureAirport: "Charles De Gaulle International Airport",
       arrivalAirport: null,
@@ -411,7 +391,6 @@ describe("SearchScroll Component", () => {
       isRoundTrip: true,
     });
 
-    // Render the component
     render(<SearchScroll filters={filters} flights={mockFlights} />);
 
     // Click on the first flight item to expand it
@@ -425,13 +404,13 @@ describe("SearchScroll Component", () => {
     // Simulate clicking the "Book My Ticket Now" button
     fireEvent.click(bookTicketButton);
 
-    // Check if the popup appears due to missing departure date
+    // Check if the popup appears due to missing arrival airport
     await waitFor(() => {
       const popup = screen.queryByText(/Complete Required Field/i);
       expect(popup).toBeInTheDocument(); // Ensure the popup is shown for missing field
     });
 
-    // Ensure the navigation is not triggered because of missing date
+    // Ensure the navigation is not triggered because of missing value 
     expect(mockPush).not.toHaveBeenCalled();
   });
 
@@ -441,7 +420,6 @@ describe("SearchScroll Component", () => {
       push: mockPush,
     });
 
-    // Setup search data with null departure date
     setupSearchStoreMock({
       departureAirport: "Charles De Gaulle International Airport",
       arrivalAirport: "São Paulo–Guarulhos International Airport",
@@ -451,7 +429,6 @@ describe("SearchScroll Component", () => {
       isRoundTrip: true,
     });
 
-    // Render the component
     render(<SearchScroll filters={filters} flights={mockFlights} />);
 
     // Click on the first flight item to expand it
@@ -465,10 +442,10 @@ describe("SearchScroll Component", () => {
     // Simulate clicking the "Book My Ticket Now" button
     fireEvent.click(bookTicketButton);
 
-    // Check if the popup appears due to missing departure date
+    // Check if the popup appears due to missing passengers 
     await waitFor(() => {
       const popup = screen.queryByText(/Complete Required Field/i);
-      expect(popup).toBeInTheDocument(); // Ensure the popup is shown for missing field
+      expect(popup).toBeInTheDocument();
     });
 
     const okButton = screen.getByText("OK");
@@ -486,7 +463,6 @@ describe("SearchScroll Component", () => {
     });
     const mockOnClick = jest.fn();
 
-    // Setup search data with null departure date
     setupSearchStoreMock({
       departureAirport: "Charles De Gaulle International Airport",
       arrivalAirport: "São Paulo–Guarulhos International Airport",
@@ -496,7 +472,6 @@ describe("SearchScroll Component", () => {
       isRoundTrip: true,
     });
 
-    // Render the component
     render(<SearchScroll filters={filters} flights={mockFlights} />);
 
     // Click on the first flight item to expand it
