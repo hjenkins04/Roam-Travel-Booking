@@ -10,8 +10,9 @@ import SearchBoxButton from "@/components/SearchBoxButton";
 import HumpButton from "@/components/Buttons/HumpButton";
 import { useRouter } from "next/navigation";
 
-import { useSearchStore  } from "@/context/SearchContext";
+import { useSearchStore } from "@/context/SearchContext";
 import { Airport } from "@/models";
+
 
 interface SearchBoxProps {
   airports: Airport[];
@@ -21,6 +22,11 @@ interface SearchBoxProps {
 const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup }) => {
   const { searchData, setSearchData } = useSearchStore();
   const router = useRouter();
+
+  console.log("searchData:", searchData);  // Log the searchData object
+  console.log("airports:", airports);  // Log airports prop
+  console.log("showRequiredFieldPopup:", showRequiredFieldPopup);  // Log the mock function
+
 
   const handleDepartureChange = (value: Airport) => {
     setSearchData({
@@ -43,7 +49,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
           : searchData.departureAirport,
     });
   };
-  
+
   const swapAirports = () => {
     setSearchData({
       ...searchData,
@@ -51,7 +57,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
       arrivalAirport: searchData.departureAirport,
     });
   };
-  
+
   const addPassenger = () => {
     setSearchData({
       ...searchData,
@@ -62,18 +68,18 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
       },
     });
   };
-  
+
   const removePassenger = () => {
     const updatedSeatTypeMapping = { ...searchData.seatTypeMapping };
     delete updatedSeatTypeMapping[searchData.passengers - 1];
-  
+
     setSearchData({
       ...searchData,
       passengers: searchData.passengers > 1 ? searchData.passengers - 1 : 1,
       seatTypeMapping: updatedSeatTypeMapping,
     });
   };
-  
+
   const updatePassengerClass = (index: number, newClass: "Business" | "Economy") => {
     setSearchData({
       ...searchData,
@@ -113,19 +119,19 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
       <div className="flex flex-col items-center justify-center relative">
         {/* Toggle Button Container */}
         <div className="relative flex -mb-0.5 justify-center items-center">
-        <HumpButton
-          primaryColor="#FF9A2A"
-          secondaryColor="#FFFFFF"
-          primaryText="Round Trip"
-          secondaryText="One Way"
-          isPrimaryActive={searchData.isRoundTrip}
-          onPrimaryClick={() =>
-            setSearchData({ ...searchData, isRoundTrip: true })
-          }
-          onSecondaryClick={() =>
-            setSearchData({ ...searchData, isRoundTrip: false })
-          }
-        />
+          <HumpButton
+            primaryColor="#FF9A2A"
+            secondaryColor="#FFFFFF"
+            primaryText="Round Trip"
+            secondaryText="One Way"
+            isPrimaryActive={searchData.isRoundTrip}
+            onPrimaryClick={() =>
+              setSearchData({ ...searchData, isRoundTrip: true })
+            }
+            onSecondaryClick={() =>
+              setSearchData({ ...searchData, isRoundTrip: false })
+            }
+          />
         </div>
 
         {/* Main search container */}
@@ -180,6 +186,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
             {/* Swap Icon between Departure and Arrival */}
             <div
               className="bg-orange-500 rounded-full p-2 z-10 cursor-pointer"
+              data-testid="swap-button"
               onClick={swapAirports}
               style={{
                 position: "relative",
@@ -270,16 +277,16 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                  mode="single"
-                  selected={searchData.departureDate || undefined}
-                  onSelect={(date) =>
-                    setSearchData({
-                      ...searchData,
-                      departureDate: date || null,
-                    })
-                  }
-                />
+                    <Calendar
+                      mode="single"
+                      selected={searchData.departureDate || undefined}
+                      onSelect={(date) =>
+                        setSearchData({
+                          ...searchData,
+                          departureDate: date || null,
+                        })
+                      }
+                    />
                   </PopoverContent>
                 </Popover>
 
@@ -317,16 +324,16 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={searchData.returnDate || undefined}
-                    onSelect={(date) =>
-                      setSearchData({
-                        ...searchData,
-                        returnDate: date || null,
-                      })
-                    }
-                  />
+                    <Calendar
+                      mode="single"
+                      selected={searchData.returnDate || undefined}
+                      onSelect={(date) =>
+                        setSearchData({
+                          ...searchData,
+                          returnDate: date || null,
+                        })
+                      }
+                    />
                   </PopoverContent>
                 </Popover>
               </>
@@ -412,6 +419,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                     <span className="font-medium">Passengers</span>
                     <div className="flex items-center space-x-2">
                       <Button
+                        data-testid='remove-passenger'
                         size="sm"
                         variant="outline"
                         onClick={removePassenger}
@@ -421,6 +429,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                       </Button>
                       <span>{searchData.passengers}</span>
                       <Button
+                        data-testid='add-passenger'
                         size="sm"
                         variant="outline"
                         onClick={addPassenger}
@@ -442,11 +451,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                             updatePassengerClass(index, value)
                           }
                         >
-                          <SelectTrigger className="w-[120px]">
+                          <SelectTrigger data-testid={`passenger-class-${index}`} className="w-[120px]">
                             <SelectValue placeholder="Select class" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Economy">Economy</SelectItem>
+                            <SelectItem data-testid={`economy-class-choice-${index}`} value="Economy">Economy</SelectItem>
                             <SelectItem value="Business">Business</SelectItem>
                           </SelectContent>
                         </Select>
