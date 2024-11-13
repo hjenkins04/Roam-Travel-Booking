@@ -1,29 +1,12 @@
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import SearchScroll from "@/components/SearchScroll";
-import { Flight, FilterOptions } from "@/models";
-import {
-  mockFlight,
-  mockUseTripStore,
-  mockFlightOneStop,
-  mockFlightExpensive,
-  mockUseSearchStore,
-  mockAuthStoreSignedIn,
-} from "@/components/__tests__/__mocks__/storeMocks";
 
-import { setTripContextData } from "@/components/HelperFunctions/setTripContextData";
 import { ImageProps } from "next/image";
 import { useRouter } from "next/navigation";
 import { useSearchStore } from "@/context/SearchContext";
 import { useLoaderStore } from "@/context/LoaderContext";
 import { useAuthStore } from "@/context/AuthContext";
-import { mockFlightReturn } from "@/components/__tests__/__mocks__/storeMocks";
 
 /**
  * Test File: Search Scroll
@@ -63,15 +46,9 @@ jest.mock("@/context/AuthContext");
 jest.mock("next/navigation");
 
 // Type-safe mocks
-const useSearchStoreMock = useSearchStore as jest.MockedFunction<
-  typeof useSearchStore
->;
-const useLoaderStoreMock = useLoaderStore as jest.MockedFunction<
-  typeof useLoaderStore
->;
-const useAuthStoreMock = useAuthStore as jest.MockedFunction<
-  typeof useAuthStore
->;
+const useSearchStoreMock = useSearchStore as jest.MockedFunction< typeof useSearchStore >;
+const useLoaderStoreMock = useLoaderStore as jest.MockedFunction< typeof useLoaderStore >;
+const useAuthStoreMock = useAuthStore as jest.MockedFunction< typeof useAuthStore >;
 const useRouterMock = useRouter as jest.MockedFunction<typeof useRouter>;
 
 type SearchData = {
@@ -86,7 +63,7 @@ type SearchData = {
 // Helper function to set up mock context values
 const setupSearchStoreMock = (searchData: SearchData) => {
   useSearchStoreMock.mockReturnValue({
-    searchData, // Pass the `searchData` object here
+    searchData, // Pass the searchData object here
     setSearchData: jest.fn(), // Mock function if needed
   });
 };
@@ -128,19 +105,30 @@ jest.mock("@/api/FetchFlightsBySearchQuery", () => ({
 
 describe("SearchScroll Component", () => {
   beforeEach(() => {
-    // Setup mock data for the store
-    setupSearchStoreMock({
-      departureAirport: "Charles De Gaulle International Airport",
-      arrivalAirport: "São Paulo–Guarulhos International Airport",
-      departureDate: "2024-12-01",
-      returnDate: "2024-12-15",
-      passengers: 1,
-      isRoundTrip: false,
+    act(() => {
+      setupSearchStoreMock({
+        departureAirport: "Charles De Gaulle International Airport",
+        arrivalAirport: "São Paulo–Guarulhos International Airport",
+        departureDate: "2024-12-01",
+        returnDate: "2024-12-15",
+        passengers: 1,
+        isRoundTrip: false,
+      });
+  
+      setupAuthStoreMock();
+      setupLoaderStoreMock();
+  
+      useRouterMock.mockReturnValue({
+        push: jest.fn(),
+        prefetch: jest.fn(),
+        back: jest.fn(),
+        forward: jest.fn(),
+        refresh: jest.fn(),
+        replace: jest.fn(),
+      });
     });
-
-    setupAuthStoreMock();
-    const { hideLoader, showLoader } = setupLoaderStoreMock(); // Call the mock setup for loader
-    useRouterMock.mockClear();
+  
+    jest.clearAllMocks();
   });
 
   // Define mock flight data and filters
@@ -291,17 +279,20 @@ describe("SearchScroll Component", () => {
       push: mockPush,
     });
 
-
-    setupSearchStoreMock({
-      departureAirport: "Charles De Gaulle International Airport",
-      arrivalAirport: "São Paulo–Guarulhos International Airport",
-      departureDate: null, // Departure date is null
-      returnDate: "2024-12-15",
-      passengers: 1,
-      isRoundTrip: false,
+    await act(async () => {
+      setupSearchStoreMock({
+        departureAirport: "Charles De Gaulle International Airport",
+        arrivalAirport: "São Paulo–Guarulhos International Airport",
+        departureDate: null, // Departure date is null
+        returnDate: "2024-12-15",
+        passengers: 1,
+        isRoundTrip: false,
+      });
     });
 
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
@@ -334,18 +325,21 @@ describe("SearchScroll Component", () => {
       push: mockPush,
     });
 
-
-    setupSearchStoreMock({
-      departureAirport: "Charles De Gaulle International Airport",
-      arrivalAirport: "São Paulo–Guarulhos International Airport",
-      departureDate: "2024-12-15",
-      returnDate: null,
-      passengers: 1,
-      isRoundTrip: true,
+    await act(async () => {
+      setupSearchStoreMock({
+        departureAirport: "Charles De Gaulle International Airport",
+        arrivalAirport: "São Paulo–Guarulhos International Airport",
+        departureDate: "2024-12-15",
+        returnDate: null,
+        passengers: 1,
+        isRoundTrip: true,
+      });
     });
 
 
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
@@ -378,17 +372,20 @@ describe("SearchScroll Component", () => {
       push: mockPush,
     });
 
-
-    setupSearchStoreMock({
-      departureAirport: null,
-      arrivalAirport: "São Paulo–Guarulhos International Airport",
-      departureDate: "2024-12-15",
-      returnDate: null,
-      passengers: 1,
-      isRoundTrip: false,
+    await act(async () => {
+      setupSearchStoreMock({
+        departureAirport: null,
+        arrivalAirport: "São Paulo–Guarulhos International Airport",
+        departureDate: "2024-12-15",
+        returnDate: null,
+        passengers: 1,
+        isRoundTrip: false,
+      });
     });
 
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
@@ -421,16 +418,20 @@ describe("SearchScroll Component", () => {
       push: mockPush,
     });
 
-    setupSearchStoreMock({
-      departureAirport: "Charles De Gaulle International Airport",
-      arrivalAirport: null,
-      departureDate: "2024-12-15",
-      returnDate: "2024-12-25",
-      passengers: 1,
-      isRoundTrip: true,
+    await act(async () => {
+      setupSearchStoreMock({
+        departureAirport: "Charles De Gaulle International Airport",
+        arrivalAirport: null,
+        departureDate: "2024-12-15",
+        returnDate: "2024-12-25",
+        passengers: 1,
+        isRoundTrip: true,
+      });
     });
 
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
@@ -463,16 +464,20 @@ describe("SearchScroll Component", () => {
       push: mockPush,
     });
 
-    setupSearchStoreMock({
-      departureAirport: "Charles De Gaulle International Airport",
-      arrivalAirport: "São Paulo–Guarulhos International Airport",
-      departureDate: "2024-12-15",
-      returnDate: "2024-12-25",
-      passengers: null,
-      isRoundTrip: true,
+    await act(async () => {
+      setupSearchStoreMock({
+        departureAirport: "Charles De Gaulle International Airport",
+        arrivalAirport: "São Paulo–Guarulhos International Airport",
+        departureDate: "2024-12-15",
+        returnDate: "2024-12-25",
+        passengers: null,
+        isRoundTrip: true,
+      });
     });
 
-    render(<SearchScroll filters={filters} flights={mockFlights} />);
+    await act(async () => {
+      render(<SearchScroll filters={filters} flights={mockFlights} />);
+    });
 
     // Click on the first flight item to expand it
     const firstFlightItem = screen.getByText("LATAM Airlines");
@@ -511,13 +516,15 @@ describe("SearchScroll Component", () => {
       push: mockPush,
     });
 
-    setupSearchStoreMock({
-      departureAirport: "Charles De Gaulle International Airport",
-      arrivalAirport: "São Paulo–Guarulhos International Airport",
-      departureDate: "2024-12-15",
-      returnDate: "2024-12-25",
-      passengers: 1,
-      isRoundTrip: true,
+    await act(async () => {
+      setupSearchStoreMock({
+        departureAirport: "Charles De Gaulle International Airport",
+        arrivalAirport: "São Paulo–Guarulhos International Airport",
+        departureDate: "2024-12-15",
+        returnDate: "2024-12-25",
+        passengers: 1,
+        isRoundTrip: true,
+      });
     });
 
     await act(async () => {

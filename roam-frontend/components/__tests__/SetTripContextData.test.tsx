@@ -1,10 +1,10 @@
 import { setTripContextData } from "../HelperFunctions/setTripContextData";
 import { fetchRandomReturnFlight } from "@/api/FetchRandomReturnFlight";
+import { act } from "@testing-library/react";
 
 // Mock the external dependencies
-jest.mock("@/api/FetchRandomReturnFlight", () => ({
-  fetchRandomReturnFlight: jest.fn(),
-}));
+jest.mock("@/api/FetchRandomReturnFlight");
+const mockFetchRandomReturnFlight = fetchRandomReturnFlight as jest.Mock;
 
 /**
  * Test Suite for setTripContextData Function
@@ -47,11 +47,12 @@ describe("setTripContextData", () => {
   let mockHideLoader: jest.Mock;
   let mockSetTripData: jest.Mock;
   let mockRouter: { push: jest.Mock; replace: jest.Mock };
-  let mockSetShowPleaseSignInPopup: { push: jest.Mock; replace: jest.Mock };
-  let mockEnsureAllSearchFields: { push: jest.Mock; replace: jest.Mock };
-  let mockSearchData: { push: jest.Mock; replace: jest.Mock };
-  let mockTripData: { push: jest.Mock; replace: jest.Mock };
-  let mockSelectedFlight: { push: jest.Mock; replace: jest.Mock };
+  let mockSetShowPleaseSignInPopup: jest.Mock;
+  let mockEnsureAllSearchFields:jest.Mock;
+  let mockSearchData: jest.Mock;
+  let mockSearchDataRoundTrip: jest.Mock;
+  let mockTripData: jest.Mock;
+  let mockSelectedFlight: jest.Mock;
 
   beforeEach(() => {
     // Reset all mocks before each test
@@ -64,6 +65,14 @@ describe("setTripContextData", () => {
     };
     mockSetShowPleaseSignInPopup = jest.fn();
     mockEnsureAllSearchFields = jest.fn(() => true);
+    mockSearchDataRoundTrip = {
+      isRoundTrip: true,
+      departureDate: new Date("2024-01-01"),
+      returnDate: new Date("2024-01-08"),
+      passengers: 2,
+      departureAirport: { guid: "dep-123" },
+      arrivalAirport: { guid: "arr-456" },
+    };
     mockSearchData = {
       isRoundTrip: false,
       departureDate: new Date("2024-01-01"),
@@ -92,18 +101,20 @@ describe("setTripContextData", () => {
     it("should show sign-in popup and redirect to home when user is not authenticated", async () => {
       const authData = { isSignedIn: false };
 
-      await setTripContextData(
-        mockSelectedFlight,
-        mockSearchData,
-        mockTripData,
-        mockSetTripData,
-        authData,
-        mockSetShowPleaseSignInPopup,
-        mockRouter,
-        mockShowLoader,
-        mockHideLoader,
-        mockEnsureAllSearchFields
-      );
+      await act(async () => {
+        setTripContextData(
+          mockSelectedFlight,
+          mockSearchData,
+          mockTripData,
+          mockSetTripData,
+          authData,
+          mockSetShowPleaseSignInPopup,
+          mockRouter,
+          mockShowLoader,
+          mockHideLoader,
+          mockEnsureAllSearchFields
+        );
+      });
 
       expect(mockShowLoader).toHaveBeenCalled();
       expect(mockSetShowPleaseSignInPopup).toHaveBeenCalledWith(true);
@@ -114,18 +125,20 @@ describe("setTripContextData", () => {
     it("should proceed with trip creation when user is authenticated", async () => {
       const authData = { isSignedIn: true };
 
-      await setTripContextData(
-        mockSelectedFlight,
-        mockSearchData,
-        mockTripData,
-        mockSetTripData,
-        authData,
-        mockSetShowPleaseSignInPopup,
-        mockRouter,
-        mockShowLoader,
-        mockHideLoader,
-        mockEnsureAllSearchFields
-      );
+      await act(async () => {
+        setTripContextData(
+          mockSelectedFlight,
+          mockSearchData,
+          mockTripData,
+          mockSetTripData,
+          authData,
+          mockSetShowPleaseSignInPopup,
+          mockRouter,
+          mockShowLoader,
+          mockHideLoader,
+          mockEnsureAllSearchFields
+        );
+      });
 
       expect(mockShowLoader).toHaveBeenCalled();
       expect(mockSetShowPleaseSignInPopup).not.toHaveBeenCalled();
@@ -140,18 +153,20 @@ describe("setTripContextData", () => {
       const authData = { isSignedIn: true };
       mockEnsureAllSearchFields.mockReturnValue(false);
 
-      await setTripContextData(
-        mockSelectedFlight,
-        mockSearchData,
-        mockTripData,
-        mockSetTripData,
-        authData,
-        mockSetShowPleaseSignInPopup,
-        mockRouter,
-        mockShowLoader,
-        mockHideLoader,
-        mockEnsureAllSearchFields
-      );
+      await act(async () => {
+        setTripContextData(
+          mockSelectedFlight,
+          mockSearchData,
+          mockTripData,
+          mockSetTripData,
+          authData,
+          mockSetShowPleaseSignInPopup,
+          mockRouter,
+          mockShowLoader,
+          mockHideLoader,
+          mockEnsureAllSearchFields
+        );
+      });
 
       expect(mockShowLoader).toHaveBeenCalled();
       expect(mockHideLoader).toHaveBeenCalled();
@@ -163,23 +178,58 @@ describe("setTripContextData", () => {
       const authData = { isSignedIn: true };
       mockEnsureAllSearchFields.mockReturnValue(true);
 
-      await setTripContextData(
-        mockSelectedFlight,
-        mockSearchData,
-        mockTripData,
-        mockSetTripData,
-        authData,
-        mockSetShowPleaseSignInPopup,
-        mockRouter,
-        mockShowLoader,
-        mockHideLoader,
-        mockEnsureAllSearchFields
-      );
+      await act(async () => {
+        setTripContextData(
+          mockSelectedFlight,
+          mockSearchData,
+          mockTripData,
+          mockSetTripData,
+          authData,
+          mockSetShowPleaseSignInPopup,
+          mockRouter,
+          mockShowLoader,
+          mockHideLoader,
+          mockEnsureAllSearchFields
+        );
+      });
 
       expect(mockShowLoader).toHaveBeenCalled();
       expect(mockHideLoader).not.toHaveBeenCalled();
       expect(mockSetTripData).toHaveBeenCalled();
       expect(mockRouter.push).toHaveBeenCalledWith("/seat-booking");
     });
+  });
+
+  it("logs an error if fetchRandomReturnFlight throws an error", async () => {
+    // Arrange: Set up the error to be thrown
+    mockFetchRandomReturnFlight.mockRejectedValueOnce(new Error("Error"));
+
+    // Spy on console.error to catch error logs
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+
+    // Act: Call the function
+    await act(async () => {
+      setTripContextData(
+        mockSelectedFlight,
+        mockSearchDataRoundTrip,
+        mockTripData,
+        mockSetTripData,
+        { isSignedIn: true },
+        mockSetShowPleaseSignInPopup,
+        mockRouter,
+        mockShowLoader,
+        mockHideLoader,
+        mockEnsureAllSearchFields
+      );
+    });
+
+    // Assert: Verify console.error was called with the error
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Error creating trip data",
+      expect.any(Error)
+    );
+
+    // Clean up
+    consoleErrorSpy.mockRestore();
   });
 });

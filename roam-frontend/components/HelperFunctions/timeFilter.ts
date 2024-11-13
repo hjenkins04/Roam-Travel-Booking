@@ -1,6 +1,6 @@
 export function getTimeCategory(time: string): "Morning" | "Afternoon" | "Evening" {
     const [hour, minutePart] = time.split(":");
-    const [minutes, period] = minutePart.trim().split(" ");
+    const [period] = minutePart.trim().split(" ");
     const hourNum = parseInt(hour);
     const isAM = period?.toLowerCase() === "am";
 

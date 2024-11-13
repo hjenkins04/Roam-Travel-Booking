@@ -312,4 +312,11 @@ describe("ReturnFlightDetails", () => {
     );
     expect(screen.getByText("2h in YYZ")).toBeInTheDocument();
   });
+
+  test("renders nothing when purchasePassenger is missing", () => {
+    const { container } = render(
+      <ReturnFlightDetails />
+    );
+    expect(container).toBeEmptyDOMElement();
+  });
 });

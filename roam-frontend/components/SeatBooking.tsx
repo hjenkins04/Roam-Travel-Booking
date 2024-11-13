@@ -33,7 +33,7 @@ export default function SeatBookingPage() {
     name: tripData?.trip?.passengers?.[passengerIndex]?.name ?? "",
   });
   
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadPassengerData = useCallback((index: number) => {
     const passenger = (tripData?.trip?.passengers?.[index] ?? {}) as Passenger;
     setFormData({
@@ -66,6 +66,7 @@ export default function SeatBookingPage() {
     setAreSeatsInitialized(true);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadFlightSeats = useCallback(async (flight: Flight) => {
     try {
       const flightConfig = await fetchFlightSeats(flight.guid);

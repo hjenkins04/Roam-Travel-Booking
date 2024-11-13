@@ -32,6 +32,10 @@ const Parent = () => {
   return <LoaderPopup isOpen={isLoading} />;
 };
 
+const ParentDefault = () => {
+  return <LoaderPopup />;
+};
+
 describe("LoaderPopup visibility based on LoaderContext", () => {
 
   afterEach(() => {
@@ -47,6 +51,8 @@ describe("LoaderPopup visibility based on LoaderContext", () => {
 
   // Render Parent component
   const renderComponent = () => render(<Parent />);
+
+  const renderComponentDefault = () => render(<ParentDefault />);
 
   test("Displays LoaderPopup when showLoader is called", async () => {
     // Arrange: Render component
@@ -110,5 +116,22 @@ describe("LoaderPopup visibility based on LoaderContext", () => {
     // Assert: Check that children are now hidden
     const { childrenHidden } = useLoaderStore.getState();
     expect(childrenHidden).toBe(true);
+  });
+
+
+  test("Does not displays LoaderPopup when isOpen is not provided", async () => {
+    // Arrange: Render component
+    renderComponentDefault();
+
+    // Act: Trigger showLoader to update isLoading state
+    act(() => {
+      useLoaderStore.getState().showLoader();
+    });
+
+    // Assert: LoaderPopup should be visible
+    await waitFor(() => {
+      const loaderPopup = screen.queryByTestId("loader-popup");
+      expect(loaderPopup).not.toBeInTheDocument();
+    });
   });
 });
