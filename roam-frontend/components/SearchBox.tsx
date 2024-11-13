@@ -23,11 +23,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
   const { searchData, setSearchData } = useSearchStore();
   const router = useRouter();
 
-  console.log("searchData:", searchData);  // Log the searchData object
-  console.log("airports:", airports);  // Log airports prop
-  console.log("showRequiredFieldPopup:", showRequiredFieldPopup);  // Log the mock function
-
-
   const handleDepartureChange = (value: Airport) => {
     setSearchData({
       ...searchData,
