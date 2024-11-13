@@ -20,7 +20,15 @@ const config: Config = {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   testPathIgnorePatterns: [
-    '<rootDir>/components/__tests__/__mocks__/'
+    "/node_modules/",
+    "<rootDir>/components/__tests__/__mocks__/"
+  ],
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "<rootDir>/components/__tests__/__mocks__/",
+    "<rootDir>/components/ui/",
+    "<rootDir>/app/",
+    "<rootDir>/api/",
   ],
 };
 
