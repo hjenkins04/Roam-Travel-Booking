@@ -7,11 +7,8 @@ import {
   act,
 } from "@testing-library/react";
 import Checkout from "../Checkout";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTripStore } from "@/context/TripContext";
-import { FetchBookingCheckout } from "@/api/FetchBookingCheckout";
-import { mockTripData } from "./__mocks__/storeMocks";
-import { KeyboardHost } from "@testing-library/user-event/dist/cjs/system/keyboard.js";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
@@ -23,7 +20,7 @@ jest.mock("@/context/TripContext", () => ({
 }));
 
 jest.mock("@/api/FetchBookingCheckout", () => ({
-  FetchBookingCheckout: () => Promise.reject("error"),
+  FetchBookingCheckout: jest.fn().mockResolvedValue({ status: "success" }),
 }));
 
 describe("Checkout Page", () => {
@@ -54,11 +51,6 @@ describe("Checkout Page", () => {
   });
 
   test("displays success message on successful payment", async () => {
-    // Mock the FetchBookingCheckout to resolve successfully
-    jest.mock("@/api/FetchBookingCheckout", () => ({
-      FetchBookingCheckout: jest.fn().mockResolvedValue({ status: "success" }),
-    }));
-
     render(<Checkout />);
 
     // Click the payment button
