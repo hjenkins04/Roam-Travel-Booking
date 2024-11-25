@@ -6,7 +6,7 @@ import {
   waitFor,
   act,
 } from "@testing-library/react";
-import Checkout from "../Checkout";
+import Checkout from "../components/Checkout";
 import { useRouter } from "next/navigation";
 import { useTripStore } from "@/context/TripContext";
 
