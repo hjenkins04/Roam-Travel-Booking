@@ -26,6 +26,7 @@ const config: Config = {
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/components/__tests__/__mocks__/",
+    "<rootDir>/components/__integration__tests__/",
     "<rootDir>/components/ui/",
     "<rootDir>/app/",
     "<rootDir>/api/",

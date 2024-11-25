@@ -41,11 +41,11 @@ const SeatBookingFormFooter: React.FC<SeatBookingFormFooterProps> = ({
             <div className="flex space-x-4">
                 <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-500">Passenger</span>
-                    <span className="text-lg font-semibold">{passengerName}</span>
+                    <span className="text-lg font-semibold" data-testid="footer-passenger-name">{passengerName}</span>
                 </div>
                 <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-500">Seat number</span>
-                    <span className="text-lg font-semibold">{seatNumber}</span>
+                    <span className="text-lg font-semibold" data-testid="footer-seat-number">{seatNumber}</span>
                 </div>
             </div>
 

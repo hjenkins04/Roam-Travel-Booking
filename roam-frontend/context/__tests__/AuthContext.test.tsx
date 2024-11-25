@@ -57,7 +57,18 @@ jest.mock('@/context/LoaderContext', () => ({
 }));
 
 describe("AuthContext", () => {
-  afterEach(() => {
+  const originalConsoleError = console.error;
+
+  beforeEach(() => {
+    jest.restoreAllMocks();
+
+    jest.spyOn(console, 'error').mockImplementation((msg, ...args) => {
+      if (typeof msg === 'string' && msg.includes('Function components cannot be given refs')) {
+        return; // Ignore this specific warning
+      }
+      originalConsoleError.apply(console, [msg, ...args]); // Log other messages
+    });
+
     act(() => {
       useAuthStore.setState({
         authData: {
@@ -68,21 +79,15 @@ describe("AuthContext", () => {
         },
       });
     });
+  });
 
-    const originalConsoleError = console.error;
-    jest.spyOn(console, 'error').mockImplementation((msg) => {
-      if (msg.includes('Function components cannot be given refs')) {
-        return; // Ignore this specific warning
-      }
-      originalConsoleError(msg); // Allow other warnings to be logged
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test("Persists initial auth data", async () => {
-    // Arrange: Render component that uses AuthContext
     const { authData } = useAuthStore.getState();
 
-    // Assert: Initial persisted values are as expected
     expect(authData.guid).toBe("");
     expect(authData.isSignedIn).toBe(false);
     expect(authData.showPleaseSignInPopup).toBe(false);
@@ -90,13 +95,12 @@ describe("AuthContext", () => {
   });
 
   test("Sign in updates auth state", async () => {
-    // Arrange: Sign in with a mock GUID
     const mockGuid = "test-guid";
+
     act(() => {
       useAuthStore.getState().signIn(mockGuid);
     });
 
-    // Assert: Check that the auth state reflects the sign-in
     await waitFor(() => {
       const { authData } = useAuthStore.getState();
       expect(authData.guid).toBe(mockGuid);
@@ -105,16 +109,16 @@ describe("AuthContext", () => {
   });
 
   test("Sign out clears auth state", async () => {
-    // Arrange: Sign in first, then sign out
     const mockGuid = "test-guid";
+
     act(() => {
       useAuthStore.getState().signIn(mockGuid);
     });
+
     act(() => {
       useAuthStore.getState().signOut();
     });
 
-    // Assert: Check that the auth state reflects the sign-out
     await waitFor(() => {
       const { authData } = useAuthStore.getState();
       expect(authData.guid).toBe("");
@@ -123,7 +127,6 @@ describe("AuthContext", () => {
   });
 
   test("Set auth data manually", async () => {
-    // Arrange: Define mock auth data
     const mockAuthData = {
       guid: "test-guid",
       isSignedIn: true,
@@ -135,7 +138,6 @@ describe("AuthContext", () => {
       useAuthStore.getState().setAuthData(mockAuthData);
     });
 
-    // Assert: Verify the auth data is set as expected
     await waitFor(() => {
       const { authData } = useAuthStore.getState();
       expect(authData).toEqual(mockAuthData);
@@ -143,15 +145,11 @@ describe("AuthContext", () => {
   });
 
   test("Display Please Sign In popup", async () => {
-    // Arrange: Set the showPleaseSignInPopup flag to true
     act(() => {
       useAuthStore.getState().setShowPleaseSignInPopup(true);
     });
 
-    // Act: Render a component to display the popup
     render(<HomePage />);
-    
-    // Assert: The popup should appear
     await waitFor(() => {
       const popup = screen.getByTestId("please-sign-in-popup");
       expect(popup).toBeInTheDocument();
@@ -159,15 +157,11 @@ describe("AuthContext", () => {
   });
 
   test("Display Bad Access popup", async () => {
-    // Arrange: Set the showBadAccessPopup flag to true
     act(() => {
       useAuthStore.getState().setBadAccessPopup(true);
     });
 
-    // Act: Render a component to display the popup
     render(<HomePage />);
-
-    // Assert: The popup should appear
     await waitFor(() => {
       const popup = screen.getByTestId("bad-access-popup");
       expect(popup).toBeInTheDocument();

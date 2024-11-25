@@ -43,6 +43,7 @@ const SearchResultsOverviewBox = () => {
 
           {/* Arrival City Button */}
           <SearchBoxButton
+            data-testid="arrival-city-button"
             leftIcon={<PlaneLanding className="text-gray-500 h-4 w-4" />}
             headerText="ARRIVAL CITY"
             mainTextLeft={
@@ -62,6 +63,7 @@ const SearchResultsOverviewBox = () => {
             <>
               {/* Departure Date Button */}
               <SearchBoxButton
+                data-testid="departure-date-button"
                 leftIcon={<CalendarIcon className="text-gray-500 h-4 w-4" />}
                 headerText="DEPARTURE DATE"
                 mainTextLeft={
@@ -87,6 +89,7 @@ const SearchResultsOverviewBox = () => {
 
           {/* Traveler & Class Button */}
           <SearchBoxButtonOneSide
+            data-testid="traveller-class-button"
             leftIcon={
               (tripData.trip?.passengers?.length ?? 0) > 1 ? (
                 <Users className="text-gray-500 h-4 w-4" data-testid="users-icon" />

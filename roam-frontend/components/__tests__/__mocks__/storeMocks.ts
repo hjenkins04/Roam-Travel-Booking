@@ -215,6 +215,22 @@ export const mockFlight: Flight = {
   layover: mockLayover,
 };
 
+export const mockFlightSameReturn: Flight = {
+  guid: "flight-guid",
+  airline: mockAirline,
+  departure_airport: mockArrivalAirport,
+  arrival_airport: mockDepartureAirport,
+  flight_time_minutes: 300,
+  departure_time: "2023-12-25T10:00:00Z",
+  arrival_time: "2023-12-25T13:00:00Z",
+  num_stops: 1,
+  price_economy: 300,
+  price_business: 600,
+  baggage_allowance: "2 bags",
+  seat_configuration: mockSeatConfiguration,
+  layover: mockLayover,
+};
+
 export const mockFlightNoStop: Flight = {
   guid: "flight-guid",
   airline: mockAirline,
@@ -282,8 +298,8 @@ export const mockFlightOutbound: Flight = {
 export const mockFlightReturn: Flight = {
   guid: "flight-guid-return",
   airline: mockAirlineNoPhoto,
-  departure_airport: mockDepartureAirportOther,
-  arrival_airport: mockArrivalAirportOther,
+  departure_airport: mockArrivalAirportOther,
+  arrival_airport: mockDepartureAirportOther,
   flight_time_minutes: 500,
   departure_time: "2024-10-25T10:00:00Z",
   arrival_time: "2024-10-25T13:00:00Z",
@@ -420,7 +436,7 @@ export const mockTripData: TripData = {
     name: "Holiday Trip",
     is_round_trip: true,
     departing_flight: mockFlight,
-    returning_flight: mockFlight,
+    returning_flight: mockFlightSameReturn,
     passengers: mockPassengers,
     departure_date: new Date("2023-12-25T10:00:00Z"),
     return_date: new Date("2023-12-31T15:00:00Z"),
@@ -472,7 +488,7 @@ export const mockTripDataOther: TripData = {
     name: "Holiday Trip",
     is_round_trip: true,
     departing_flight: mockFlight,
-    returning_flight: mockFlight,
+    returning_flight: mockFlightReturn,
     passengers: [mockPassengerMin],
     departure_date: new Date("2023-12-25T10:00:00Z"),
     return_date: new Date("2023-12-31T15:00:00Z"),

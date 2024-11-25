@@ -13,7 +13,7 @@ export interface TripData {
   trip_purchased: boolean
 }
 
-interface TripState {
+export interface TripState {
   tripData: TripData;
   setTripData: (data: Partial<TripData> | ((prev: TripData) => TripData)) => void;
 }

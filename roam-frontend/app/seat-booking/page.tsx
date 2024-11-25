@@ -6,14 +6,14 @@ import SeatBooking from "@/components/SeatBooking";
 import { useAuthStore } from "@/context/AuthContext";
 import { useTripStore } from "@/context/TripContext";
 
-export default function CheckoutPage() {
+export default function SeatBookingPage({ delay = 800 }) {
   const { tripData } = useTripStore();
   const { setBadAccessPopup } = useAuthStore();
-  const [showSeatBooking, setShowSeatBooking] = useState(false);
+  const [showSeatBooking, setShowSeatBooking] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const delayTimer = setTimeout(() => setShowSeatBooking(true), 800);
+    const delayTimer = setTimeout(() => setShowSeatBooking(true), delay);
 
     if (tripData && tripData.trip_booking_active === false) {
       setBadAccessPopup(true);
@@ -22,7 +22,8 @@ export default function CheckoutPage() {
     }
 
     return () => clearTimeout(delayTimer);
-  }, [tripData, router, setBadAccessPopup]);
+  }, []);
+  
 
   return <>{showSeatBooking && <SeatBooking />}</>;
 }

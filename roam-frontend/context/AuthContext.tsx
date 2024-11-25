@@ -8,7 +8,7 @@ interface AuthData {
   showBadAccessPopup: boolean;
 }
 
-interface AuthStore {
+export interface AuthStore {
   authData: AuthData;
   signIn: (guid: string) => void;
   signOut: () => void;

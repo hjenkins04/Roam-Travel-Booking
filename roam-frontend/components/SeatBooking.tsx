@@ -49,6 +49,7 @@ export default function SeatBookingPage() {
       street_address: passenger.street_address ?? "",
       apt_number: passenger.apt_number ?? "",
       zip_code: passenger.zip_code ?? "",
+      province: passenger.province ?? "",
       emerg_name: passenger.emerg_name ?? "",
       emerg_last: passenger.emerg_last ?? "",
       emerg_email: passenger.emerg_email ?? "",
@@ -204,7 +205,7 @@ export default function SeatBookingPage() {
     if (tripData?.trip?.passengers) {
       loadPassengerData(passengerIndex);
     }
-  }, [tripData, passengerIndex]);
+  }, [tripData, passengerIndex, areSeatsInitialized]);
 
   return (
     <>
@@ -224,13 +225,13 @@ export default function SeatBookingPage() {
             <span className="text-sm font-medium text-gray-500" data-testid="is-first-flight">{`First Flight: ${isFirstFlight}`}</span>
         </div>
 
-        <div className="relative flex overflow-hidden z-20 bg-neutral-50" style={{ height: "calc(100vh - 150px)" }} >
+        <div className="relative flex overflow-hidden z-20 bg-neutral-50" style={{ height: "calc(100vh - 150px)" }} data-testid="seat-booking">
           <div className={`relative transition-all duration-300 ease-in-out overflow-hidden
             ${ selectedSeat ? "w-2/4" : "w-full" }`}
             style={{ height: "100%" }}
             data-testid={"airplane-column"}
           >
-            <div className="relative w-full h-full cursor-grab active:cursor-grabbing" data-testid={"airplane-svg"}>
+            <div className="relative w-full h-full cursor-grab active:cursor-grabbing" data-testid="airplane-svg">
               <Airplane
                 onSeatClick={toggleSeatState}
                 seatStates={seatStates}

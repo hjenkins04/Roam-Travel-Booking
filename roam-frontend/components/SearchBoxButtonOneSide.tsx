@@ -24,12 +24,14 @@ const SearchBoxButtonOneSide: FC<SearchBoxButtonOneSideProps> = ({
     size = "w-[200px]",
     className = "",
     onClickLeftIcon,
-    onClickRightIcon
+    onClickRightIcon,
+    ...props
 }) => {
     return (
         <div
             className={`relative flex items-center justify-between bg-white rounded-2xl shadow-lg p-3 border-2 border-gray-300 ${size} ${className}`}
             style={{ minHeight: "75px" }}
+            {...props}
         >
             {/* Header Text */}
             <div className="absolute -top-3 left-4 bg-white px-2 text-xs text-gray-600">

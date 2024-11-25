@@ -61,9 +61,6 @@ describe("SeatBooking Component", () => {
     });
     
     // Mock initial seat state with one seat as "taken"
-    mockUseTripStore.getState().tripData = {
-      ...mockUseTripStore.getState().tripData
-    };
 
     renderComponent()
 

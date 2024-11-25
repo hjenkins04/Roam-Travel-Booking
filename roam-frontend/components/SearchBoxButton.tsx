@@ -31,12 +31,14 @@ const SearchBoxButton = forwardRef<HTMLDivElement, SearchBoxButtonProps>(
       className = "",
       onClickLeftIcon,
       onClickRightIcon,
+      ...props
     },
-    ref // Add the ref parameter here
+    ref
   ) => {
     return (
       <div
-        ref={ref} // Attach ref here
+        ref={ref}
+        {...props}
         className={`relative flex items-center justify-between bg-white rounded-2xl shadow-lg p-3 border-2 border-gray-300 ${size} ${className}`}
         style={{ minHeight: "75px" }}
       >
