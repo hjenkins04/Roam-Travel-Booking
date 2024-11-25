@@ -7,40 +7,39 @@ import {
   act,
 } from "@testing-library/react";
 import Checkout from "../components/Checkout";
-import { useRouter } from "next/navigation";
 import { useTripStore } from "@/context/TripContext";
+import { FetchBookingCheckout } from "@/api/FetchBookingCheckout";
+import { mockTripData } from "@/components/__tests__/__mocks__/storeMocks";
 
+const mockPush = jest.fn();
 jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
+  useRouter: () => ({
+    push: mockPush,
+  }),
   usePathname: jest.fn(),
 }));
 
-jest.mock("@/context/TripContext", () => ({
-  useTripStore: jest.fn(),
+// Mock FetchBookingCheckout
+jest.mock("@/api/FetchBookingCheckout", () => ({
+  FetchBookingCheckout: jest.fn(),
 }));
 
-jest.mock("@/api/FetchBookingCheckout", () => ({
-  FetchBookingCheckout: jest.fn().mockResolvedValue({ status: "success" }),
-}));
+// Suppress specific console error
+const originalConsoleError = console.error;
+jest.spyOn(console, "error").mockImplementation((msg, ...args) => {
+  if (typeof msg === "string" && msg.includes("Submission failed:")) return;
+  originalConsoleError.call(console, msg, ...args);
+});
 
 describe("Checkout Page", () => {
-  const mockPush = jest.fn();
-  const mockTripData = {
-    trip: {
-      passengers: [
-        { name: "John Doe", departing_seat_id: 1, returning_seat_id: 2 },
-      ],
-      total_cost: 1000,
-    },
-  };
-
   beforeEach(() => {
     jest.clearAllMocks();
-    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
-    (useTripStore as unknown as jest.Mock).mockReturnValue({
-      tripData: mockTripData,
+
+    // Set up trip data in the store
+    act(() => {
+      const { setTripData } = useTripStore.getState();
+      setTripData(mockTripData);
     });
-    global.fetch = jest.fn();
   });
 
   test("renders checkout page with trip details", async () => {
@@ -59,30 +58,35 @@ describe("Checkout Page", () => {
 
     // Wait for and verify success message
     await waitFor(() => {
-      expect(screen.getByText("View Purchases")).toBeInTheDocument();
+      expect(screen.getByText("Success")).toBeInTheDocument();
     });
 
-    const viewPurchasesButton = screen.getByText("View Purchases");
-    fireEvent.click(viewPurchasesButton);
+    const homeButton = screen.getByText("Home");
+    expect(homeButton).toBeInTheDocument();
+    fireEvent.click(homeButton);
 
     // Verify that router.push was called
-    expect(mockPush).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith("/dashboard");
+    });
   });
 
   test("displays error message on payment failure", async () => {
-    jest
-      .spyOn(global, "fetch")
-      .mockRejectedValueOnce(new Error("Payment failed"));
+    // Mock FetchBookingCheckout to reject
+    (FetchBookingCheckout as jest.Mock).mockRejectedValueOnce(
+      new Error("Payment failed")
+    );
 
     render(<Checkout />);
 
     const payButton = screen.getByText("Confirm and Pay");
-    fireEvent.click(payButton);
+
+    await act(async () => {
+      fireEvent.click(payButton);
+    });
 
     await waitFor(() => {
       expect(screen.getByText("Failed")).toBeInTheDocument();
     });
-
-    (global.fetch as jest.Mock).mockRestore();
   });
 });
