@@ -12,7 +12,6 @@ interface SearchBoxButtonOneSideProps {
     className?: string;
     onClickLeftIcon?: () => void;
     onClickRightIcon?: () => void;
-    onClickMainButton?: () => void;
 }
 
 const SearchBoxButtonOneSide: FC<SearchBoxButtonOneSideProps> = ({

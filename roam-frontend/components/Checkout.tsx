@@ -18,7 +18,7 @@ const Checkout: React.FC = () => {
   const [successLoader, setSuccessLoading] = useState(false);
   const [successLoaderState, setSuccessLoaderState] = useState<"loading" | "success" | "fail">("loading");
   const [successLoaderShowButton, setSuccessLoaderShowButton] = useState(false);
-  const [successLoaderButtonLabel] = useState("View Purchases");
+  const [successLoaderButtonLabel] = useState("Home");
 
   const router = useRouter();
 

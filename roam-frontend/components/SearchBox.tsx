@@ -267,7 +267,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                             : "Month"
                         }
                         size="w-[175px]"
-                        onClickMainButton={() => { }}
                       />
                     </div>
                   </PopoverTrigger>
@@ -314,7 +313,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                             : "Month"
                         }
                         size="w-[175px]"
-                        onClickMainButton={() => { }}
                       />
                     </div>
                   </PopoverTrigger>
@@ -364,7 +362,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                           : "Month"
                       }
                       size="w-[230px]"
-                      onClickMainButton={() => { }}
                     />
                   </div>
                 </PopoverTrigger>
@@ -404,7 +401,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                     mainTextRight={getPassengerTypeSummary()} // Summary of passenger types
                     subTextRight=""
                     size="w-[195px]"
-                    onClickMainButton={() => { }}
                   />
                 </div>
               </PopoverTrigger>

@@ -272,7 +272,6 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
                             : "Month"
                         }
                         size="w-[175px]"
-                        onClickMainButton={() => {}}
                       />
                     </div>
                   </PopoverTrigger>
@@ -319,7 +318,6 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
                             : "Month"
                         }
                         size="w-[175px]"
-                        onClickMainButton={() => {}}
                       />
                     </div>
                   </PopoverTrigger>
@@ -369,7 +367,6 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
                           : "Month"
                       }
                       size="w-[230px]"
-                      onClickMainButton={() => {}}
                     />
                   </div>
                 </PopoverTrigger>
@@ -409,7 +406,6 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
                     mainTextRight={getPassengerTypeSummary()} // Summary of passenger types
                     subTextRight=""
                     size="w-[195px]"
-                    onClickMainButton={() => {}}
                   />
                 </div>
               </PopoverTrigger>
