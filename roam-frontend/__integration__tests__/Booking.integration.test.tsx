@@ -43,9 +43,23 @@ jest.mock('@/api/FetchFlightSeats', () => ({
 
 
 /**
- * Test File: SeatBooking Component
+ * Test File: SeatBooking Integration Test
  *
+ * Purpose:
+ * - Verifies the comprehensive flow and behavior of the SeatBookingPage component,
+ *   including seat selection, form submission, and trip data updates.
+ *
+ * Tests cover:
+ * 1. Proper initial rendering of the SeatBookingPage layout and associated elements.
+ * 2. Handling of inactive trip bookings by redirecting to the home page.
+ * 3. Correct seat selection and rendering of the seat booking form for both departing and returning flights.
+ * 4. Filling out passenger information, verifying form updates, and submitting the form.
+ * 5. Reserving seats for multiple passengers and navigating between passengers and flights.
+ * 6. Ensuring trip data is correctly updated for all passengers across departing and returning flights.
+ * 7. Validation of form behavior for emergency contact fields and auto-fill functionalities.
+ * 8. Handling edge cases gracefully, such as undefined or incomplete trip data.
  */
+
 describe("SeatBookingPage Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -316,7 +330,6 @@ describe("SeatBookingPage Tests", () => {
 
     // === RETURN FLIGHT ===
     // === FIRST PASSENGER SEAT SELECTION & FORM FILLING ===
-    
     expect(screen.getByTestId("passenger-index")).toHaveTextContent("Passenger Index: 0")
 
     await waitFor(() => {
