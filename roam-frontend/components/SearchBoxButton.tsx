@@ -14,7 +14,6 @@ interface SearchBoxButtonProps {
   className?: string;
   onClickLeftIcon?: () => void;
   onClickRightIcon?: () => void;
-  onClickMainButton?: () => void;
 }
 
 const SearchBoxButton = forwardRef<HTMLDivElement, SearchBoxButtonProps>(
