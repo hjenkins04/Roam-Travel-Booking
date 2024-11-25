@@ -6,7 +6,7 @@ import {
   waitFor,
   act,
 } from "@testing-library/react";
-import ProfilePage from "../ProfilePage";
+import ProfilePage from "../components/ProfilePage";
 import { useAuthStore } from "@/context/AuthContext";
 import { fetchUserInfo } from "@/api/FetchUserInfo";
 import { fetchTrips } from "@/api/FetchTrips";
