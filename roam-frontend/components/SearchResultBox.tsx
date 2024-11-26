@@ -138,12 +138,13 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
         {/* Main search container */}
         <div className="relative bg-white rounded-2xl shadow-lg p-4 max-w-[97%] w-full z-2">
           {/* Search Form (Button List) */}
-          <SearchBoxButtonList className="w-full justify-center space-y-4 sm:space-y-6">
+          <SearchBoxButtonList data-testid='search-box' className="w-full justify-center space-y-4 sm:space-y-6">
             {/* Departure City Dropdown */}
             <Popover>
               <PopoverTrigger asChild>
                 <div>
                   <SearchBoxButton
+                    data-testid="departure-city-button"
                     leftIcon={
                       <PlaneTakeoff className="text-gray-500 h-4 w-4" />
                     }
@@ -202,6 +203,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
               <PopoverTrigger asChild>
                 <div>
                   <SearchBoxButton
+                    data-testid="arrival-city-button"
                     leftIcon={
                       <PlaneLanding className="text-gray-500 h-4 w-4" />
                     }
@@ -248,6 +250,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
                   <PopoverTrigger asChild>
                     <div>
                       <SearchBoxButton
+                        data-testid="departure-date-button"
                         leftIcon={
                           <CalendarIcon className="text-gray-500 h-4 w-4" />
                         }
@@ -294,6 +297,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
                   <PopoverTrigger asChild>
                     <div>
                       <SearchBoxButton
+                        data-testid="return-date-button"
                         leftIcon={
                           <CalendarIcon className="text-gray-500 h-4 w-4" />
                         }
@@ -390,6 +394,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
               <PopoverTrigger asChild>
                 <div>
                   <SearchBoxButton
+                    data-testid="travellers-button"
                     leftIcon={
                       searchData.passengers > 1 ? (
                         <Users className="text-gray-500 h-4 w-4" />
@@ -461,7 +466,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
             </Popover>
           </SearchBoxButtonList>
         </div>
-      </div>
+      </div >
     </>
   );
 };

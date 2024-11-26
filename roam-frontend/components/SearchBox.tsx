@@ -197,6 +197,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
               <PopoverTrigger asChild>
                 <div>
                   <SearchBoxButton
+
                     leftIcon={
                       <PlaneLanding className="text-gray-500 h-4 w-4" />
                     }
