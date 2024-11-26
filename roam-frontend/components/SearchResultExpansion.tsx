@@ -44,7 +44,7 @@ const SearchResultExpansion: React.FC<SearchResultExpansionProps> = ({
             <div className="text-5xl  text-gray-600  font-bold">
               {flight.departure_airport.iata_code}
             </div>
-            <ArrowRight className="mx-2" size={40} />
+            <ArrowRight data-testid="right-arrow" className="mx-2" size={40} />
             <div className="text-5xl  text-gray-600 font-bold text-right">
               {flight.arrival_airport.iata_code}
             </div>

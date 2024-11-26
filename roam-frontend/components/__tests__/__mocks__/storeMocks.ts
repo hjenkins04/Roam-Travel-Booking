@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { Flight, Airport, Continent, Country, Location, Airline, Layover, FlightSeatConfiguration, DisplayPurchasePassenger, Passenger, DisplayPurchase, PassengerFormData, Trip  } from '@/models';
+import { Flight, Airport, Continent, Country, Location, Airline, Layover, FlightSeatConfiguration, DisplayPurchasePassenger, Passenger, DisplayPurchase, PassengerFormData, Trip } from '@/models';
 import { TripData } from "@/context/TripContext"
 
 export const mockContinent: Continent = {
@@ -144,18 +144,19 @@ export const mockSeatConfiguration: FlightSeatConfiguration = {
   seat_configuration: mockSeats,
 };
 
+
 export const mockSeatSimple = ([
   {
     seat_id: 1,
     type: "Business",
-    position: "Window" ,
+    position: "Window",
     available: true,
   },
   {
     seat_id: 2,
     type: "Business",
-    position: "Window" ,
-    available: false,
+    position: "Window",
+    available: true,
   },
 ]);
 
@@ -208,7 +209,7 @@ export const mockFlight: Flight = {
   departure_time: "2023-12-25T10:00:00Z",
   arrival_time: "2023-12-25T13:00:00Z",
   num_stops: 1,
-  price_economy: 300,
+  price_economy: 200,
   price_business: 600,
   baggage_allowance: "2 bags",
   seat_configuration: mockSeatConfiguration,
@@ -406,29 +407,29 @@ export const mockPassengers: Passenger[] = [
 ];
 
 export const mockPassengerMin: Passenger =
-  {
-    guid: "passenger-guid-1",
-    trip_id: "trip-guid",
-    name: undefined,
-    departing_seat_id: 0,
-    returning_seat_id: undefined,
-    middle: undefined,
-    last: undefined,
-    prefix: undefined,
-    dob: undefined,
-    passport_number: undefined,
-    known_traveller_number: undefined,
-    email: undefined,
-    phone: undefined,
-    street_address: undefined,
-    apt_number: undefined,
-    province: undefined,
-    zip_code: undefined,
-    emerg_name: undefined,
-    emerg_last: undefined,
-    emerg_email: undefined,
-    emerg_phone: undefined,
-  };
+{
+  guid: "passenger-guid-1",
+  trip_id: "trip-guid",
+  name: undefined,
+  departing_seat_id: 0,
+  returning_seat_id: undefined,
+  middle: undefined,
+  last: undefined,
+  prefix: undefined,
+  dob: undefined,
+  passport_number: undefined,
+  known_traveller_number: undefined,
+  email: undefined,
+  phone: undefined,
+  street_address: undefined,
+  apt_number: undefined,
+  province: undefined,
+  zip_code: undefined,
+  emerg_name: undefined,
+  emerg_last: undefined,
+  emerg_email: undefined,
+  emerg_phone: undefined,
+};
 
 export const mockTripData: TripData = {
   trip: {
@@ -567,8 +568,8 @@ export const mockUseTripStore = {
   })),
 
   setState: jest.fn((update: TripDataUpdate) => {
-    mockUseTripStore.tripData = 
-      typeof update === "function" 
+    mockUseTripStore.tripData =
+      typeof update === "function"
         ? update(mockUseTripStore.tripData)
         : { ...mockUseTripStore.tripData, ...update };
   }),
