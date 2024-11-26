@@ -123,7 +123,7 @@ describe("SeatBookingPage Tests", () => {
     // === RENDER COMPONENT ===
     // Arrange: Render SeatBookingPage and verify initial state
     const user = userEvent.setup();
-    const { container } = render(<SeatBookingPage delay={0} />);
+    const { container } = render(<SeatBookingPage />);
     const { tripData: initialTripData } = useTripStore.getState();
 
     // Assert: Ensure initial trip states are set correctly

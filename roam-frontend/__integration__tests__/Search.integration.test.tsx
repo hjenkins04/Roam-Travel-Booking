@@ -144,7 +144,7 @@ describe("Search Results Page Integration Tests", () => {
         (fetchFlightsBySearchQuery as jest.Mock).mockResolvedValue(mockFlights);
     });
 
-    test("Allows searching, filtering, selecting a flight, and booking", async () => {
+    test("allows searching, filtering, selecting a flight, and booking", async () => {
         const onClickMock = jest.fn();
         const authStore = useAuthStore();
         const mockOnClick = jest.fn();
