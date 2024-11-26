@@ -2,7 +2,7 @@
   "extends": ["next/core-web-vitals", "next/typescript"],
   "overrides": [
     {
-      "files": ["**/__tests__/**/*.{js,jsx,ts,tsx,test}", "**/__mocks__/**/*.{js,jsx,ts,tsx,test}"],
+      "files": ["**/__tests__/**/*.{js,jsx,ts,tsx,test}", "**/__integration__tests__/**/*.{js,jsx,ts,tsx,test}", "**/__mocks__/**/*.{js,jsx,ts,tsx,test}"],
       "rules": {
         "@next/next/no-document-import-in-page": "off",
         "@next/next/no-title-in-document-head": "off",
@@ -13,7 +13,8 @@
         "@next/next/no-img-element": "off",
         "jsx-a11y/alt-text": "off",
         "react/display-name": "off",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "react-hooks/exhaustive-deps": "off"
       }
     },
     {

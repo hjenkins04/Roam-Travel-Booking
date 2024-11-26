@@ -1,5 +1,22 @@
 ﻿# CISC327 Group 34
 
+## How to Test Integration Tests
+
+To test integration tests for this project, make sure you are in the `roam-frontend` directory.
+
+1. **Navigate to the `roam-frontend` Directory**:
+   - Open a terminal and navigate to the `roam-frontend` directory:
+     ```bash
+     cd roam-frontend
+     ```
+
+2. **Run Jest**:
+   - Execute Jest tests:
+     ```bash
+     npx jest --testPathPattern="__integration__tests__"
+     ```
+   - This command will run only the tests in the `__integration__tests__` directory.
+
 ## How to Test Frontend Code Coverage
 
 To test frontend code coverage for this project, make sure you are in the `roam-frontend` directory.
