@@ -61,6 +61,7 @@ jest.mock("next/navigation", () => ({
 }));
 
 const { push } = require('next/navigation');
+jest.spyOn(console, 'error').mockImplementation(() => { });
 
 jest.mock("@/context/AuthContext", () => ({
     useAuthStore: jest.fn(),
@@ -109,6 +110,8 @@ jest.mock("@/api/FetchFlightsBySearchQuery", () => ({
 
 
 const mockFlights = [mockCurrentFlight, mockFlight, mockFlightOutbound, mockFlightExpensive];
+
+
 
 describe("Search Results Page Integration Tests", () => {
 
