@@ -201,6 +201,7 @@ const LoginSignupPopout: React.FC<LoginSignupPopoutProps> = ({
           {/* Submit Button */}
           <Button
             className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg"
+            data-testid="submit-button"
             type="submit"
           >
             {isLogin ? "Sign In" : "Sign Up"}
