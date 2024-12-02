@@ -58,11 +58,17 @@ const ProfilePage: React.FC = () => {
   // Event handlers for form submission and cancellation
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSuccessLoading(true);
+    setSuccessLoaderState("loading");
+
     try {
       await fetchUpdate(authData.guid, firstName, lastName, email, phoneNumber);
       setSuccessModalOpen(true);
     } catch (error) {
       console.error("Error updating profile:", error);
+      setSuccessLoaderState("fail");
+    } finally {
+      setSuccessLoading(false);
     }
   };
 
@@ -230,7 +236,10 @@ const ProfilePage: React.FC = () => {
           </DialogDescription>
           <DialogFooter>
             <DialogClose asChild>
-              <Button className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white">
+              <Button
+                className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white"
+                data-testid="close-button"
+              >
                 Close
               </Button>
             </DialogClose>
@@ -246,6 +255,7 @@ const ProfilePage: React.FC = () => {
             <Button
               className="mt-4 px-4 py-2 bg-white hover:bg-orange-400 text-orange-500 hover:text-white"
               onClick={refundConfirmAction}
+              data-testid="refund-confirm-button"
             >
               Confirm
             </Button>

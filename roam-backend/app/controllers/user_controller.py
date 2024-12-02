@@ -32,12 +32,15 @@ def update_user(guid: str) -> Response:
     try:
         if data.get('guid') != guid:
             return jsonify({"error": "Guid mismatch"}), 400
+        print("Received data:", data)
         user_dto = UserDTO.from_dict(data)
         UserService.update_user(user_dto)
         return jsonify({"message": "User updated successfully"}), 200
     except ValueError as e:
+        print("ValueError:", str(e))
         return jsonify({"error": str(e)}), 400
-    except Exception:
+    except Exception as e:
+        print("Exception:", str(e))
         return jsonify({"error": "Internal Server Error"}), 500
 
 @user_bp.route('/api/users/<uuid:user_id>', methods=['GET'])

@@ -23,15 +23,24 @@ const LoaderSuccessFailPopup: React.FC<PopupProps> = ({
     setIsVisible(isOpen);
   }, [isOpen]);
 
-
   if (!isVisible) return null;
 
   const getStatusIcon = () => {
     switch (status) {
       case "success":
-        return <CheckCircle className="w-16 h-16 text-green-500" />;
+        return (
+          <CheckCircle
+            className="w-16 h-16 text-green-500"
+            data-testid="success-icon"
+          />
+        );
       case "fail":
-        return <XCircle className="w-16 h-16 text-red-500" />;
+        return (
+          <XCircle
+            className="w-16 h-16 text-red-500"
+            data-testid="error-icon"
+          />
+        );
       default:
         return <Loader2 className="w-16 h-16 text-orange-500 animate-spin" />;
     }
@@ -56,7 +65,9 @@ const LoaderSuccessFailPopup: React.FC<PopupProps> = ({
         aria-modal="true"
         aria-labelledby="popup-title"
       >
-        <h2 id="popup-title" className="text-xl font-semibold">{getStatusMessage()}</h2>
+        <h2 id="popup-title" className="text-xl font-semibold">
+          {getStatusMessage()}
+        </h2>
         {getStatusIcon()}
 
         {showButton && (

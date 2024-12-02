@@ -117,34 +117,56 @@ class TestProfileDashboard(EndToEndTestBase):
 
             # Verify Success Modal
             success_modal = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '[data-testid="success-modal"]'))
+                EC.presence_of_element_located((By.XPATH, "//h2[text()='Account Updated']"))
             )
             assert success_modal.is_displayed(), "Success modal not displayed."
             self.logger.debug("Profile updated successfully.")
 
+            # Close Success Modal
+            back_button = WebDriverWait(self.driver, 100).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="close-button"]'))
+            )
+            back_button.click()
+            self.logger.debug("Closed success modal.")
+
+            # Navigate to purchases section
+            purchases_button = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="purchases-button"]'))
+            )
+            purchases_button.click()
+            self.logger.debug("Clicked Purchases button.")
+
             # Handle Refunds (if any purchases exist)
-            purchase_item = self.driver.find_elements(By.CSS_SELECTOR, '[data-testid="purchase-item"]')
-            if purchase_item:
-                purchase_item[0].click()
-                refund_button = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="refund-button"]'))
-                )
-                refund_button.click()
+            refund_button = self.driver.find_elements(By.CSS_SELECTOR, '[data-testid="cancel-icon"]')
+            if refund_button:
+                refund_button[0].click()
                 self.logger.debug("Initiated refund.")
 
                 # Confirm Refund Dialog
                 confirm_button = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="confirm-refund-button"]'))
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="refund-confirm-button"]'))
                 )
                 confirm_button.click()
                 self.logger.debug("Confirmed refund.")
 
-                # Verify Success/Fail
-                loader_status = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, '[data-testid="refund-status"]'))
-                )
-                assert loader_status.text in ["success", "fail"], "Unexpected refund status."
-                self.logger.debug(f"Refund completed with status: {loader_status.text}")
+                # Verify Success/Fail with shorter timeout and handle disappearing element
+                try:
+                    loader_status = WebDriverWait(self.driver, 5).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, '[data-testid="success-icon"]'))
+                    )
+                    # If we found the success icon, log it immediately
+                    self.logger.debug("Refund successful - success icon detected.")
+                except:
+                    # If we didn't find the success icon, check for error icon
+                    try:
+                        error_icon = WebDriverWait(self.driver, 2).until(
+                            EC.presence_of_element_located((By.CSS_SELECTOR, '[data-testid="error-icon"]'))
+                        )
+                        self.logger.error("Refund failed - error icon detected.")
+                        raise Exception("Refund failed")
+                    except:
+                        self.logger.error("Could not verify refund status - no success or error icon found")
+                        raise Exception("Could not verify refund status")
 
         except Exception as e:
             self.logger.error(f"Test failed with error: {str(e)}")
