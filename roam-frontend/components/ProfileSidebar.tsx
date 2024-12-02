@@ -23,7 +23,10 @@ const Sidebar: React.FC<ProfileSidebarProps> = ({ onEditProfile }) => {
   };
 
   return (
-    <nav className="flex flex-col h-full z-10 max-w-full text-s leading-none text-amber-500 w-[218px] max-md:h-auto">
+    <nav
+      className="flex flex-col h-full z-10 max-w-full text-s leading-none text-amber-500 w-[218px] max-md:h-auto"
+      data-testid="profile-sidebar"
+    >
       {/* Top section: Home and Purchases buttons */}
       <div className="flex flex-col gap-6 flex-grow">
         {/* Home button */}

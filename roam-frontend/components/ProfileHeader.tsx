@@ -13,7 +13,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onEditProfile,
 }) => {
   return (
-    <header className="flex justify-between items-center py-6 px-6 bg-orange-400 rounded-xl w-full max-md:px-5">
+    <header
+      className="flex justify-between items-center py-6 px-6 bg-orange-400 rounded-xl w-full max-md:px-5"
+      data-testid="profile-header"
+    >
       {/* User information section */}
       <div className="flex flex-col text-white ml-20">
         {/* Display user's name */}

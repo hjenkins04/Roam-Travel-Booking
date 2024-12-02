@@ -1,9 +1,10 @@
 from BaseTest import *
 from Login import TestLogin
 from TestSetTripData import TestSetTripData
+from Dashboard import TestProfileDashboard
 
 def run_all_tests(debug=False):
-    test_classes = [TestLogin, TestSetTripData]  # All Tests HERE
+    test_classes = [TestProfileDashboard]  # All Tests HERE
     for test_class in test_classes:
         test_instance = test_class(debug=debug)
         try:
