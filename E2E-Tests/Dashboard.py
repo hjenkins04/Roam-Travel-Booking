@@ -78,7 +78,7 @@ class TestProfileDashboard(EndToEndTestBase):
                 EC.presence_of_element_located((By.XPATH, '//input[@placeholder="Email Address*"]'))
             )
             email_input.clear()
-            email_input.send_keys("email@example.com")
+            email_input.send_keys("update@email.com")
             self.logger.debug("Entered new address.")
 
             phone_input = WebDriverWait(self.driver, 10).until(

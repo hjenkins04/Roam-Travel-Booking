@@ -4,7 +4,7 @@ from TestSetTripData import TestSetTripData
 from Dashboard import TestProfileDashboard
 
 def run_all_tests(debug=False):
-    test_classes = [TestProfileDashboard]  # All Tests HERE
+    test_classes = [TestLogin, TestSetTripData, TestProfileDashboard]  # All Tests HERE
     for test_class in test_classes:
         test_instance = test_class(debug=debug)
         try:
