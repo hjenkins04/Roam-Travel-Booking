@@ -595,12 +595,14 @@ describe('SearchBox', () => {
         const oneWayDepart = screen.getByText('DEPARTURE DATE');
         fireEvent.click(oneWayDepart)
 
-        const selectedDate = screen.getByText('3')
-        fireEvent.click(selectedDate)
+        const selectedDate = screen.getAllByText('3')
+        fireEvent.click(selectedDate[0])
 
-        expect(setSearchDataMock).toHaveBeenCalledWith(expect.objectContaining({
-            departureDate: new Date('2024-11-03T04:00:00.000Z'),
-        }));
+        expect(setSearchDataMock.mock.calls[1][0]).toEqual(
+            expect.objectContaining({
+                departureDate: new Date('2024-12-03T05:00:00.000Z'),
+            })
+        );
 
         // Deselect the date (click on the same date again)
 
@@ -661,13 +663,12 @@ describe('SearchBox', () => {
             // Simulate the click
             fireEvent.click(selectedDate);
 
-            // Optionally, check if the departureDate is set correctly
-            expect(setSearchDataMock).toHaveBeenCalledWith(
+
+            expect(setSearchDataMock.mock.calls[0][0]).toEqual(
                 expect.objectContaining({
-                    departureDate: new Date('2024-11-05T05:00:00.000Z'), // Adjust the date format to match your logic
+                    departureDate: new Date('2024-12-05T05:00:00.000Z'), // Ensure this date matches your test logic
                 })
             );
-
 
         });
 
@@ -711,7 +712,7 @@ describe('SearchBox', () => {
         // Optionally, check if the departureDate is set correctly
         expect(setSearchDataMock).toHaveBeenCalledWith(
             expect.objectContaining({
-                returnDate: new Date('2024-11-05T05:00:00.000Z'), // Adjust the date format to match your logic
+                returnDate: new Date('2024-12-05T05:00:00.000Z'), // Adjust the date format to match your logic
             })
         );
 

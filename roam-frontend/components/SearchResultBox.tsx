@@ -177,6 +177,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
                         key={airport.guid}
                         onClick={() => handleDepartureChange(airport)}
                         className="cursor-pointer p-2 hover:bg-gray-100 rounded-md"
+                        data-testid={`airport-item-${airport.iata_code}`}
                       >
                         {airport.short_name} ({airport.iata_code})
                       </div>
@@ -235,6 +236,7 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ airports }) => {
                         key={airport.guid}
                         onClick={() => handleArrivalChange(airport)}
                         className="cursor-pointer p-2 hover:bg-gray-100 rounded-md"
+                        data-testid={`airport-item-${airport.iata_code}`}
                       >
                         {airport.short_name} ({airport.iata_code})
                       </div>

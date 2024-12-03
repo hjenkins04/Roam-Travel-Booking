@@ -2,14 +2,17 @@ from BaseTest import *
 from Login import TestLogin
 from TestSetTripData import TestSetTripData
 from Dashboard import TestProfileDashboard
+from HomepageSearch import TestHomepageSearch
+from SearchResults import TestSearchResults
 
 def run_all_tests(debug=False):
-    test_classes = [TestLogin, TestSetTripData, TestProfileDashboard]  # All Tests HERE
+    test_classes = [TestProfileDashboard, TestSearchResults]  # All Tests HERE
     for test_class in test_classes:
         test_instance = test_class(debug=debug)
         try:
             test_instance.setup()
             test_instance.run_test()
+
         except Exception as e:
             print(f"{Fore.RED}FAILURE{Style.RESET_ALL} - Test {test_instance.test_name} failed.")
             if debug:

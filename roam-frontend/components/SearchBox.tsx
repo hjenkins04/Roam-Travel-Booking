@@ -138,6 +138,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
               <PopoverTrigger asChild>
                 <div>
                   <SearchBoxButton
+                    data-testid="departure-city"
                     leftIcon={
                       <PlaneTakeoff className="text-gray-500 h-4 w-4" />
                     }
@@ -170,6 +171,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                         key={airport.guid}
                         onClick={() => handleDepartureChange(airport)}
                         className="cursor-pointer p-2 hover:bg-gray-100 rounded-md"
+                        data-testid={`airport-item-${airport.iata_code}`}
                       >
                         {airport.short_name} ({airport.iata_code})
                       </div>
@@ -197,7 +199,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
               <PopoverTrigger asChild>
                 <div>
                   <SearchBoxButton
-
+                    data-testid="arrival-city"
                     leftIcon={
                       <PlaneLanding className="text-gray-500 h-4 w-4" />
                     }
@@ -229,6 +231,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                         key={airport.guid}
                         onClick={() => handleArrivalChange(airport)}
                         className="cursor-pointer p-2 hover:bg-gray-100 rounded-md"
+                        data-testid={`airport-item-${airport.iata_code}`}
                       >
                         {airport.short_name} ({airport.iata_code})
                       </div>
@@ -244,6 +247,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                   <PopoverTrigger asChild>
                     <div>
                       <SearchBoxButton
+                        data-testid="departure-date"
                         leftIcon={
                           <CalendarIcon className="text-gray-500 h-4 w-4" />
                         }
@@ -290,6 +294,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
                   <PopoverTrigger asChild>
                     <div>
                       <SearchBoxButton
+                        data-testid="return-date"
                         leftIcon={
                           <CalendarIcon className="text-gray-500 h-4 w-4" />
                         }
@@ -386,6 +391,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
               <PopoverTrigger asChild>
                 <div>
                   <SearchBoxButton
+                    data-testid="traveller-number"
                     leftIcon={
                       searchData.passengers > 1 ? (
                         <Users className="text-gray-500 h-4 w-4" />
@@ -462,6 +468,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ airports, showRequiredFieldPopup 
           {/* Search Button */}
           <div className="flex justify-center pt-6 relative">
             <Button
+              data-testid='search-button'
               onClick={handleButtonClick}
               className="bg-orange-500 text-white px-10 py-7 rounded-2xl hover:bg-orange-600 absolute left-1/2 transform -translate-x-1/2 shadow-[0_5px_15px_rgba(255,165,0,0.3)] text-lg flex items-center space-x-2"
             >
