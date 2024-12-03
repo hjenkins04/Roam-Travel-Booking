@@ -45,7 +45,7 @@ class TestProfileDashboard(EndToEndTestBase):
             assert sidebar.is_displayed(), "Sidebar not visible"
             self.logger.debug("Sidebar is visible.")
 
-            # Edit Profile
+            # Navigate to Edit Profile
             edit_button = WebDriverWait(self.driver, 10).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="edit-profile-button"]'))
             )
