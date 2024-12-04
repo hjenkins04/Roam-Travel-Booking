@@ -4,9 +4,9 @@ from TestSetTripData import TestSetTripData
 from Dashboard import TestProfileDashboard
 from HomepageSearch import TestHomepageSearch
 from SearchResults import TestSearchResults
-
+from SeatBookingTest import TestSeatBooking
 def run_all_tests(debug=False):
-    test_classes = [TestProfileDashboard, TestSearchResults]  # All Tests HERE
+    test_classes = [TestLogin, TestSearchResults, TestHomepageSearch, TestSeatBooking, TestProfileDashboard, TestSearchResults]  # All Tests HERE
     for test_class in test_classes:
         test_instance = test_class(debug=debug)
         try:

@@ -1,53 +1,21 @@
 from BaseTest import *
-from selenium.common.exceptions import ElementNotInteractableException
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-from HomeSearchTest import HomeSearchTest
 
 class TestSeatBooking(EndToEndTestBase):
     def __init__(self, debug=False):
         super().__init__("TestSeatBooking", debug=debug)
 
     def test(self):
-        # // Arrange
-        # Navigate to the seat booking page
+        self.search_page_navigation()
         
-        self.driver.get("http://localhost:3000/")
-        self.logger.debug("Navigated to the application homepage.")
-        
-        self.ensure_logged_in()
-        self.logger.debug("User is logged in.")
-        
-        search = HomeSearchTest
-        search.test(self)
-
-        # search_results = SearchResultsTest
-        # search_results.test(self)
-        
-         # Select the first search result
-        search_results_item = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="search-result-0"]'))
-        )
-        search_results_item.click()
-        self.logger.debug("Clicked the first search result")
-
-        # Click Book My Ticket Now button
-        checkout_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//span[text()="Book My Ticket Now"]'))
-        )
-        self.logger.debug('Located the button with text "Book My Ticket Now".')
-        checkout_button.click()
-
-        # Assert redirection to the seat booking page
+        # Assert we are on the seat booking page
         WebDriverWait(self.driver, 10).until(
             lambda driver: '/seat-booking' in driver.current_url,
-            message="Redirection to '/seat-booking' did not occur within the timeout period"
+            message="We arent on the '/seat-booking' page"
         )
-        self.logger.debug("Successfully redirected to the seat booking page")
 
         # Ensure the seat booking page loaded
         WebDriverWait(self.driver, 10).until(
@@ -138,7 +106,6 @@ class TestSeatBooking(EndToEndTestBase):
             phone="0987654321"
         )
         
-
         # Act: Submit the seat booking form
         checkout_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="checkout-button"]'))

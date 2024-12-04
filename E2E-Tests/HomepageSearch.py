@@ -91,10 +91,6 @@ class TestHomepageSearch(EndToEndTestBase):
 
             #==== CONFIRM RENDERING ===
 
-
-
-
-
             #==== SEARCH ====
 
             search_button = WebDriverWait(self.driver, 10).until(
@@ -102,6 +98,13 @@ class TestHomepageSearch(EndToEndTestBase):
             )
             search_button.click()
             self.logger.debug("Clicked Search Button.")
+            
+            WebDriverWait(self.driver, 10).until(
+                lambda driver: '/search-results' in driver.current_url,
+                message="Redirection to '/search-results' did not occur within the timeout period."
+            )
+
+            self.logger.debug("Successfully search for flights and reached the search results page.")
             
         except Exception as e:
             self.logger.error(f"Test failed with error: {str(e)}")
