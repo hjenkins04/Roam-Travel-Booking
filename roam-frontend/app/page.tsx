@@ -67,7 +67,7 @@ export default function HomePage() {
 
   return (
     <>
-      <div className="relative min-h-screen">
+      <div className="relative min-h-screen" data-testid="home-page">
         {/* Background SVG */}
         <div className="absolute inset-0">
           <LandingPageBackground />

@@ -34,6 +34,7 @@ const SearchBoxButton = forwardRef<HTMLDivElement, SearchBoxButtonProps>(
     },
     ref
   ) => {
+    const test_prefix = headerText.toLowerCase().replace(/\s+/g, '-');
     return (
       <div
         ref={ref}
@@ -42,27 +43,27 @@ const SearchBoxButton = forwardRef<HTMLDivElement, SearchBoxButtonProps>(
         style={{ minHeight: "75px" }}
       >
         {/* Header Text */}
-        <div className="absolute -top-3 left-4 bg-white px-2 text-xs text-gray-600">
+        <div className="absolute -top-3 left-4 bg-white px-2 text-xs text-gray-600"  data-testid={`${test_prefix}-header-text`}>
           {headerText}
         </div>
 
         {/* Left Side */}
         <div className="flex items-center space-x-2">
-          <div onClick={onClickLeftIcon} className="cursor-pointer">
+          <div onClick={onClickLeftIcon} className="cursor-pointer"  data-testid={`${test_prefix}-left-icon`}>
             {leftIcon}
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-lg font-medium text-gray-800 text-left">
+            <span className="text-lg font-medium text-gray-800 text-left"  data-testid={`${test_prefix}-left-main-text`}>
               {mainTextLeft}
             </span>
-            <span className="text-xs text-gray-500 text-left">
+            <span className="text-xs text-gray-500 text-left"  data-testid={`${test_prefix}-left-sub-text`}>
               {subTextLeft}
             </span>
           </div>
         </div>
 
         {/* Vertical Divider */}
-        <div className="h-8 border-l border-dotted border-gray-300 mx-2"></div>
+        <div className="h-8 border-l border-dotted border-gray-300 mx-2"  data-testid={`${test_prefix}-divider`}></div>
 
         {/* Right Side */}
         <div className="flex items-center space-x-2">
@@ -72,19 +73,20 @@ const SearchBoxButton = forwardRef<HTMLDivElement, SearchBoxButtonProps>(
           >
             {" "}
             {/* Add maxWidth */}
-            <span className="text-lg font-medium text-gray-800 text-left">
+            <span className="text-lg font-medium text-gray-800 text-left"  data-testid={`${test_prefix}-right-main-text`}>
               {mainTextRight}
             </span>
             <span
               className="text-xs text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis"
               style={{ maxWidth: "100px" }}
+              data-testid="right-sub-text"
             >
               {" "}
               {/* Set maxWidth for truncation */}
               {subTextRight}
             </span>
           </div>
-          <div onClick={onClickRightIcon} className="cursor-pointer">
+          <div onClick={onClickRightIcon} className="cursor-pointer"  data-testid={`${test_prefix}-right-icon`}>
             {rightIcon}
           </div>
         </div>

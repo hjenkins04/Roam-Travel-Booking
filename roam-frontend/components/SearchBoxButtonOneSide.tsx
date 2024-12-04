@@ -33,7 +33,7 @@ const SearchBoxButtonOneSide: FC<SearchBoxButtonOneSideProps> = ({
             {...props}
         >
             {/* Header Text */}
-            <div className="absolute -top-3 left-4 bg-white px-2 text-xs text-gray-600">
+            <div className="absolute -top-3 left-4 bg-white px-2 text-xs text-gray-600" data-testid="header-text">
                 {headerText}
             </div>
 
@@ -41,20 +41,20 @@ const SearchBoxButtonOneSide: FC<SearchBoxButtonOneSideProps> = ({
             <div className="flex items-center justify-between w-full">
                 {/* Left Icon */}
                 {leftIcon && (
-                    <div onClick={onClickLeftIcon} className="cursor-pointer">
+                    <div onClick={onClickLeftIcon} className="cursor-pointer" data-testid="left-icon">
                         {leftIcon}
                     </div>
                 )}
 
                 {/* Main Text and Sub Text */}
                 <div className="flex flex-col items-center text-center w-full">
-                    <span className="text-lg font-medium text-gray-800">{mainText}</span>
-                    <span className="text-xs text-gray-500">{subText}</span>
+                    <span className="text-lg font-medium text-gray-800" data-testid="main-text">{mainText}</span>
+                    <span className="text-xs text-gray-500" data-testid="sub-text">{subText}</span>
                 </div>
 
                 {/* Right Icon */}
                 {rightIcon && (
-                    <div onClick={onClickRightIcon} className="cursor-pointer">
+                    <div onClick={onClickRightIcon} className="cursor-pointer" data-testid="right-icon">
                         {rightIcon}
                     </div>
                 )}
