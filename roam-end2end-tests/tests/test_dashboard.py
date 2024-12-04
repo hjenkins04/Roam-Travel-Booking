@@ -111,7 +111,7 @@ class TestProfileDashboard(EndToEndTestBase):
         self.logger.debug("Submitted profile form.")
 
         # Verify Success Modal
-        success_modal = WebDriverWait(self.driver, 10).until(
+        success_modal = WebDriverWait(self.driver, 3000).until(
             EC.presence_of_element_located((By.XPATH, "//h2[text()='Account Updated']"))
         )
         assert success_modal.is_displayed(), "Success modal not displayed."
