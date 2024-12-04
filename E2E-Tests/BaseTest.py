@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from colorama import Fore, Style, init
 from datetime import datetime
 from webdriver_manager.chrome import ChromeDriverManager
-
+import time
 # Initialize colorama for colored terminal output
 init(autoreset=True)
 
@@ -72,6 +72,21 @@ class EndToEndTestBase:
                 self.logger.debug(f"Error details: {str(e)}")
         finally:
             self.teardown()
+
+    def run_test_without_teardown(self):
+        """Run the test method, handle logging, and teardown."""
+        try:
+            self.logger.debug(f"Starting test: {self.test_name}")
+            self.test()  # Actual test implementation in child classes
+            self.logger.info(f"Test {self.test_name} completed successfully.")
+        except Exception as e:
+            self.logger.error(f"Test {self.test_name} failed.")
+            if self.debug_mode:
+                self.logger.debug("Stack trace of the error:")
+                self.logger.debug(traceback.format_exc())
+            else:
+                self.logger.debug(f"Error details: {str(e)}")
+
 
     def test(self):
         """Placeholder for child class implementation."""
@@ -147,3 +162,81 @@ class EndToEndTestBase:
             EC.presence_of_element_located((By.CSS_SELECTOR, '[data-testid="login-button"]'))
         )
         self.logger.debug("Logout successful.")
+
+    def homepage_navigation(self):
+
+            #===ARRIVAL & DEPARTURE====
+
+        departure_city = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="departure-city"]'))
+            )
+        departure_city.click()
+        self.logger.debug("Clicked Departure City button.")
+
+        depart_vancouver = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="airport-item-YVR"]'))
+            )
+        depart_vancouver.click()
+        self.logger.debug("Selected Vancouver Departure.")
+
+        departure_city_close = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="departure-city"]'))
+            )
+        departure_city_close.click()
+        self.logger.debug("Closed Departure City button.")
+
+        time.sleep(1)
+
+        arrival_city = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="arrival-city"]'))
+            )
+        arrival_city.click()
+        self.logger.debug("Clicked Arrival City button.")
+
+        arrive_toronto = WebDriverWait(self.driver, 20).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="airport-item-YYZ"]'))
+            )
+        arrive_toronto.click()
+        self.logger.debug("Selected Toronto Arrival.")
+
+
+            #===DATES====
+
+        departure_date_button = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="departure-date"]'))
+            )
+        departure_date_button.click()
+        self.logger.debug("Clicked Departure Date Button.")
+
+        departure_date = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//button[text()="21"]'))
+                )
+        departure_date.click()
+        self.logger.debug("Selected Arrival Date: 2024-12-21.")
+
+        departure_date_close = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="departure-date"]'))
+            )
+        departure_date_close.click()
+        self.logger.debug("Closed Departure Date Button.")
+
+        time.sleep(1)
+
+        arrival_date_button = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="return-date"]'))
+            )
+        arrival_date_button.click()
+        self.logger.debug("Clicked Arrival Date Button.")
+
+        arrival_date = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//button[text()="25"]'))
+                )
+        arrival_date.click()
+        self.logger.debug("Selected Arrival Date: 2024-12-25.")
+
+        search_button = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="search-button"]'))
+            )
+        search_button.click()
+        self.logger.debug("Clicked Search Button.")
+            
