@@ -26,11 +26,18 @@
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "react/display-name": "off",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "react-hooks/exhaustive-deps": "off"
       }
     },
     {
       "files": ["components/SeatBooking.tsx"],
+      "rules": {
+        "react-hooks/exhaustive-deps": "off"
+      }
+    },
+    {
+      "files": ["app/seat-booking/page.tsx"],
       "rules": {
         "react-hooks/exhaustive-deps": "off"
       }

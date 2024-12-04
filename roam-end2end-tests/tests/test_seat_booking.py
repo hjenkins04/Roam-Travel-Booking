@@ -1,14 +1,16 @@
 from BaseTest import *
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 class TestSeatBooking(EndToEndTestBase):
-    def __init__(self, debug=False):
-        super().__init__("TestSeatBooking", debug=debug)
-
     def test(self):
+        self.driver.get("http://localhost:3000/")
+        self.logger.debug("Opened the application homepage.")
+
+        self.driver.set_window_size(1920,1080)
+        self.logger.debug("Set the browser window size.")
+
+        self.ensure_logged_in()
+        self.logger.debug("User is logged in.")
+        
         self.search_page_navigation()
         
         # Assert we are on the seat booking page

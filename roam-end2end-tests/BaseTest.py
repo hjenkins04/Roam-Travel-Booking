@@ -9,23 +9,53 @@ from colorama import Fore, Style, init
 from datetime import datetime
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+import pytest
+import os
+
 # Initialize colorama for colored terminal output
 init(autoreset=True)
 
+@pytest.mark.usefixtures("setup_driver")
 class EndToEndTestBase:
-    def __init__(self, test_name, debug=False):
-        self.test_name = test_name
-        self.driver = None
-        self.debug_mode = debug
-        self.logger = self.setup_logger(debug)
+    @pytest.fixture(autouse=True)
+    def setup_driver(self, request):
+        """Fixture to set up and tear down the WebDriver."""
+        self.logger = self.setup_logger(debug=False, use_logger=False)  # Initialize logger
+        try:
+            service = Service(ChromeDriverManager().install())
+            
+            options = webdriver.ChromeOptions()
+            options.add_experimental_option('excludeSwitches', ['enable-logging'])
+            options.add_argument("--log-level=2")
+            
+            # Add headless mode
+            options.add_argument("--headless=new")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--window-size=1920,1080")
 
-    def setup_logger(self, debug):
+            # Setup WebDriver
+            self.driver = webdriver.Chrome(service=service, options=options)
+            self.logger.debug("WebDriver setup complete.")
+        except Exception as e:
+            self.logger.error(f"Failed to set up WebDriver: {str(e)}")
+            raise e
+
+        request.cls.driver = self.driver  # Attach the driver to the test
+        yield
+        self.driver.quit()
+        self.logger.debug("WebDriver closed.")
+    
+    def setup_logger(self, debug, use_logger=True):
         """Set up a logger for output with adjustable log level"""
-        logger = logging.getLogger(self.test_name)
-        handler = logging.StreamHandler()
-        handler.setFormatter(self.CustomFormatter())
-        logger.addHandler(handler)
-        logger.setLevel(logging.DEBUG if debug else logging.INFO)
+        logger = logging.getLogger(self.__class__.__name__)
+        if use_logger:
+            handler = logging.StreamHandler()
+            handler.setFormatter(self.CustomFormatter())
+            logger.addHandler(handler)
+            logger.setLevel(logging.DEBUG if debug else logging.INFO)
+        else:
+            logger.setLevel(logging.CRITICAL + 1)
+            
         return logger
 
     class CustomFormatter(logging.Formatter):
@@ -40,23 +70,22 @@ class EndToEndTestBase:
                 status = f"{Fore.RED}FAILURE{Style.RESET_ALL} - {timestamp}"
             return f"{status} - {record.getMessage()}"
 
-    def setup(self):
-        """Set up the WebDriver"""
+    def manual_driver_setup(self, debug):
+        """Set up the WebDriver manually."""
+        self.logger = self.setup_logger(debug)
         try:
             self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-            self.logger.debug("WebDriver setup complete")
+            self.logger.debug("WebDriver setup complete.")
         except Exception as e:
             self.logger.error(f"Failed to set up WebDriver: {str(e)}")
-            if self.debug_mode:
-                self.logger.debug(traceback.format_exc())
             raise e
 
-    def teardown(self):
+    def manual_driver_teardown(self):
         """Tear down the WebDriver"""
         if self.driver:
             self.driver.quit()
             self.logger.debug("WebDriver closed")
-
+            
     def run_test(self):
         """Run the test method, handle logging, and teardown"""
         try:
@@ -86,8 +115,8 @@ class EndToEndTestBase:
                 self.logger.debug(traceback.format_exc())
             else:
                 self.logger.debug(f"Error details: {str(e)}")
-
-
+    
+    @pytest.mark.skip(reason="Base test method should not be executed")
     def test(self):
         """Placeholder for child class implementation"""
         raise NotImplementedError("Test method must be implemented in the child class")
@@ -270,6 +299,7 @@ class EndToEndTestBase:
         # Close the calendar dropdown by clicking outside or another element
         self.driver.find_element(By.TAG_NAME, 'body').click()
         
+        time.sleep(1)
         
         # ARRIVAl
         arrival_right_icon = WebDriverWait(self.driver, 10).until(
@@ -289,6 +319,7 @@ class EndToEndTestBase:
         # Close the calendar dropdown by clicking outside or another element
         self.driver.find_element(By.TAG_NAME, 'body').click()
         
+        time.sleep(1)
         
         # DEPARTURE DATE
         # Locate and click the departure date right-icon
@@ -307,6 +338,8 @@ class EndToEndTestBase:
 
         # Close the calendar dropdown by clicking outside or another element
         self.driver.find_element(By.TAG_NAME, 'body').click()
+        
+        time.sleep(1)
 
         # ARRIVAL DATE
         # Locate and click the arrival date right-icon
@@ -326,6 +359,7 @@ class EndToEndTestBase:
         # Close the calendar dropdown by clicking outside or another element
         self.driver.find_element(By.TAG_NAME, 'body').click()
         
+        time.sleep(1)
         
         # TRAVELER CLASS
         # Locate and click the departure date right-icon
@@ -358,9 +392,124 @@ class EndToEndTestBase:
         )
 
         self.logger.debug("Successfully search for flights and reached the search results page")
+    
+    def homepage_navigation2(self):
+
+        #===ARRIVAL & DEPARTURE====
+
+        departure_city = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="departure-city"]'))
+            )
+        departure_city.click()
+        self.logger.debug("Clicked Departure City button")
+
+        depart_vancouver = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="airport-item-YYZ"]'))
+            )
+        depart_vancouver.click()
+        self.logger.debug("Selected Vancouver Departure")
+
+        departure_city_close = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="departure-city"]'))
+            )
+        departure_city_close.click()
+        self.logger.debug("Closed Departure City button")
+
+        time.sleep(1)
+
+        arrival_city = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="arrival-city"]'))
+            )
+        arrival_city.click()
+        self.logger.debug("Clicked Arrival City button")
+
+        arrive_toronto = WebDriverWait(self.driver, 20).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="airport-item-HNL"]'))
+            )
+        arrive_toronto.click()
+        self.logger.debug("Selected Toronto Arrival")
         
+        arrive_city_close = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="arrival-city"]'))
+            )
+        arrive_city_close.click()
+        self.logger.debug("Closed Arrival City button")
+
+
+        #===DATES====
+
+        departure_date_button = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="departure-date"]'))
+            )
+        departure_date_button.click()
+        self.logger.debug("Clicked Departure Date Button")
+
+        departure_date = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//button[text()="21"]'))
+                )
+        departure_date.click()
+        self.logger.debug("Selected Arrival Date: 2024-12-21")
+
+        departure_date_close = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="departure-date"]'))
+            )
+        departure_date_close.click()
+        self.logger.debug("Closed Departure Date Button")
+
+        time.sleep(1)
+
+        arrival_date_button = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="return-date"]'))
+            )
+        arrival_date_button.click()
+        self.logger.debug("Clicked Arrival Date Button")
+
+        arrival_date = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//button[text()="25"]'))
+                )
+        arrival_date.click()
+        self.logger.debug("Selected Arrival Date: 2024-12-25")
+        
+        arrival_date_close = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="return-date"]'))
+            )
+        arrival_date_close.click()
+        self.logger.debug("Closed Arrival Date Button")
+        
+        time.sleep(1)
+        
+        # TRAVELER CLASS
+        # Locate and click the departure date right-icon
+        traveler_class_button = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="traveller-number"]'))
+        )
+        traveler_class_button.click()
+        self.logger.debug("Clicked the traveler class right-icon to display the dropdown")
+
+        # Wait for and select the specific date in the calendar (e.g., 4)
+        traveler_class_add = WebDriverWait(self.driver, 10).until(
+           EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="add-passenger"]'))
+        )
+        traveler_class_add.click()
+        self.logger.debug('Clicked the add passenger button from the dropdown.')
+
+        # Close the calendar dropdown by clicking outside or another element
+        traveler_class_close = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="traveller-number"]'))
+        )
+        traveler_class_close.click()
+        
+        time.sleep(1)
+
+        search_button = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="search-button"]'))
+            )
+        search_button.click()
+        self.logger.debug("Clicked Search Button")
+    
     def search_page_navigation(self):
-        self.homepage_navigation_for_seat_booking()
+        #self.homepage_navigation_for_seat_booking()
+        self.homepage_navigation2()
         
         search_results_item = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="search-result-0"]'))

@@ -1,5 +1,55 @@
 ﻿# CISC327 Group 34
 
+
+## How to run End To End Tests
+
+To test the E2E tests for this project, make sure you are in the `roam-end2end-tests` directory.
+
+1. **Navigate to the `roam-end2end-tests` Directory**:
+   - Open a terminal and navigate to the `roam-end2end-tests` directory:
+     ```bash
+     cd roam-end2end-tests
+     ```
+
+2. Create a virtual environment in the `roam-backend` directory:
+   ```bash
+   python -m venv venv
+   ```
+
+3. Activate the virtual environment:
+   - **macOS/Linux**:
+     ```bash
+     source venv/bin/activate
+     ```
+   - **Windows**:
+     ```bash
+     .\venv\Scripts\activate
+     ```
+
+4. Once activated, your terminal prompt will show `(venv)` at the beginning.
+
+5. After activating the virtual environment, install the required packages listed in `requirements.txt`:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+6. Run the webapplication by following the steps outline in [How to run the app](#how-to-run-the-app)
+
+7. Run the End To End Tests from the `roam-end2end-tests` directory:
+   ```bash
+   pytest -n auto -v tests
+   ```
+
+8. An alternative is to run `run.py` or `run_pytest`
+   - **Manual**:
+     ```bash
+     python run.py
+     ```
+   - **Pytest**:
+     ```bash
+     python run_pytest.py
+     ```
+
 ## How to Test Integration Tests
 
 To test integration tests for this project, make sure you are in the `roam-frontend` directory.

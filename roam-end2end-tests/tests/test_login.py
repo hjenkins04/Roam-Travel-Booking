@@ -1,9 +1,6 @@
 from BaseTest import *
 
 class TestLogin(EndToEndTestBase):
-    def __init__(self, debug=False):
-        super().__init__("TestLogin", debug=debug)
-
     def test(self):
         self.driver.get("http://localhost:3000/")
         self.logger.debug("Opened the application homepage.")

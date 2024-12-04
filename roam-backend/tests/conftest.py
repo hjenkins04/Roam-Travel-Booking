@@ -1,7 +1,6 @@
 import pytest
 from app import create_app, db
 
-
 @pytest.fixture(scope='session')
 def client():
     app = create_app('testing') 
