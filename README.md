@@ -1,311 +1,204 @@
-﻿# CISC327 Group 34
+﻿# Roam: Flight Booking App
 
-## How to run End To End Tests
+<br/>
+<p align="center">
+  <a>
+    <img src="/documentation/assets/logo.png" alt="Roam Logo" width="100" height="100">
+  </a>
+  <h3 align="center">Roam: Simplify Your Flight Booking Experience</h3>
+  <p align="center">A modern web application for booking flights, choosing seats, and making secure payments.</p>
+</p>
+---
 
-To test the E2E tests for this project, make sure you are in the `roam-end2end-tests` directory.
+## Overview
 
-1. **Navigate to the `roam-end2end-tests` Directory**:
+Roam is a web-based flight ticket booking system designed to provide a seamless and enhanced user experience for travelers. With Roam, users can:
 
-   - Open a terminal and navigate to the `roam-end2end-tests` directory:
-     ```bash
-     cd roam-end2end-tests
-     ```
+- Search and browse available flights.
+- Select and reserve seats.
+- Make secure payments.
+- Perform end-to-end flight booking with ease.
 
-2. Create a virtual environment in the `roam-end2end-tests` directory:
+Built with modular architecture, the application is divided into backend, frontend, and end-to-end testing components for optimal scalability and maintainability.
 
-   ```bash
-   python -m venv venv
-   ```
+---
 
-3. Activate the virtual environment:
+## Table of Contents
 
-   - **macOS/Linux**:
-     ```bash
-     source venv/bin/activate
-     ```
-   - **Windows**:
-     ```bash
-     .\venv\Scripts\activate
-     ```
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+  - [Running with Docker](#running-with-docker)
+  - [Frontend Setup](#frontend-setup)
+  - [Backend Setup](#backend-setup)
+- [Testing](#testing)
+  - [End-to-End Tests](#end-to-end-tests)
+  - [Frontend Tests](#frontend-tests)
+  - [Backend Tests](#backend-tests)
+- [Acknowledgements](#acknowledgements)
 
-4. Once activated, your terminal prompt will show `(venv)` at the beginning.
+---
 
-5. After activating the virtual environment, install the required packages listed in `requirements.txt`:
+## Features
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+- **Search Flights**: Browse flights by origin, destination, date, and time.
+- **Seat Selection**: View seat maps and reserve your preferred seat.
+- **Secure Payments**: Integrated payment gateway for fast and safe transactions.
+- **End-to-End Testing**: Comprehensive testing suite for high reliability.
+- **Modern User Experience**: Intuitive and responsive design for ease of use.
 
-6. Run the webapplication by following the steps outline in [How to run the app](#how-to-run-the-app)
+---
 
-7. Run the End To End Tests from the `roam-end2end-tests` directory:
+## Project Structure
 
-   ```bash
-   pytest -n auto -v tests
-   ```
+The project follows a modular directory structure for efficient development and testing:
 
-8. An alternative is to run `run.py` or `run_pytest`
-   - **Manual**:
-     ```bash
-     python run.py
-     ```
-   - **Pytest**:
-     ```bash
-     python run_pytest.py
-     ```
-
-## How to Test Integration Tests
-
-To test integration tests for this project, make sure you are in the `roam-frontend` directory.
-
-1. **Navigate to the `roam-frontend` Directory**:
-
-   - Open a terminal and navigate to the `roam-frontend` directory:
-     ```bash
-     cd roam-frontend
-     ```
-
-2. **Run Jest**:
-   - Execute Jest tests:
-     ```bash
-     npx jest --testPathPattern="__integration__tests__"
-     ```
-   - This command will run only the tests in the `__integration__tests__` directory.
-
-## How to Test Frontend Code Coverage
-
-To test frontend code coverage for this project, make sure you are in the `roam-frontend` directory.
-
-### Using VS Code
-
-1. **Install Jest Extension**:
-
-   - Ensure you have the [Jest](https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest) extension installed.
-   - This extension will automatically run Jest tests and display code coverage information within the editor.
-
-2. **Enable Code Coverage Display**:
-
-   - Once the Jest extension is installed, open the command palette (`Ctrl + Shift + P` or `Cmd + Shift + P` on Mac).
-   - Search for and select **Jest: Toggle Coverage Overlay**.
-   - This will show the inline code coverage overlay, which highlights tested and untested lines of code in the editor.
-
-3. **Execute Tests**:
-
-   - From the VS Code Testing side nav bar, you can execute all Jest tests.
-
-4. **View Coverage Summary**:
-   - The Jest extension should display a coverage summary in the VS Code side nav bar, providing an overview of the test coverage across all the files.
-
-### Using Jest Terminal Command
-
-To manually run Jest and view a detailed code coverage report:
-
-1. **Navigate to the `roam-frontend` Directory**:
-
-   - Open a terminal and navigate to the `roam-frontend` directory:
-     ```bash
-     cd roam-frontend
-     ```
-
-2. **Run Jest with Coverage Option**:
-
-   - Execute Jest tests and generate a code coverage report by running:
-     ```bash
-     npx jest --coverage
-     ```
-   - This command will display coverage information in the terminal and generate a `coverage` folder containing an HTML report.
-
-3. **View Detailed HTML Report**:
-   - To view the HTML report, open `coverage/lcov-report/index.html` in a browser.
-
-## How to run the app
-
-To run project with both the fronend and backend, follow these steps:
-
-## Using Docker
-
-1. [Install Docker](https://docs.docker.com/get-docker/) on your machine.
-2. Ensure you are in the repo directory.
-3. Build the containers: `docker compose build`.
-4. Run your container: `docker run compose up -d`.
-5. Ensure both the frontend and backend containers are running `docker ps`.
-6. Open your browser and navigate to `http://localhost:3000` to see the webpage.
-7. To run the tests see the instructions below.
-
-You can view your docekr images created with `docker images`.
-
-## Frontend
-
-- Navigate into the `roam-fronend` directory.
-
-### Prerequisites
-
-- Node.js installed
-- `npm` or `pnpm` package manager installed
-
-### Step-by-Step Setup
-
-#### Step 1: Install Node.js
-
-##### Option 1: Using `nvm` (Node Version Manager)
-
-Using `nvm` allows you to easily manage multiple Node.js versions on your machine.
-
-**macOS/Linux:**
-
-1. Install `nvm` by running the following command in your terminal:
-   ```bash
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-   ```
-2. Reload your terminal or run the following command to activate `nvm`:
-   ```bash
-   source ~/.nvm/nvm.sh
-   ```
-3. Install the required Node.js version (check the `.nvmrc` file in the project if it exists or use the latest stable version):
-   ```bash
-   nvm install node
-   ```
-4. Use the installed Node.js version:
-   ```bash
-   nvm use node
-   ```
-
-**Windows:**
-
-1. Install `nvm-windows` by downloading the installer from the [nvm-windows GitHub repository](https://github.com/coreybutler/nvm-windows/releases).
-2. Follow the setup instructions to complete the installation.
-3. Install the required Node.js version:
-   ```bash
-   nvm install latest
-   ```
-4. Use the installed Node.js version:
-   ```bash
-   nvm use latest
-   ```
-
-#### Step 2: Install Dependencies
-
-Once Node.js is installed, navigate to the `roam-frontend` directory:
-
-```bash
-cd roam-frontend
+```plaintext
+ROAM-TRAVEL-BOOKING/
+├── documentation/           # Project documentation
+├── roam-backend/            # Backend API (Flask)
+├── roam-end2end-tests/      # End-to-End Testing Suite
+├── roam-frontend/           # Frontend Application (React/Next.js)
+└── docker-compose.yml       # Docker configuration
 ```
+---
 
-Now, you can install the dependencies using either `npm` or `pnpm`.
+## Installation
 
-##### Option 1: Using `npm` (default Node.js package manager)
+### Running with Docker
 
-1. Install the required packages:
+1. **Install Docker**:
+   - Follow the [official Docker installation guide](https://docs.docker.com/get-docker/).
+
+2. **Build and Run Containers**:
+   - Build the Docker images:
+     ```bash
+     docker compose build
+     ```
+   - Start the containers:
+     ```bash
+     docker compose up -d
+     ```
+   - Verify running containers:
+     ```bash
+     docker ps
+     ```
+
+3. **Access the App**:
+   - Open your browser and navigate to `http://localhost:3000`.
+
+---
+
+### Frontend Setup
+
+1. **Navigate to Frontend Directory**:
+   ```bash
+   cd roam-frontend
+   ```
+
+2. **Install Dependencies**:
    ```bash
    npm install
    ```
 
-##### Option 2: Using `pnpm` (alternative package manager)
-
-1. If `pnpm` is not installed, you can install it globally:
+3. **Start the Development Server**:
    ```bash
-   npm install -g pnpm
-   ```
-2. Install the required packages:
-   ```bash
-   pnpm install
+   npm run dev
    ```
 
-#### Step 3: Run the Development Server
+4. **Access the Frontend**:
+   - Open your browser and go to `http://localhost:3000`.
 
-After installing the dependencies, run the following command to start the development server:
+---
 
-##### Using `npm`:
+### Backend Setup
 
-```bash
-npm run dev
-```
+1. **Navigate to Backend Directory**:
+   ```bash
+   cd roam-backend
+   ```
 
-##### Using `pnpm`:
-
-```bash
-pnpm run dev
-```
-
-This will start the development server. You can access the application in your browser at `http://localhost:3000`.
-
-#### Tesing the frontend
-
-- To test the application:
-  ```bash
-  npm test
-  ```
-  or
-  ```bash
-  pnpm test
-  ```
-
-#### Building the frontend
-
-- To build the application:
-  ```bash
-  npm run build
-  ```
-  or
-  ```bash
-  pnpm run build
-  ```
-
-## Backend
-
-- Navigate into the `roam-backend` directory.
-
-### Prerequisites
-
-- Python installed.
-
-### Step-by-Step Setup
-
-#### Step 1: Set up Virtual Environment
-
-1. Create a virtual environment in the `roam-backend` directory:
-
+2. **Set Up Virtual Environment**:
    ```bash
    python -m venv venv
+   source venv/bin/activate  # macOS/Linux
+   .\venv\Scripts\activate   # Windows
    ```
 
-2. Activate the virtual environment:
+3. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-   - **macOS/Linux**:
-     ```bash
-     source venv/bin/activate
-     ```
-   - **Windows**:
-     ```bash
-     .\venv\Scripts\activate
-     ```
-
-3. Once activated, your terminal prompt will show `(venv)` at the beginning.
-
-#### Step 2: Install Dependencies
-
-After activating the virtual environment, install the required packages listed in `requirements.txt`:
-
-```bash
-pip install -r requirements.txt
-```
-
-#### Step 3: Run the Application
-
-Start the Flask backend.
-
-1. Run the application:
-
+4. **Run the Backend**:
    ```bash
    python run.py
    ```
 
-2. The app will be available at `http://127.0.0.1:5000` by default. You can change the host or port by updating the environment variables `FLASK_RUN_HOST` and `FLASK_RUN_PORT` if needed.
+5. **Access the Backend**:
+   - By default, the backend will be available at `http://127.0.0.1:5000`.
 
-### Testing the Backend
+---
 
-To run tests for the backend, use `pytest`:
+## Testing
 
-```bash
-pytest
-```
+### End-to-End Tests
+
+1. **Navigate to Test Suite Directory**:
+   ```bash
+   cd roam-end2end-tests
+   ```
+
+2. **Set Up Virtual Environment**:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # macOS/Linux
+   .\venv\Scripts\activate   # Windows
+   ```
+
+3. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Run Tests**:
+   ```bash
+   pytest -n auto -v tests
+   ```
+
+### Frontend Tests
+
+1. **Navigate to Frontend Directory**:
+   ```bash
+   cd roam-frontend
+   ```
+
+2. **Run Tests**:
+   ```bash
+   npm test
+   ```
+
+3. **View Code Coverage**:
+   ```bash
+   npm run coverage
+   ```
+
+### Backend Tests
+
+1. **Navigate to Backend Directory**:
+   ```bash
+   cd roam-backend
+   ```
+
+2. **Run Tests**:
+   ```bash
+   pytest
+   ```
+
+---
+
+## Acknowledgements
+
+- **Frameworks**: React, Flask, Docker
+- **Contributors**: [Group 34 Team](https://github.com/ryanvandrunen/327-Group34-CH/graphs/contributors)
+- **Course**: CISC 327 - Software Quality Assurance Fall 2024
