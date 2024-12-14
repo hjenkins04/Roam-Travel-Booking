@@ -3,12 +3,11 @@
 <br/>
 <p align="center">
   <a>
-    <img src="/documentation/assets/logo.png" alt="Roam Logo" width="100" height="100">
+    <img src="./documentation/assets/logo.png" alt="Roam Logo" width="510" height="161">
   </a>
   <h3 align="center">Roam: Simplify Your Flight Booking Experience</h3>
   <p align="center">A modern web application for booking flights, choosing seats, and making secure payments.</p>
 </p>
----
 
 ## Overview
 
